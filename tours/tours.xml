@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tours>
+  <tour ID="dt">
+    <name>Downtown NOLA Tour</name>
+    <audience>DealerTire</audience>
+    <logo>https://www.dealertire.com/wp-content/uploads/2016/10/logo_type_white.png</logo>
+  </tour>
+  <tour ID="kk">
+  <name>Downtown NOLA Tour</name>
+  <audience>Kevin Kolb</audience>
+  <logo>https://www.dealertire.com/wp-content/uploads/2016/10/logo_type_white.png</logo>
+  </tour>
+  <tour ID="360">
+    <name>Downtown NOLA Tour</name>
+    <audience>360insights</audience>
+    <logo>https://www.360insights.com/hubfs/_2022/360insights-Logo-With%20Strapline.svg</logo>
+  </tour>
+</tours>
