@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealerTire Downtown NOLA Tour</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+    }
+    header {
+      background: #1a73e8;
+      color: #fff;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 0 0.75rem;
+    }
+    .intro-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .intro-card h2 {
+      margin-top: 0;
+      color: #1a73e8;
+      font-size: 1.25rem;
+    }
+    .phone-number {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #1a73e8;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .phone-number a {
+      color: #1a73e8;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      display: inline-block;
+      border: 2px solid #1a73e8;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .phone-number a:hover,
+    .phone-number a:active {
+      background: #1a73e8;
+      color: #fff;
+    }
+    .intro-card ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+    .intro-card li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    .message-thread {
+      margin-top: 1.5rem;
+    }
+    .message {
+      margin-bottom: 0.75rem;
+      max-width: 90%;
+      clear: both;
+    }
+    .message.incoming {
+      float: left;
+    }
+    .message.outgoing {
+      float: right;
+    }
+    .message .bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 18px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .message.incoming .bubble {
+      background: #fff;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .message.outgoing .bubble {
+      background: #1a73e8;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .message .label {
+      font-size: 0.75rem;
+      color: #888;
+      margin-bottom: 0.25rem;
+      padding: 0 0.5rem;
+    }
+    .message.incoming .label {
+      text-align: left;
+    }
+    .message.outgoing .label {
+      text-align: right;
+    }
+    .message img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 0.5rem;
+      display: block;
+    }
+    .bubble p {
+      margin: 0 0 1em 0;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .bubble p:last-child {
+      margin-bottom: 0;
+    }
+    .bubble a {
+      color: #1a73e8;
+      word-break: break-all;
+      padding: 0.25rem 0;
+      display: inline-block;
+    }
+    .message.outgoing .bubble a {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .section-divider {
+      text-align: center;
+      color: #888;
+      font-size: 0.85rem;
+      margin: 1.5rem 0;
+      clear: both;
+    }
+    .section-divider span {
+      background: #f0f0f0;
+      padding: 0 1rem;
+    }
+    .footer {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #666;
+      clear: both;
+    }
+    .message.incoming {
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: -0.5rem;
+      background: #e8e8e8;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s, background 0.2s;
+      z-index: 1;
+    }
+    .copy-btn:hover,
+    .copy-btn:active {
+      opacity: 1;
+      background: #d0d0d0;
+    }
+    .copy-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #555;
+    }
+    .copy-btn.copied {
+      background: #4caf50;
+    }
+    .copy-btn.copied svg {
+      fill: #fff;
+    }
+
+    /* Tablet and up */
+    @media (min-width: 768px) {
+      header {
+        padding: 2rem 1rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      .container {
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      .intro-card {
+        padding: 1.5rem;
+      }
+      .intro-card h2 {
+        font-size: 1.5rem;
+      }
+      .phone-number {
+        font-size: 1.5rem;
+      }
+      .message {
+        max-width: 85%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://www.dealertire.com/wp-content/uploads/2016/10/logo_type_white.png" alt="DealerTire Logo" style="height: 50px; margin-bottom: 1rem;">
+    <h1>DealerTire Downtown NOLA Tour</h1>
+    <p>Self-Guided Neighborhood Experience</p>
+  </header>
+
+  <div class="container">
+    <div class="intro-card">
+      <h2>Get Started</h2>
+      <p>To take a DealerTire Self-Guided Downtown NOLA Neighborhood Tour, text your name to:</p>
+      <p class="phone-number"><a href="sms:+15043129212">+1 (504) 312-9212</a></p>
+      <ul>
+        <li>Text now and you'll get the start instructions, so you can do the tour whenever you have a free hour over the next few days.</li>
+        <li>Go solo or gather a group and lead the way.</li>
+        <li>You can start from the office or the Virgin Hotels.</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"><span>Message Flow Preview</span></div>
+
+    <div class="message-thread">
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">John Smith</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p>Great! You are set to go! Today, tomorrow, or the next day reply "START" to this number and we'll begin our tour.</p>
+          <p>This is a walking tour that will take about an hour and cover approximately 2 miles. Everything is in the general vicinity. If you end up on Bourbon Street, you've gone too far! You can go solo or gather a group that you can lead around. Touring during daylight is encouraged.</p>
+          <p>We will text back and forth to show you the neighborhood.</p>
+          <p>You can start outside of the DealerTire office or outside The Virgin Hotels New Orleans.</p>
+          <p>This is not a race, but all finishers will be famous*!</p>
+          <p><em>*DealerTire team.</em></p>
+          <p><strong>DO NOT REPLY "START" UNTIL YOU'RE GATHERED OUTSIDE AND READY TO GO!</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      360insights NOLA Office Experience
+    </footer>
+  </div>
+
+</body>
+</html>

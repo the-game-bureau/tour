@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealerTire Downtown NOLA Tour</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+    }
+    header {
+      background: #1a73e8;
+      color: #fff;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    header p {
+      margin: 0.5rem 0 0;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 1rem auto;
+      padding: 0 0.75rem;
+    }
+    .intro-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .intro-card h2 {
+      margin-top: 0;
+      color: #1a73e8;
+      font-size: 1.25rem;
+    }
+    .phone-number {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #1a73e8;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    .phone-number a {
+      color: #1a73e8;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      display: inline-block;
+      border: 2px solid #1a73e8;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .phone-number a:hover,
+    .phone-number a:active {
+      background: #1a73e8;
+      color: #fff;
+    }
+    .intro-card ul {
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+    .intro-card li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    .message-thread {
+      margin-top: 1.5rem;
+    }
+    .message {
+      margin-bottom: 0.75rem;
+      max-width: 90%;
+      clear: both;
+    }
+    .message.incoming {
+      float: left;
+    }
+    .message.outgoing {
+      float: right;
+    }
+    .message .bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 18px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .message.incoming .bubble {
+      background: #fff;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .message.outgoing .bubble {
+      background: #1a73e8;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .message .label {
+      font-size: 0.75rem;
+      color: #888;
+      margin-bottom: 0.25rem;
+      padding: 0 0.5rem;
+    }
+    .message.incoming .label {
+      text-align: left;
+    }
+    .message.outgoing .label {
+      text-align: right;
+    }
+    .message img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 0.5rem;
+      display: block;
+    }
+    .bubble p {
+      margin: 0 0 1em 0;
+      -webkit-user-select: text;
+      user-select: text;
+    }
+    .bubble p:last-child {
+      margin-bottom: 0;
+    }
+    .bubble a {
+      color: #1a73e8;
+      word-break: break-all;
+      padding: 0.25rem 0;
+      display: inline-block;
+    }
+    .message.outgoing .bubble a {
+      color: #fff;
+      text-decoration: underline;
+    }
+    .clearfix::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .section-divider {
+      text-align: center;
+      color: #888;
+      font-size: 0.85rem;
+      margin: 1.5rem 0;
+      clear: both;
+    }
+    .section-divider span {
+      background: #f0f0f0;
+      padding: 0 1rem;
+    }
+    .footer {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #666;
+      clear: both;
+    }
+    .message.incoming {
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: -0.5rem;
+      background: #e8e8e8;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.2s, background 0.2s;
+      z-index: 1;
+    }
+    .copy-btn:hover,
+    .copy-btn:active {
+      opacity: 1;
+      background: #d0d0d0;
+    }
+    .copy-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #555;
+    }
+    .copy-btn.copied {
+      background: #4caf50;
+    }
+    .copy-btn.copied svg {
+      fill: #fff;
+    }
+
+    /* Tablet and up */
+    @media (min-width: 768px) {
+      header {
+        padding: 2rem 1rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      .container {
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      .intro-card {
+        padding: 1.5rem;
+      }
+      .intro-card h2 {
+        font-size: 1.5rem;
+      }
+      .phone-number {
+        font-size: 1.5rem;
+      }
+      .message {
+        max-width: 85%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://www.dealertire.com/wp-content/uploads/2016/10/logo_type_white.png" alt="DealerTire Logo" style="height: 50px; margin-bottom: 1rem;">
+    <h1>DealerTire Downtown NOLA Tour</h1>
+    <p>Self-Guided Neighborhood Experience</p>
+  </header>
+
+  <div class="container">
+    <div class="intro-card">
+      <h2>Get Started</h2>
+      <p>To take a DealerTire Self-Guided Downtown NOLA Neighborhood Tour, text your name to:</p>
+      <p class="phone-number"><a href="sms:+15043129212">+1 (504) 312-9212</a></p>
+      <ul>
+        <li>Text now and you'll get the start instructions, so you can do the tour whenever you have a free hour over the next few days.</li>
+        <li>Go solo or gather a group and lead the way.</li>
+        <li>You can start from the office or the Virgin Hotels.</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"><span>Message Flow Preview</span></div>
+
+    <div class="message-thread">
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">John Smith</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p>Great! You are set to go! Today, tomorrow, or the next day reply "START" to this number and we'll begin our tour.</p>
+          <p>This is a walking tour that will take about an hour and cover approximately 2 miles. Everything is in the general vicinity. If you end up on Bourbon Street, you've gone too far! You can go solo or gather a group that you can lead around. Touring during daylight is encouraged.</p>
+          <p>We will text back and forth to show you the neighborhood.</p>
+          <p>You can start outside of the DealerTire office or outside The Virgin Hotels New Orleans.</p>
+          <p>This is not a race, but all finishers will be famous*!</p>
+          <p><em>*DealerTire team.</em></p>
+          <p><strong>DO NOT REPLY "START" UNTIL YOU'RE GATHERED OUTSIDE AND READY TO GO!</strong></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">START</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p>Surprise! This is not a Neighborhood Tour.</p>
+          <p>You've heard of Escape Rooms. Now you're stepping into the world's first Break-In Room Game.</p>
+          <p>You're "locked out" of the NOLA Office (717 St. Charles Ave). Your mission is to use the neighborhood to solve the clues, uncover the secret password, and get back inside.</p>
+          <p>And no, you're not really locked out. Stop by anytime if you need a restroom, or if you just plain give up.</p>
+          <p>Let's start easy. What word is lit up over the bar in the New Orleans office?</p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">INSIGHTS</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          DING! DING! DING! Don't worry. It gets harder. Are there any Hamilton fans on your team? The founding father, not the Tiger-Cats. Head over to the Square named for America's favorite fighting Frenchman. Google it if you must. AFTER you get there, tell me his name.
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">LAFAYETTE</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p><img src="https://the-game-bureau.github.io/nolabound/image/360insights/1769022042034.png" alt="Lafayette Square clue"></p>
+          <p><a href="https://the-game-bureau.github.io/nolabound/image/360insights/1769022042034.png" target="_blank">https://the-game-bureau.github.io/nolabound/image/360insights/1769022042034.png</a></p>
+          <p>As you can see New Orleans is deep in Mardi Gras prep mode. That's Gallier Hall getting Mardi Gras stands setup in front of it. Gallier Hall is New Orleans' original city hall. Now it's used as parade reviewing stands, for inaugurations and even for state funerals.</p>
+          <p>That boring building to the right isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it.</p>
+          <p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">6 MILLION</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          Right! That's a lot of cash! One more thing about Gallier Hall. I mentioned funerals. What American president's funeral was held there? This is a trick question. We don't necessarily mean US President. Remember the other side of the Civil War had a president too.
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">JEFFERSON DAVIS</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p><a href="https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18" target="_blank">https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18</a></p>
+          <p>I told you it was a trick question. We didn't say President of the United States of America. Jefferson Davis was President of the CONFEDERATE States of America. 😮</p>
+          <p>Send me a photo of you or your team with Henry Clay in the background. Why he's hanging out in Lafayette Square, I'll never know.</p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">PHOTO</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          Let's wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">SHUMARD OAK</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p><img src="https://the-game-bureau.github.io/nolabound/archive/Bush.jpg" alt="Bush tree photo"></p>
+          <p><a href="https://the-game-bureau.github.io/nolabound/archive/Bush.jpg" target="_blank">https://the-game-bureau.github.io/nolabound/archive/Bush.jpg</a></p>
+          <p>Look at that! The US and Canada working together! Just like 360!</p>
+          <p>This place used to look a lot different.</p>
+          <p><img src="https://the-game-bureau.github.io/nolabound/archive/ls.jpg" alt="Lafayette Square old photo"></p>
+          <p><a href="https://the-game-bureau.github.io/nolabound/archive/ls.jpg" target="_blank">https://the-game-bureau.github.io/nolabound/archive/ls.jpg</a></p>
+          <p>But let's move on. It's been reported that Lee Harvey Oswald used to hang out at the Newman building at the corner of Lafayette and Camp - but don't bother looking for it.</p>
+          <p>The Newman building has been replaced by a sculpture.</p>
+          <p>TAKE A PICTURE OF YOU OR YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER.</p>
+          <p>Do NOT text me "Benjamin Franklin". You may have to strain your neck a bit to find the father written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself.</p>
+          <p>Here's some Oswald stuff that will help you in no way what-so-ever 🤣.</p>
+          <p><img src="https://the-game-bureau.github.io/nolabound/archive/newman.jpg" alt="Newman building"></p>
+          <p><a href="https://the-game-bureau.github.io/nolabound/archive/newman.jpg" target="_blank">https://the-game-bureau.github.io/nolabound/archive/newman.jpg</a></p>
+          <p><img src="https://the-game-bureau.github.io/nolabound/archive/flyer.jpg" alt="Oswald flyer"></p>
+          <p><a href="https://the-game-bureau.github.io/nolabound/archive/flyer.jpg" target="_blank">https://the-game-bureau.github.io/nolabound/archive/flyer.jpg</a></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">JOHN JAY</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          <p>Great job! I can't believe we didn't even mention the 4 beautiful statues on top of the old post office you're pointing to. BUT WE DON'T HAVE TIME! Look at this later: <a href="https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf" target="_blank">https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf</a></p>
+          <p>We've got one more thing to find, and the answer will be the password that you send to me to buzz the office door open... Send me the name of the country who had their flag made in New Orleans and sent to the country. No seriously. It's here: <a href="https://what3words.com/remake.king.cloth" target="_blank">https://what3words.com/remake.king.cloth</a> Again, tell me the name of the country.</p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message outgoing">
+        <div class="label">You</div>
+        <div class="bubble">CUBA</div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          🥳 You win! Head back to the office (<a href="https://what3words.com/blur.trek.searches" target="_blank">https://what3words.com/blur.trek.searches</a>) for a frosty beverage! Text VICTORY when you get there and I'll buzz you in.
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label">Tour Guide</div>
+        <div class="bubble">
+          Sorry the game has concluded for the evening. Please continue in the am! 😴
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <footer class="footer">
+      360insights NOLA Office Experience
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const copyIcon = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+      const checkIcon = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+
+      document.querySelectorAll('.message.incoming').forEach(function(msg) {
+        const bubble = msg.querySelector('.bubble');
+        if (!bubble) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = copyIcon;
+        btn.setAttribute('aria-label', 'Copy message');
+
+        btn.addEventListener('click', function() {
+          const text = bubble.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.innerHTML = checkIcon;
+            btn.classList.add('copied');
+            setTimeout(function() {
+              btn.innerHTML = copyIcon;
+              btn.classList.remove('copied');
+            }, 2000);
+          });
+        });
+
+        msg.appendChild(btn);
+      });
+    });
+  </script>
+</body>
+</html>
