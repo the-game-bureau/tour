@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Team Puzzle · New Orleans Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d10;
+    --surface: #18181e;
+    --surface2: #222230;
+    --border: #2a2a38;
+    --text: #eaeaf2;
+    --muted: #5a5a78;
+    --lag: #f5a623;
+    --tch: #4ecf98;
+    --rou: #e85568;
+    --bei: #6aaef7;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 18px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px 14px 80px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .wrap { width: 100%; max-width: 640px; }
+
+  /* HEADER */
+  header { text-align: center; margin-bottom: 22px; }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 12vw, 5.5rem);
+    letter-spacing: 0.05em; line-height: 0.9;
+    background: linear-gradient(130deg, var(--lag), var(--rou) 55%, var(--bei));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .sub {
+    margin-top: 8px; font-family: 'DM Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* TEAM LEGEND — removed */
+
+  /* CLUE PANEL */
+  .clue-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;
+  }
+  .panel-label {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .panel-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .clue-list { display: flex; flex-direction: column; gap: 14px; }
+  .clue-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    line-height: 1.65; color: #7a7a9a;
+    transition: color 0.3s;
+  }
+  .clue-row.solved { color: var(--text); }
+  .clue-left {
+    flex-shrink: 0; padding-top: 5px;
+  }
+  .clue-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .clue-row:not(.solved) .clue-dot { background: var(--muted) !important; }
+  .clue-body { flex: 1; }
+  .clue-team-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem; letter-spacing: 0.1em;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .clue-text { font-size: 1rem; line-height: 1.65; }
+  .clue-row strong { font-weight: 600; }
+
+  /* SOLVED ROWS */
+  .solved-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .solved-row {
+    border-radius: 12px; padding: 14px 18px;
+    animation: popIn 0.38s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.9) translateY(-8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .solved-team-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+    letter-spacing: 0.1em; color: rgba(0,0,0,0.65); margin-bottom: 4px;
+  }
+  .solved-members {
+    font-family: 'DM Mono', monospace; font-size: 0.8rem;
+    color: rgba(0,0,0,0.55); line-height: 1.5;
+  }
+  .lag-bg { background: var(--lag); }
+  .tch-bg { background: var(--tch); }
+  .rou-bg { background: var(--rou); }
+  .bei-bg { background: var(--bei); }
+
+  /* NAME GRID — mobile first: 2 columns */
+  .name-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 9px; margin-bottom: 12px;
+  }
+  /* wider screens get 4 columns */
+  @media (min-width: 480px) {
+    .name-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  }
+  .card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 16px 8px; text-align: center;
+    cursor: pointer; transition: background 0.12s, border-color 0.12s, transform 0.12s, box-shadow 0.12s;
+    user-select: none; -webkit-user-select: none;
+    min-height: 72px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+    touch-action: manipulation;
+  }
+  .card:active { transform: scale(0.96); }
+  .card.selected {
+    border-color: var(--text); background: var(--surface2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+  }
+  .card.team-lit {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+  }
+  .card.team-lit .card-first { color: rgba(0,0,0,0.55); }
+  .card.team-lit .card-last  { color: rgba(0,0,0,0.85); }
+  .card.lag-lit  { background: var(--lag); border-color: var(--lag); }
+  .card.tch-lit  { background: var(--tch); border-color: var(--tch); }
+  .card.rou-lit  { background: var(--rou); border-color: var(--rou); }
+  .card.bei-lit  { background: var(--bei); border-color: var(--bei); }
+  .card-first {
+    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    color: var(--muted); line-height: 1;
+  }
+  .card-last {
+    font-family: 'DM Mono', monospace; font-size: 0.95rem;
+    font-weight: 500; color: var(--text); line-height: 1.2;
+  }
+  .card.shake { animation: shake 0.38s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-7px); }
+    75% { transform: translateX(7px); }
+  }
+
+  /* CONTROLS */
+  .sel-count {
+    font-family: 'DM Mono', monospace; font-size: 0.85rem;
+    color: var(--muted); text-align: center; min-height: 20px; margin-bottom: 12px;
+  }
+  .btn-row { display: flex; gap: 9px; justify-content: center; margin-bottom: 24px; }
+  button {
+    font-family: 'DM Mono', monospace; font-size: 0.85rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 14px 20px; border-radius: 10px; cursor: pointer;
+    transition: all 0.12s; border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text);
+    touch-action: manipulation; min-height: 52px;
+  }
+  button:active { transform: scale(0.97); }
+  button:disabled { opacity: 0.28; cursor: not-allowed; }
+  .btn-submit {
+    background: var(--text); color: var(--bg); border-color: var(--text);
+    font-weight: 600; padding: 14px 28px;
+  }
+  .btn-submit:not(:disabled):active { opacity: 0.8; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; top: 16px; left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--text); color: var(--bg);
+    padding: 12px 24px; border-radius: 10px;
+    font-family: 'DM Mono', monospace; font-size: 0.95rem; font-weight: 500;
+    transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999; white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* WIN */
+  .win-banner {
+    display: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 32px 24px; text-align: center;
+    animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .win-banner h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.08em;
+    background: linear-gradient(130deg, var(--lag), var(--tch));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .win-banner p { color: var(--muted); margin-top: 10px; font-size: 1rem; font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>TEAM CIPHER</h1>
+    <p class="sub">4 teams · 4 people each</p>
+  </header>
+
+  <!-- CLUES -->
+  <div class="clue-panel">
+    <div class="panel-label">🎭 Clues</div>
+    <div class="clue-list" id="clue-list"></div>
+  </div>
+
+  <!-- SOLVED ROWS -->
+  <div class="solved-rows" id="solved-rows"></div>
+
+  <!-- NAME GRID -->
+  <div class="name-grid" id="name-grid"></div>
+
+  <!-- SEL COUNT -->
+  <div class="sel-count" id="sel-count"></div>
+
+  <!-- BUTTONS -->
+  <div class="btn-row">
+    <button onclick="deselectAll()">Deselect</button>
+    <button onclick="shuffleGrid()">Shuffle</button>
+    <button class="btn-submit" id="submit-btn" onclick="submitGuess()" disabled>Submit</button>
+  </div>
+
+  <!-- WIN -->
+  <div class="win-banner" id="win-banner">
+    <h2>🎉 Laissez les bons temps rouler!</h2>
+    <p>You sorted all 16 people correctly. Who dat!</p>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const TEAMS = {
+  beignet: {
+    name: 'Beignet',
+    members: ['Abigail Beadle', 'Sanil Parambil', 'Rahim Bhimani', 'Chris Bingham'],
+    bg: 'bei-bg', color: 'var(--bei)',
+    clue: 'All 4 members share at least one letter in common with the word <strong style="color:var(--text)">"BEIGNET"</strong>.'
+  },
+  lagniappe: {
+    name: 'Lagniappe',
+    members: ['Matt Toms', 'Deji Oduntan', 'Aneesh Chakko', 'Arlene Radley'],
+    bg: 'lag-bg', color: 'var(--lag)',
+    clue: 'Three members of this team each have a first name and last name with <strong>equal letter counts</strong> — but those counts are <strong>not necessarily the same</strong> as each other. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+  },
+  tchoupitoulas: {
+    name: 'Tchoupitoulas',
+    members: ['Rory Sewell', 'Chuck Foster', 'Kamran Kamal', 'Sharon Maxfield'],
+    bg: 'tch-bg', color: 'var(--tch)',
+    clue: 'Contains one of two people who <strong>share a last name</strong>. Also includes the only person whose <strong>first and last name start with the same letter</strong>, and the person whose <strong>combined first and last name is the longest</strong> in the group. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+  },
+  rougarou: {
+    name: 'Rougarou',
+    members: ['Tim Sewell', 'Jeremy Sharp', 'Mo Zaman', 'Jason Atkins'],
+    bg: 'rou-bg', color: 'var(--rou)',
+    clue: 'If you\'ve figured out the other three teams — these are the four people <strong>who\'s left!</strong>'
+  }
+};
+
+const memberTeam = {};
+for (const [key, t] of Object.entries(TEAMS))
+  for (const m of t.members) memberTeam[m] = key;
+
+let displayOrder = Object.values(TEAMS).flatMap(t => t.members);
+let selected = new Set();
+let solvedTeams = new Set();
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+shuffle(displayOrder);
+
+const isSolved = name => solvedTeams.has(memberTeam[name]);
+
+function renderClues() {
+  document.getElementById('clue-list').innerHTML = Object.entries(TEAMS).map(([key, t]) => `
+    <div class="clue-row ${solvedTeams.has(key) ? 'solved' : ''}">
+      <div class="clue-left">
+        <div class="clue-dot" style="background:${t.color}"></div>
+      </div>
+      <div class="clue-body">
+        <div class="clue-team-name" style="color:${t.color}">${t.name.toUpperCase()} TEAM</div>
+        <div class="clue-text">${t.clue}</div>
+      </div>
+    </div>`).join('');
+}
+
+function getTeamLitClass(key) {
+  return { lagniappe: 'lag-lit', tchoupitoulas: 'tch-lit', rougarou: 'rou-lit', beignet: 'bei-lit' }[key] || '';
+}
+
+function allSameTeam() {
+  if (selected.size !== 4) return null;
+  const keys = [...selected].map(n => memberTeam[n]);
+  return keys.every(k => k === keys[0]) ? keys[0] : null;
+}
+
+function renderGrid() {
+  const rem = displayOrder.filter(n => !isSolved(n));
+  const litTeam = allSameTeam();
+  const litClass = litTeam ? getTeamLitClass(litTeam) : '';
+  document.getElementById('name-grid').innerHTML = rem.map(name => {
+    const parts = name.split(' ');
+    const first = parts[0];
+    const last = parts.slice(1).join(' ');
+    const isSelected = selected.has(name);
+    const cardClass = isSelected ? (litTeam ? `team-lit ${litClass}` : 'selected') : '';
+    return `<div class="card ${cardClass}"
+      id="c-${name.replace(/ /g, '_')}"
+      data-name="${name}">
+      <div class="card-first">${first}</div>
+      <div class="card-last">${last}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('sel-count').textContent = selected.size ? `${selected.size} of 4 selected` : '';
+  document.getElementById('submit-btn').disabled = selected.size !== 4;
+}
+
+function toggle(name) {
+  if (selected.has(name)) {
+    selected.delete(name);
+  } else {
+    if (selected.size >= 4) { showToast('Deselect someone first'); return; }
+    selected.add(name);
+  }
+  renderGrid();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('name-grid').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const name = card.dataset.name;
+    if (name) toggle(name);
+  });
+});
+
+function deselectAll() { selected.clear(); renderGrid(); }
+
+function shuffleGrid() {
+  const rem = shuffle(displayOrder.filter(n => !isSolved(n)));
+  displayOrder = [...displayOrder.filter(isSolved), ...rem];
+  renderGrid();
+}
+
+function submitGuess() {
+  if (selected.size !== 4) return;
+  const names = [...selected];
+  const keys = names.map(n => memberTeam[n]);
+
+  if (keys.every(k => k === keys[0])) {
+    const key = keys[0];
+    solvedTeams.add(key);
+    selected.clear();
+    addSolvedRow(key);
+    renderGrid(); renderClues();
+    if (solvedTeams.size === Object.keys(TEAMS).length) {
+      setTimeout(() => document.getElementById('win-banner').style.display = 'block', 500);
+    } else {
+      showToast('Correct! 🎉');
+    }
+  } else {
+    const counts = {};
+    keys.forEach(k => counts[k] = (counts[k] || 0) + 1);
+    const oneAway = Object.values(counts).some(c => c === 3);
+    names.forEach(name => {
+      const el = document.getElementById('c-' + name.replace(/ /g, '_'));
+      if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+    });
+    showToast(oneAway ? '😬 One away...' : 'Not quite — try again');
+  }
+}
+
+function addSolvedRow(key) {
+  const t = TEAMS[key];
+  const el = document.createElement('div');
+  el.className = `solved-row ${t.bg}`;
+  el.innerHTML = `<div class="solved-team-name">${t.name} Team</div>
+    <div class="solved-members">${t.members.join(' · ')}</div>`;
+  document.getElementById('solved-rows').appendChild(el);
+}
+
+let toastT;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+renderClues(); renderGrid();
+</script>
+</body>
+</html>
