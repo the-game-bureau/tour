@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mission Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,31 +33,21 @@
       width: 42px; height: 42px;
       border-radius: 50%;
       background: #01b9d8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
     }
     .contact-info { flex: 1; }
     .contact-name { font-size: 1rem; font-weight: 600; color: #111827; line-height: 1.2; }
-    .contact-sub  { font-size: 0.72rem; color: #6b7280; margin-top: 0.1rem; }
     .online-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #4ecf98;
-      flex-shrink: 0;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4ecf98; flex-shrink: 0;
     }
 
     /* ── Chat scroll area ────────────────────────────────────────── */
     .chat {
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
       padding: 1rem 0.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
+      display: flex; flex-direction: column; gap: 0.35rem;
     }
 
     /* ── Message bubbles ─────────────────────────────────────────── */
@@ -77,20 +68,15 @@
       color: #ffffff;
     }
     .msg.from-player .msg-bubble {
-      background: #e5e7eb;
-      color: #111827;
+      background: #e5e7eb; color: #111827;
       border-bottom-right-radius: 5px;
     }
 
-    /* Team-colored bubbles (kept for later use) */
+    /* Team-colored bubbles */
     .msg-bubble.team-beignet   { background: #172a40; border-left: 4px solid #6aaef7; }
     .msg-bubble.team-lagniappe { background: #2d2007; border-left: 4px solid #f5a623; }
     .msg-bubble.team-rougarou  { background: #2d0f14; border-left: 4px solid #e85568; }
     .msg-bubble.team-tch       { background: #0a2118; border-left: 4px solid #4ecf98; }
-    .msg-label.team-beignet   { color: #6aaef7; }
-    .msg-label.team-lagniappe { color: #f5a623; }
-    .msg-label.team-rougarou  { color: #e85568; }
-    .msg-label.team-tch       { color: #4ecf98; }
 
     .msg-bubble p { margin: 0 0 0.6rem; }
     .msg-bubble p:last-child { margin-bottom: 0; }
@@ -98,25 +84,30 @@
     .msg.from-player .msg-bubble a { color: #01b9d8; }
     .msg-bubble img { max-width: 100%; border-radius: 10px; display: block; margin-top: 0.5rem; }
 
-    /* ── Embedded iframe bubble ─────────────────────────────────────── */
-    .msg.embed-bubble { max-width: 100%; width: 100%; }
-    .msg.embed-bubble .msg-bubble { padding: 0; background: none; border-radius: 12px; overflow: hidden; width: 100%; }
-    .msg.embed-bubble iframe { width: 100%; height: 72vh; border: none; border-radius: 12px; display: block; }
+    /* ── Open-cipher button inside a chat bubble ─────────────────── */
+    .open-cipher-btn {
+      display: block; width: 100%;
+      margin-top: 0.5rem;
+      background: rgba(0,0,0,0.2);
+      border: 1.5px solid rgba(255,255,255,0.45);
+      color: #ffffff;
+      font-family: inherit; font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 10px 16px; border-radius: 12px;
+      cursor: pointer; text-align: center;
+      transition: background 0.15s;
+    }
+    .open-cipher-btn:active { background: rgba(0,0,0,0.4); }
 
     /* ── Typing indicator ─────────────────────────────────────────── */
     .typing {
       align-self: flex-start;
-      background: #01b9d8;
-      border-radius: 20px;
-      border-bottom-left-radius: 5px;
+      background: #01b9d8; border-radius: 20px; border-bottom-left-radius: 5px;
       padding: 0.55rem 0.9rem;
-      display: flex;
-      gap: 4px;
-      align-items: center;
+      display: flex; gap: 4px; align-items: center;
     }
     .typing span {
-      width: 7px; height: 7px;
-      border-radius: 50%;
+      width: 7px; height: 7px; border-radius: 50%;
       background: rgba(255,255,255,0.7);
       animation: typingBounce 1.2s infinite;
     }
@@ -134,65 +125,46 @@
       padding: 0.6rem 0.75rem;
       flex-shrink: 0;
     }
-    .answer-row {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
+    .answer-row { display: flex; gap: 0.5rem; align-items: center; }
     .answer-input {
       flex: 1;
       background: #f3f4f6;
       border: 2px solid #e5e7eb;
       border-radius: 24px;
       padding: 0.6rem 1rem;
-      color: #111827;
-      font-size: 1rem;
+      color: #111827; font-size: 1rem;
       outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-      transition: border-color 0.2s;
+      -webkit-appearance: none; appearance: none;
+      transition: border-color 0.2s, opacity 0.2s;
     }
     .answer-input:focus { border-color: #01b9d8; }
-    .answer-input.wrong {
-      border-color: #e85568;
-      animation: shake 0.35s ease;
-    }
+    .answer-input:disabled { opacity: 0.4; }
+    .answer-input.wrong { border-color: #e85568; animation: shake 0.35s ease; }
     .answer-input::placeholder { color: #9ca3af; }
+    .answer-input::-webkit-contacts-auto-fill-button,
+    .answer-input::-webkit-credentials-auto-fill-button { visibility: hidden; pointer-events: none; }
 
     .submit-btn {
-      background: #01b9d8;
-      border: none;
-      border-radius: 50%;
-      width: 44px; height: 44px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #01b9d8; border: none; border-radius: 50%;
+      width: 44px; height: 44px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s, transform 0.1s, opacity 0.2s;
     }
     .submit-btn:active { transform: scale(0.9); background: #0199b5; }
+    .submit-btn:disabled { opacity: 0.35; cursor: default; }
 
     .hint {
-      font-size: 0.78rem;
-      color: #e85568;
-      margin-top: 0.35rem;
-      padding-left: 0.5rem;
-      min-height: 1.1em;
+      font-size: 0.78rem; color: #e85568;
+      margin-top: 0.35rem; padding-left: 0.5rem; min-height: 1.1em;
     }
 
     /* Choice buttons */
-    .btn-choices { display: flex; flex-direction: column; gap: 0.4rem; }
+    .btn-choices { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.4rem; }
     .choice-btn {
-      padding: 0.7rem 1rem;
-      border-radius: 12px;
-      border: 2px solid;
-      background: transparent;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: left;
-      transition: opacity 0.15s;
+      padding: 0.7rem 1rem; border-radius: 12px; border: 2px solid;
+      background: transparent; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; text-align: left; transition: opacity 0.15s;
     }
     .choice-btn:active { opacity: 0.6; }
     .choice-btn.team-beignet   { border-color: #6aaef7; color: #6aaef7; }
@@ -202,11 +174,8 @@
     .choice-btn.neutral        { border-color: #d1d5db; color: #374151; }
 
     .win-msg {
-      text-align: center;
-      color: #01b9d8;
-      font-weight: 700;
-      font-size: 1.05rem;
-      padding: 0.5rem;
+      text-align: center; color: #01b9d8;
+      font-weight: 700; font-size: 1.05rem; padding: 0.5rem;
     }
 
     @keyframes slideIn {
@@ -221,46 +190,184 @@
 
     /* ── Team Cipher overlay ─────────────────────────────────────── */
     .team-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      display: flex;
-      flex-direction: column;
-      background: #0d0d10;
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; flex-direction: column;
       transform: translateY(100%);
       transition: transform 0.35s cubic-bezier(.4,0,.2,1);
     }
     .team-overlay.open { transform: translateY(0); }
     .overlay-bar {
-      background: #1f2937;
-      border-bottom: 1px solid #374151;
+      background: #041c2e;
+      border-bottom: 1px solid rgba(1,185,216,0.35);
       padding: 0.55rem 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-shrink: 0;
+      display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0;
     }
     .back-btn {
-      background: none;
-      border: none;
-      color: #38bdf8;
-      font-size: 1rem;
-      cursor: pointer;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
+      background: none; border: none; color: #01b9d8;
+      font-size: 1rem; cursor: pointer;
+      padding: 0.25rem 0.5rem; border-radius: 6px;
       font-family: inherit;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      display: flex; align-items: center; gap: 0.3rem;
     }
     .back-btn:active { opacity: 0.6; }
-    .overlay-title { font-size: 0.9rem; font-weight: 600; color: #f3f4f6; }
-    .team-overlay iframe {
-      flex: 1;
-      border: none;
-      width: 100%;
-      height: 100%;
+    .overlay-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.1em; color: #01b9d8;
     }
+
+    /* ── Team Cipher inline content (scoped to .tc-wrap) ─────────── */
+    .tc-wrap {
+      --tc-bg: #020c18; --tc-surface: #041c2e; --tc-surface2: #07293f;
+      --tc-border: rgba(1,185,216,0.35); --tc-border-hi: #01b9d8;
+      --tc-text: #e0f8ff; --tc-muted: #4a8fa0; --tc-cyan: #01b9d8;
+      --tc-lag: #f5a623; --tc-tch: #4ecf98; --tc-rou: #e85568; --tc-bei: #6aaef7;
+
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      background: var(--tc-bg); color: var(--tc-text);
+      font-family: 'DM Sans', sans-serif; font-size: 24px;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 80px; -webkit-tap-highlight-color: transparent;
+    }
+    @media (min-width: 480px) { .tc-wrap { font-size: 20px; } }
+
+    .tc-wrap .wrap { width: 100%; max-width: 640px; }
+    .tc-wrap header { text-align: center; margin-bottom: 28px; }
+    .tc-wrap h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 14vw, 5.5rem);
+      letter-spacing: 0.12em; line-height: 0.9; color: #01b9d8;
+      text-shadow: 0 0 8px #01b9d8, 0 0 28px rgba(1,185,216,0.7), 0 0 60px rgba(1,185,216,0.3);
+    }
+    .tc-wrap .sub {
+      margin-top: 10px; font-family: 'DM Mono', monospace;
+      font-size: 0.8rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--tc-muted);
+    }
+    .tc-wrap .clue-panel {
+      background: var(--tc-surface); border: 1px solid var(--tc-border);
+      border-radius: 16px; padding: 20px; margin-bottom: 20px;
+    }
+    .tc-wrap .panel-label {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--tc-muted);
+      margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+    }
+    .tc-wrap .panel-label::after { content: ''; flex: 1; height: 1px; background: var(--tc-border); }
+    .tc-wrap .clue-list { display: flex; flex-direction: column; gap: 20px; }
+    .tc-wrap .clue-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      line-height: 1.7; color: var(--tc-muted); transition: color 0.3s;
+    }
+    .tc-wrap .clue-row.solved { color: var(--tc-text); }
+    .tc-wrap .clue-left { flex-shrink: 0; padding-top: 6px; }
+    .tc-wrap .clue-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .tc-wrap .clue-row:not(.solved) .clue-dot { background: var(--tc-muted) !important; }
+    .tc-wrap .clue-body { flex: 1; }
+    .tc-wrap .clue-team-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 0.1em; line-height: 1; margin-bottom: 6px;
+    }
+    .tc-wrap .clue-text { font-size: 1rem; line-height: 1.7; }
+    .tc-wrap .clue-row strong { font-weight: 600; color: var(--tc-text); }
+
+    .tc-wrap .solved-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .tc-wrap .solved-row {
+      border-radius: 14px; padding: 16px 20px;
+      animation: tcPopIn 0.38s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes tcPopIn {
+      from { opacity: 0; transform: scale(0.9) translateY(-8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .tc-wrap .solved-team-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+      letter-spacing: 0.1em; color: rgba(0,0,0,0.7); margin-bottom: 6px;
+    }
+    .tc-wrap .solved-members {
+      font-family: 'DM Mono', monospace; font-size: 0.85rem;
+      color: rgba(0,0,0,0.6); line-height: 1.6;
+    }
+    .tc-wrap .lag-bg { background: var(--tc-lag); }
+    .tc-wrap .tch-bg { background: var(--tc-tch); }
+    .tc-wrap .rou-bg { background: var(--tc-rou); }
+    .tc-wrap .bei-bg { background: var(--tc-bei); }
+
+    .tc-wrap .name-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 12px; margin-bottom: 16px;
+    }
+    @media (min-width: 480px) {
+      .tc-wrap .name-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    }
+    .tc-wrap .card {
+      background: var(--tc-surface); border: 1.5px solid var(--tc-border);
+      border-radius: 14px; padding: 20px 10px; text-align: center;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, transform 0.12s, box-shadow 0.12s;
+      user-select: none; -webkit-user-select: none;
+      min-height: 90px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 6px;
+      touch-action: manipulation;
+    }
+    .tc-wrap .card:active { transform: scale(0.96); }
+    .tc-wrap .card.selected {
+      border-color: var(--tc-border-hi); background: var(--tc-surface2);
+      transform: translateY(-2px);
+      box-shadow: 0 0 14px rgba(1,185,216,0.45), 0 6px 20px rgba(0,0,0,0.5);
+    }
+    .tc-wrap .card.team-lit { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.55); }
+    .tc-wrap .card.team-lit .card-first { color: rgba(0,0,0,0.55); }
+    .tc-wrap .card.team-lit .card-last  { color: rgba(0,0,0,0.85); }
+    .tc-wrap .card.lag-lit { background: var(--tc-lag); border-color: var(--tc-lag); }
+    .tc-wrap .card.tch-lit { background: var(--tc-tch); border-color: var(--tc-tch); }
+    .tc-wrap .card.rou-lit { background: var(--tc-rou); border-color: var(--tc-rou); }
+    .tc-wrap .card.bei-lit { background: var(--tc-bei); border-color: var(--tc-bei); }
+    .tc-wrap .card-first {
+      font-family: 'DM Mono', monospace; font-size: 0.85rem;
+      color: var(--tc-muted); line-height: 1;
+    }
+    .tc-wrap .card-last {
+      font-family: 'DM Mono', monospace; font-size: 1.05rem;
+      font-weight: 500; color: var(--tc-text); line-height: 1.2;
+    }
+    .tc-wrap .card.shake { animation: tcShake 0.38s ease; }
+    @keyframes tcShake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-7px); }
+      75% { transform: translateX(7px); }
+    }
+    .tc-wrap .sel-count {
+      font-family: 'DM Mono', monospace; font-size: 0.9rem;
+      color: var(--tc-muted); text-align: center; min-height: 24px; margin-bottom: 14px;
+    }
+    .tc-wrap .btn-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+    .tc-wrap button {
+      font-family: 'DM Mono', monospace; font-size: 0.95rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 16px 22px; border-radius: 12px; cursor: pointer;
+      transition: all 0.12s; border: 1.5px solid var(--tc-border);
+      background: var(--tc-surface); color: var(--tc-text);
+      touch-action: manipulation; min-height: 58px;
+    }
+    .tc-wrap button:active { transform: scale(0.97); }
+    .tc-wrap button:disabled { opacity: 0.28; cursor: not-allowed; }
+    .tc-wrap .btn-submit {
+      background: var(--tc-cyan); color: var(--tc-bg); border-color: var(--tc-cyan);
+      font-weight: 600; padding: 16px 32px;
+      box-shadow: 0 0 14px rgba(1,185,216,0.5);
+    }
+    .tc-wrap .btn-submit:not(:disabled):active { opacity: 0.8; }
+    #tc-toast {
+      position: fixed; top: 16px; left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: #e0f8ff; color: #020c18;
+      padding: 14px 28px; border-radius: 12px;
+      font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 500;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+      z-index: 9999; white-space: nowrap; pointer-events: none;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+    #tc-toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -281,11 +388,31 @@
     <button class="back-btn" onclick="closeTeamOverlay()">&#8592; Back</button>
     <span class="overlay-title">Team Cipher</span>
   </div>
-  <iframe id="team-frame" src="" title="Team Cipher"></iframe>
+  <div class="tc-wrap">
+    <div class="wrap">
+      <header>
+        <h1>TEAM CIPHER</h1>
+        <p class="sub">4 teams · 4 people each</p>
+      </header>
+      <div class="clue-panel">
+        <div class="panel-label">🎭 Clues</div>
+        <div class="clue-list" id="tc-clue-list"></div>
+      </div>
+      <div class="solved-rows" id="tc-solved-rows"></div>
+      <div class="name-grid" id="tc-name-grid"></div>
+      <div class="sel-count" id="tc-sel-count"></div>
+      <div class="btn-row">
+        <button onclick="TC.deselectAll()">Deselect</button>
+        <button onclick="TC.shuffleGrid()">Shuffle</button>
+        <button class="btn-submit" id="tc-submit-btn" onclick="TC.submitGuess()" disabled>Submit</button>
+      </div>
+    </div>
+  </div>
 </div>
+<div id="tc-toast"></div>
 
 <script>
-// ── Team definitions (kept for later use) ────────────────────────────────────
+// ── Team definitions ──────────────────────────────────────────────────────────
 const TEAMS = {
   beignet:   { name: 'Beignet',       color: '#6aaef7', cls: 'team-beignet',   w3w: 'https://w3w.co/command.assets.hopping' },
   lagniappe: { name: 'Lagniappe',     color: '#f5a623', cls: 'team-lagniappe', w3w: 'https://w3w.co/jacuzzi.bundles.planet'  },
@@ -293,160 +420,151 @@ const TEAMS = {
   tch:       { name: 'Tchoupitoulas', color: '#4ecf98', cls: 'team-tch',       w3w: 'https://w3w.co/sprouts.props.huddle'   }
 };
 
+const TEAM_KEY_MAP = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas: 'tch', rougarou: 'rougarou' };
+
+const TEAM_DEFS = {
+  beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. 🍩 We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe', give: 'JAMBALAYA', receive: 'gumbo'      },
+  lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',   give: 'GUMBO',     receive: 'jambalaya' },
+  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, too much standing around. Let\'s get moving!', partner: 'Rougarou',  give: 'ETOUFFEE',  receive: 'muffeletta'},
+  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFELETTA', receive: 'etouffee'}
+};
+
 // ── Build step sequence ───────────────────────────────────────────────────────
 function buildSteps(teamKey) {
-  const t = teamKey ? TEAMS[teamKey] : null;
+  const t   = teamKey ? TEAMS[teamKey]    : null;
+  const def = teamKey ? TEAM_DEFS[teamKey] : null;
 
-  return [
-    // 0 ── Welcome
-    {
-      reveal: [
-        { html: 'We lied. This IS a team building exercise, but it\'s NOT a walking tour. It\'s more like an Escape Room/Scavenger Hunt.' },
-        { html: 'Type PLAY to figure out what team you\'re on.' }
-      ],
-      action: { type: 'text', answers: ['play'] }
-    },
+  // ── Shared steps (0–5) ────────────────────────────────────────────────────
+  const s0 = {
+    reveal: [
+      { name: 'we-lied',   html: 'We lied. This IS a team building exercise, but it\'s NOT a walking tour. It\'s more like an Escape Room/Scavenger Hunt.' },
+      { name: 'type-play', html: 'Type PLAY to figure out what team you\'re on.' }
+    ],
+    action: { type: 'text', answers: ['play'] }
+  };
 
-    // 1 ── Team Cipher game + team name question
-    {
-      reveal: [
-        { html: '<iframe src="teams.html" title="Team Cipher"></iframe>', embed: true },
-        { html: 'OK, what\'s your team name?' }
-      ],
-      action: { type: 'text', answers: ['beignet', 'lagniappe', 'tchoupitoulas', 'rougarou'], setsTeam: true }
-    },
+  const s1 = {
+    reveal: [
+      { name: 'cipher-btn', html: 'Figure out which team you\'re on using the Team Cipher puzzle.<button class="open-cipher-btn" onclick="openTeamOverlay()">Open Team Cipher →</button>' }
+    ],
+    action: { type: 'text', answers: ['beignet', 'lagniappe', 'tchoupitoulas', 'rougarou'], setsTeam: true }
+  };
 
-    // 2 ── Team name definition
-    {
-      reveal: [{
-        html: 'Gather up with your teammates and send us a brief (4 words or less) definition of &ldquo;' + (t ? t.name : 'your team name') + '&rdquo;. If no one on your team knows, you can Google it or ask for help from another team. Will they help or lead you astray?'
-      }],
-      action: { type: 'free-text' }
-    },
+  const s2 = {
+    reveal: [{
+      name: 'definition-ask',
+      html: '<p>Ok, you\'re TEAM <strong>' + (t ? t.name.toUpperCase() : 'X') + '</strong>, but what does ' + (t ? t.name : 'your team name') + ' mean?</p>'
+        + '<p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>'
+    }],
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: [def ? def.letter : 'a'] }
+  };
 
-    // ── GO! (hidden for now)
-    // {
-    //   reveal: [{
-    //     html: 'Pick a team communicator. Have them send "GO!" directly to Mission Control in Teams (not in the Channel).'
-    //   }],
-    //   action: { type: 'button', text: 'I sent GO! ✓', playerText: 'GO!' }
-    // },
+  const s3 = {
+    reveal: [
+      { name: 'correct-definition', html: def ? def.correctMsg : 'Correct! We know, too much standing around. Let\'s get moving!' },
+      { name: 'go-to-lafayette',    html: 'Are there any Hamilton fans on your team? Hamilton, the musical, not the Tiger-Cats football team. HEAD OVER TO THE SQUARE NAMED FOR AMERICA\'S FAVORITE FIGHTING FRENCHMAN (ACCORDING TO HAMILTON). Google it if you must. Are the other teams following you? Hurry! — but beware of cars and streetcars. AFTER you get there, tell me the Frenchman\'s name.' }
+    ],
+    action: { type: 'text', placeholder: 'The Frenchman\'s name…', answers: ['lafayette'] }
+  };
 
-    // 3 ── Head to Lafayette Square
-    {
-      reveal: [{
-        html: 'That\'s too much standing around. Let\'s get moving! Are there any Hamilton fans on your team? Hamilton, the musical, not the Tiger-Cats football team. HEAD OVER TO THE SQUARE NAMED FOR AMERICA\'S FAVORITE FIGHTING FRENCHMAN (ACCORDING TO HAMILTON). Google it if you must. Are the other teams following you? Hurry! — but beware of cars and streetcars. AFTER you get there, tell me the Frenchman\'s name.'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'The Frenchman\'s name…',
-        answers: ['lafayette'],
-        hints: ['Think Hamilton the musical…', 'Marquis de ___']
-      }
-    },
-
-    // 4 ── Team-specific Lafayette bubble
-    {
-      reveal: t ? [{
-        teamClass: t.cls,
+  const s4 = {
+    reveal: t ? [
+      {
+        name: 'lafayette-welcome', teamClass: t.cls,
         html: '<p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square"></p>'
-          + '<p>Welcome to Lafayette Square! I\'m so glad you didn\'t go all the way to Jackson Square. Take a look around for a minute, but don\'t get too comfortable — your team has a specific position to hold: <a href="' + t.w3w + '" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There\'s a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office. Now let\'s look at the most boring looking building around for a minute.</p>'
-          + '<p>Actually, the building to the right of Gallier Hall isn\'t as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. You can save the video for later after you get your answer from it. I know you\'re in a hurry.</p>'
-          + '<p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>'
-      }] : [{
-        html: '<p>Welcome to Lafayette Square! I\'m so glad you didn\'t go all the way to Jackson Square. Take a look around for a minute. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There\'s a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office. Now let\'s look at the most boring looking building around for a minute.</p>'
-          + '<p>Actually, the building to the right of Gallier Hall isn\'t as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. You can save the video for later after you get your answer from it. I know you\'re in a hurry.</p>'
-          + '<p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'How many dollars a day?',
-        answers: ['6million', '6000000', 'sixmillion'],
-        hints: ['Watch the video!', 'It\'s a big round number…']
-      }
-    },
+          + '<p>Welcome to Lafayette Square, Team <strong>' + t.name + '</strong>! I\'m so glad you didn\'t go all the way to Jackson Square. Take a look around for a minute, but don\'t get too comfortable — your team has a specific position to hold: <a href="' + t.w3w + '" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There\'s a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office.</p>'
+      },
+      { name: 'callout',         html: def ? 'We hope the other teams are relatively close by. You\'re going to need their help. Call out for Team <strong>' + def.partner.toUpperCase() + '</strong>. Tell them their password is <strong>' + def.give + '</strong>.' : 'We hope the other teams are relatively close by. You\'re going to need their help. Call out for your partner team.' },
+      { name: 'password-prompt', html: def ? 'What password did Team ' + def.partner.toUpperCase() + ' give you?' : 'What password did your partner team give you?' }
+    ] : [
+      { name: 'lafayette-welcome', html: '<p>Welcome to Lafayette Square! I\'m so glad you didn\'t go all the way to Jackson Square. Take a look around for a minute. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There\'s a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office.</p>' },
+      { name: 'callout',         html: 'We hope the other teams are relatively close by. You\'re going to need their help. Call out for your partner team.' },
+      { name: 'password-prompt', html: 'What password did your partner team give you?' }
+    ],
+    action: { type: 'text', placeholder: 'Password from the other team…', answers: def ? [def.receive] : [] }
+  };
 
-    // 5 ── Jefferson Davis
-    {
-      reveal: [{
-        html: 'Right! That\'s a lot of cash! One more thing about Gallier Hall. I mentioned funerals. What American president\'s funeral was held there? This is a trick question. We don\'t necessarily mean US President. Remember the other side of the Civil War had a president too.'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'Which president?',
-        answers: ['jeffersondavis', 'jeffdavis'],
-        hints: ['Think Civil War…', 'Confederate president…']
-      }
-    },
+  const s5 = {
+    reveal: teamKey === 'tch' ? [
+      { name: 'gallier-photo',   html: 'Head over to Gallier Hall and take a picture of you and your team on the steps. Save it for later.' },
+      { name: 'jefferson-davis', html: 'What American president\'s funeral was held there? This is a trick question. We don\'t necessarily mean US President. Remember the other side of the Civil War had a president too.' }
+    ] : [
+      { name: 'jefferson-davis', html: 'One more thing about Gallier Hall. What American president\'s funeral was held there? This is a trick question. We don\'t necessarily mean US President. Remember the other side of the Civil War had a president too.' }
+    ],
+    action: { type: 'text', placeholder: 'Which president?', answers: ['jeffersondavis', 'jeffdavis'] }
+  };
 
-    // 6 ── Photo with Henry Clay
-    {
-      reveal: [{
-        html: '<p><a href="https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18" target="_blank">https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18</a></p>'
-          + '<p>I told you it was a trick question. We didn\'t say President of the United States of America. Jefferson Davis was President of the CONFEDERATE States of America. 😮</p>'
-          + '<p>Send me a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, I\'ll never know.</p>'
-      }],
-      action: { type: 'button', text: 'Photo sent ✓', playerText: '[photo]' }
-    },
+  // ── Reusable challenge steps ──────────────────────────────────────────────
+  const henryClay = {
+    reveal: [{
+      name: 'henry-clay-photo',
+      html: '<p>Jefferson Davis was President of the CONFEDERATE States of America — not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, 135 years ago: <a href="https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18" target="_blank">https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18</a></p>'
+        + '<p>Now send me a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, I\'ll never know.</p>'
+    }],
+    action: { type: 'button', text: 'Photo sent ✓', playerText: '[photo]' }
+  };
 
-    // 7 ── Tree planted by a Bush
-    {
-      reveal: [{
-        html: 'Let\'s wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'Type of tree?',
-        answers: ['shumardoak'],
-        hints: ['Look for a plaque near the tree…', 'It\'s an oak variety…']
-      }
-    },
+  const bushTree = {
+    reveal: [{ name: 'bush-tree', html: 'Let\'s wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.' }],
+    action: { type: 'text', placeholder: 'Type of tree?', answers: ['shumardoak'] }
+  };
 
-    // 8 ── Oswald / sculpture / John Jay
-    {
-      reveal: [{
-        html: '<p><img src="https://the-game-bureau.github.io/nolabound/archive/Bush.jpg" alt="Bush tree photo"></p>'
-          + '<p>Look at that! The US and Canada working together! Just like 360!</p>'
-          + '<p>This place used to look a lot different.</p>'
-          + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/ls.jpg" alt="Lafayette Square old photo"></p>'
-          + '<p>But let\'s move on. It\'s been reported that Lee Harvey Oswald used to hang out at the Newman building at the corner of Lafayette and Camp — but don\'t bother looking for it.</p>'
-          + '<p>The Newman building has been replaced by a sculpture.</p>'
-          + '<p>TAKE A PICTURE OF YOU OR YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER.</p>'
-          + '<p>Do NOT text me "Benjamin Franklin". You may have to strain your neck a bit to find the father written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself.</p>'
-          + '<p>Here\'s some Oswald stuff that will help you in no way what-so-ever 🤣.</p>'
-          + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/newman.jpg" alt="Newman building"></p>'
-          + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/flyer.jpg" alt="Oswald flyer"></p>'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'The founding father\'s name?',
-        answers: ['johnjay'],
-        hints: ['First Chief Justice of the US…', 'First name rhymes with "gone"…']
-      }
-    },
+  const sculpture = {
+    reveal: [{
+      name: 'oswald-sculpture',
+      html: '<p><img src="https://the-game-bureau.github.io/nolabound/archive/Bush.jpg" alt="Bush tree photo"></p>'
+        + '<p>Look at that! The US and Canada working together! Just like 360!</p>'
+        + '<p>This place used to look a lot different.</p>'
+        + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/ls.jpg" alt="Lafayette Square old photo"></p>'
+        + '<p>But let\'s move on. It\'s been reported that Lee Harvey Oswald used to hang out at the Newman building at the corner of Lafayette and Camp — but don\'t bother looking for it.</p>'
+        + '<p>The Newman building has been replaced by a sculpture.</p>'
+        + '<p>TAKE A PICTURE OF YOU OR YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER.</p>'
+        + '<p>Do NOT text me "Benjamin Franklin". You may have to strain your neck a bit to find the father written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself.</p>'
+        + '<p>Here\'s some Oswald stuff that will help you in no way what-so-ever 🤣.</p>'
+        + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/newman.jpg" alt="Newman building"></p>'
+        + '<p><img src="https://the-game-bureau.github.io/nolabound/archive/flyer.jpg" alt="Oswald flyer"></p>'
+    }],
+    action: { type: 'text', placeholder: 'The founding father\'s name?', answers: ['johnjay'] }
+  };
 
-    // 9 ── Cuba
-    {
-      reveal: [{
-        html: '<p>Great job! I can\'t believe we didn\'t even mention the 4 beautiful statues on top of the old post office you\'re pointing to. BUT WE DON\'T HAVE TIME! Look at this later: <a href="https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf" target="_blank">https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf</a></p>'
-          + '<p>We\'ve got one more thing to find, and the answer will be the password that you send to me to buzz the office door open... Send me the name of the country who had their flag made in New Orleans and sent to the country. No seriously. It\'s here: <a href="https://what3words.com/remake.king.cloth" target="_blank">https://what3words.com/remake.king.cloth</a> Again, tell me the name of the country.</p>'
-      }],
-      action: {
-        type: 'text',
-        placeholder: 'Which country?',
-        answers: ['cuba'],
-        hints: ['Island nation to the south…', 'Think Caribbean…']
-      }
-    },
+  const federalReserve = {
+    reveal: [{
+      name: 'federal-reserve',
+      html: '<p>Take a look at the plain building to the right of Gallier Hall — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch.</p>'
+        + '<p>TEXT ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. You can save the video for later after you get your answer from it. You don\'t want to stand around looking like a teenager watching videos in public!</p>'
+        + '<p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>'
+    }],
+    action: { type: 'text', placeholder: 'How many dollars a day?', answers: ['6million', '6000000', 'sixmillion'] }
+  };
 
-    // 10 ── Win
-    {
-      reveal: [{
-        html: '🥳 You win! Head back to the office (<a href="https://what3words.com/blur.trek.searches" target="_blank">https://what3words.com/blur.trek.searches</a>) for a frosty beverage! Text VICTORY when you get there and I\'ll buzz you in.'
-      }],
-      action: { type: 'win' }
-    }
-  ];
+  const cuba = {
+    reveal: [{
+      name: 'cuba',
+      html: '<p>Great job! I can\'t believe we didn\'t even mention the 4 beautiful statues on top of the old post office you\'re pointing to. BUT WE DON\'T HAVE TIME! Look at this later: <a href="https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf" target="_blank">https://www.lb5.uscourts.gov/Courthistory/jmwbldg/jmw_building_brochure.pdf</a></p>'
+        + '<p>We\'ve got one more thing to find, and the answer will be the password that you send to me to buzz the office door open... Send me the name of the country who had their flag made in New Orleans and sent to the country. No seriously. It\'s here: <a href="https://what3words.com/remake.king.cloth" target="_blank">https://what3words.com/remake.king.cloth</a> Again, tell me the name of the country.</p>'
+    }],
+    action: { type: 'text', placeholder: 'Which country?', answers: ['cuba'] }
+  };
+
+  const lighthouse = {
+    reveal: [{ name: 'lighthouse', html: 'TAKE A PIC OF THE BEACON OF LIGHT STANDING BETWEEN JULIA AND HER BROTHER GIROD. Send me the name of the restaurant we\'re going to.' }],
+    action: { type: 'text', placeholder: 'Restaurant name?', answers: ['junebug'] }
+  };
+
+  const win = {
+    reveal: [{ name: 'win', html: '🥳 You win! Head back to the office (<a href="https://what3words.com/blur.trek.searches" target="_blank">https://what3words.com/blur.trek.searches</a>) for a frosty beverage! Text VICTORY when you get there and I\'ll buzz you in.' }],
+    action: { type: 'win' }
+  };
+
+  // ── Team-specific tails ───────────────────────────────────────────────────
+  const tail =
+    teamKey === 'tch'      ? [federalReserve, bushTree,      sculpture,      cuba, lighthouse, win] :
+    teamKey === 'beignet'  ? [henryClay,      federalReserve, bushTree,       sculpture, cuba, lighthouse, win] :
+    teamKey === 'lagniappe'? [sculpture,       henryClay,      federalReserve, bushTree,  cuba, lighthouse, win] :
+    teamKey === 'rougarou' ? [bushTree,        sculpture,      henryClay,      federalReserve, cuba, lighthouse, win] :
+                             [henryClay, federalReserve, bushTree, sculpture, cuba, lighthouse, win]; // fallback (no team)
+
+  return [s0, s1, s2, s3, s4, s5, ...tail];
 }
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -456,7 +574,7 @@ try { state.team = localStorage.getItem('nola360_team') || null; } catch(e) {}
 function saveState() { /* step not persisted; team saved inline on setsTeam */ }
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
-const chatEl     = document.getElementById('chat');
+const chatEl      = document.getElementById('chat');
 const inputAreaEl = document.getElementById('input-area');
 
 function norm(s) { return s.toLowerCase().replace(/[$,.\s]/g, ''); }
@@ -467,7 +585,8 @@ function scrollBottom(smooth) {
 
 function addMsg(msg, animate) {
   const wrap = document.createElement('div');
-  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (msg.embed ? ' embed-bubble' : '');
+  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game');
+  if (msg.name) wrap.dataset.bubble = msg.name;
   if (!animate) wrap.style.animation = 'none';
 
   const bubble = document.createElement('div');
@@ -490,12 +609,8 @@ function addTyping() {
 }
 
 // ── Input rendering ───────────────────────────────────────────────────────────
-let wrongCount = 0;
-
 function renderInput() {
   inputAreaEl.innerHTML = '';
-  inputAreaEl.classList.add('visible');
-  wrongCount = 0;
 
   const steps = buildSteps(state.team);
   if (state.step >= steps.length) return;
@@ -506,7 +621,22 @@ function renderInput() {
     p.className = 'win-msg';
     p.textContent = '🎉 Congratulations!';
     inputAreaEl.appendChild(p);
-    return;
+    // fall through to also render the (disabled) text input below
+  }
+
+  if (action.type === 'button') {
+    const div = document.createElement('div');
+    div.className = 'btn-choices';
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn neutral';
+    btn.textContent = action.text;
+    btn.addEventListener('click', () => {
+      addMsg({ fromPlayer: true, text: action.playerText || action.text }, true);
+      doAdvance();
+    });
+    div.appendChild(btn);
+    inputAreaEl.appendChild(div);
+    // fall through to also render the (disabled) text input below
   }
 
   if (action.type === 'team-select') {
@@ -525,62 +655,72 @@ function renderInput() {
       div.appendChild(btn);
     });
     inputAreaEl.appendChild(div);
-    return;
+    // fall through to also render the (disabled) text input below
   }
 
-  if (action.type === 'button') {
-    const div = document.createElement('div');
-    div.className = 'btn-choices';
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn neutral';
-    btn.textContent = action.text;
-    btn.addEventListener('click', () => {
-      addMsg({ fromPlayer: true, text: action.playerText || action.text }, true);
-      doAdvance();
-    });
-    div.appendChild(btn);
-    inputAreaEl.appendChild(div);
-    return;
-  }
+  // Always render the text input row (disabled for non-text steps, or setsTeam before question shown)
+  const isTextStep = action.type === 'text' &&
+                     (!action.setsTeam || teamQuestionShown);
 
-  // Text / free-text input
   const row = document.createElement('div');
   row.className = 'answer-row';
 
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'answer-input';
-  input.placeholder = '';
+  input.placeholder = action.placeholder || '';
   input.setAttribute('autocomplete', 'off');
   input.setAttribute('autocorrect', 'off');
   input.setAttribute('spellcheck', 'false');
   if (action.type === 'text') input.setAttribute('autocapitalize', 'characters');
+  if (!isTextStep) input.disabled = true;
 
   const sendBtn = document.createElement('button');
   sendBtn.className = 'submit-btn';
+  sendBtn.disabled = !isTextStep;
   sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
-
-  const hintEl = document.createElement('div');
-  hintEl.className = 'hint';
 
   const submit = () => {
     const val = input.value.trim();
     if (!val) return;
 
-    if (action.type === 'free-text') {
-      addMsg({ fromPlayer: true, text: val }, true);
-      doAdvance();
-      return;
+    // ── Global team name detection (any step except the setsTeam step) ──
+    if (!action.setsTeam) {
+      const matchedRaw = Object.keys(TEAM_KEY_MAP).find(k => norm(val) === norm(k));
+      if (matchedRaw) {
+        const newKey = TEAM_KEY_MAP[matchedRaw];
+        state.team = newKey;
+        try { localStorage.setItem('nola360_team', state.team); } catch(e) {}
+        addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
+        addMsg({ name: 'welcome-team', html: 'Welcome to team ' + (TEAMS[newKey]?.name || val) + '!' }, true);
+        input.value = '';
+        // Disable input during re-reveal
+        inputAreaEl.querySelectorAll('input, button').forEach(el => el.disabled = true);
+        scrollBottom(true);
+        // Re-reveal current step's bubbles with updated team context
+        const updatedSteps = buildSteps(state.team);
+        if (state.step < updatedSteps.length) {
+          const reveals = updatedSteps[state.step].reveal;
+          const t = addTyping();
+          reveals.forEach((msg, i) => {
+            setTimeout(() => {
+              if (i === reveals.length - 1) t.remove();
+              addMsg(msg, true);
+              scrollBottom(true);
+              if (i === reveals.length - 1) renderInput();
+            }, 700 + i * 400);
+          });
+        }
+        return;
+      }
     }
 
     const correct = action.answers.some(a => norm(val) === norm(a));
     if (correct) {
       if (action.setsTeam) {
-        const keyMap = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas: 'tch', rougarou: 'rougarou' };
-        state.team = keyMap[norm(val)] || norm(val);
+        state.team = TEAM_KEY_MAP[norm(val)] || norm(val);
         try { localStorage.setItem('nola360_team', state.team); } catch(e) {}
         addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
-        addMsg({ html: 'Welcome to team ' + (TEAMS[state.team]?.name || val) + '!' }, true);
         scrollBottom(true);
         doAdvance();
         return;
@@ -588,35 +728,34 @@ function renderInput() {
       addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
       doAdvance();
     } else {
-      wrongCount++;
       input.value = '';
       input.classList.add('wrong');
       setTimeout(() => input.classList.remove('wrong'), 400);
-      if (action.setsTeam) {
-        addMsg({ html: 'Check that spelling.' }, true);
-        scrollBottom(true);
-      }
-      if (action.hints && wrongCount >= 2) {
-        hintEl.textContent = '💡 ' + action.hints[Math.min(wrongCount - 2, action.hints.length - 1)];
-      }
+      addMsg({ html: action.setsTeam
+        ? 'Hmm, check that spelling! If you\'re stuck, text <strong>504-581-5652</strong> for help from Mission Control.'
+        : 'Ooh, not quite! 🤔 Text <strong>504-581-5652</strong> and Mission Control will get you sorted.' }, true);
+      scrollBottom(true);
     }
   };
 
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
-  sendBtn.addEventListener('click', submit);
+  if (isTextStep) {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+    sendBtn.addEventListener('click', submit);
+  }
 
   row.appendChild(input);
   row.appendChild(sendBtn);
   inputAreaEl.appendChild(row);
-  inputAreaEl.appendChild(hintEl);
-  setTimeout(() => input.focus(), 150);
+  if (isTextStep) setTimeout(() => input.focus(), 150);
 }
 
 // ── Advance ───────────────────────────────────────────────────────────────────
 function doAdvance() {
   state.step++;
   saveState();
-  inputAreaEl.innerHTML = '';
+
+  // Disable (not clear) the input so it stays visible during transition
+  inputAreaEl.querySelectorAll('input, button').forEach(el => el.disabled = true);
   scrollBottom(true);
 
   const steps = buildSteps(state.team);
@@ -652,12 +791,9 @@ bootStep.reveal.forEach((msg, i) => {
 
 // ── Team Cipher overlay ───────────────────────────────────────────────────────
 const teamOverlay = document.getElementById('team-overlay');
-const teamFrame   = document.getElementById('team-frame');
+let teamQuestionShown = false;
 
 function openTeamOverlay() {
-  if (!teamFrame.src || teamFrame.src === window.location.href) {
-    teamFrame.src = 'teams.html';
-  }
   teamOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -665,12 +801,188 @@ function openTeamOverlay() {
 function closeTeamOverlay() {
   teamOverlay.classList.remove('open');
   document.body.style.overflow = '';
+
+  // Inject "OK, what's your team name?" the first time Back is tapped on step 1
+  const steps = buildSteps(state.team);
+  if (!teamQuestionShown && state.step < steps.length && steps[state.step].action.setsTeam) {
+    teamQuestionShown = true;
+    const t = addTyping();
+    setTimeout(() => {
+      t.remove();
+      addMsg({ name: 'team-question', html: 'OK, what\'s your team name?' }, true);
+      scrollBottom(true);
+      renderInput();
+    }, 500);
+  }
 }
 
-chatEl.addEventListener('click', e => {
-  const link = e.target.closest('a.team-link');
-  if (link) { e.preventDefault(); openTeamOverlay(); }
-});
+// ── Team Cipher game (inline) ─────────────────────────────────────────────────
+const TC = (() => {
+  const TEAMS = {
+    beignet: {
+      name: 'Beignet',
+      members: ['Abigail Beadle', 'Sanil Parambil', 'Rahim Bhimani', 'Chris Bingham'],
+      bg: 'bei-bg', color: 'var(--tc-bei)',
+      clue: 'All 4 members share at least one consonant in common with the word <strong style="color:var(--tc-text)">"BEIGNET"</strong>.'
+    },
+    lagniappe: {
+      name: 'Lagniappe',
+      members: ['Matt Toms', 'Deji Oduntan', 'Aneesh Chakko', 'Arlene Radley'],
+      bg: 'lag-bg', color: 'var(--tc-lag)',
+      clue: 'Three members of this team each have a first name and last name with <strong>equal letter counts</strong> — but those counts are <strong>not necessarily the same</strong> as other team members. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+    },
+    tchoupitoulas: {
+      name: 'Tchoupitoulas',
+      members: ['Rory Sewell', 'Chuck Foster', 'Kamran Kamal', 'Sharon Maxfield'],
+      bg: 'tch-bg', color: 'var(--tc-tch)',
+      clue: 'Contains one of two people who <strong>share a last name</strong>. Also includes the only person whose <strong>first and last name start with the same letter</strong>, and the person whose <strong>combined first and last name is the longest</strong> in the group. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+    },
+    rougarou: {
+      name: 'Rougarou',
+      members: ['Tim Sewell', 'Jeremy Sharp', 'Mo Zaman', 'Jason Atkins'],
+      bg: 'rou-bg', color: 'var(--tc-rou)',
+      clue: 'This team contains the <strong>first person alphabetically by last name</strong> and the <strong>last person alphabetically by last name</strong>. It also contains <strong>one of two people who share a last name</strong>. One member\'s last name is one of only <strong>two last names in the entire group that doubles as an adjective</strong>.'
+    }
+  };
+
+  const memberTeam = {};
+  for (const [key, t] of Object.entries(TEAMS))
+    for (const m of t.members) memberTeam[m] = key;
+
+  let displayOrder = Object.values(TEAMS).flatMap(t => t.members);
+  let selected = new Set();
+  let solvedTeams = new Set();
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  shuffle(displayOrder);
+
+  const isSolved = name => solvedTeams.has(memberTeam[name]);
+
+  function renderClues() {
+    document.getElementById('tc-clue-list').innerHTML = Object.entries(TEAMS).map(([key, t]) => `
+      <div class="clue-row ${solvedTeams.has(key) ? 'solved' : ''}">
+        <div class="clue-left">
+          <div class="clue-dot" style="background:${t.color}"></div>
+        </div>
+        <div class="clue-body">
+          <div class="clue-team-name" style="color:${t.color}">${t.name.toUpperCase()} TEAM</div>
+          <div class="clue-text">${t.clue}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function getTeamLitClass(key) {
+    return { lagniappe: 'lag-lit', tchoupitoulas: 'tch-lit', rougarou: 'rou-lit', beignet: 'bei-lit' }[key] || '';
+  }
+
+  function allSameTeam() {
+    if (selected.size !== 4) return null;
+    const keys = [...selected].map(n => memberTeam[n]);
+    return keys.every(k => k === keys[0]) ? keys[0] : null;
+  }
+
+  function renderGrid() {
+    const rem = displayOrder.filter(n => !isSolved(n));
+    const litTeam = allSameTeam();
+    const litClass = litTeam ? getTeamLitClass(litTeam) : '';
+    document.getElementById('tc-name-grid').innerHTML = rem.map(name => {
+      const parts = name.split(' ');
+      const first = parts[0];
+      const last = parts.slice(1).join(' ');
+      const isSelected = selected.has(name);
+      const cardClass = isSelected ? (litTeam ? `team-lit ${litClass}` : 'selected') : '';
+      return `<div class="card ${cardClass}"
+        id="tc-c-${name.replace(/ /g, '_')}"
+        data-name="${name}">
+        <div class="card-first">${first}</div>
+        <div class="card-last">${last}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('tc-sel-count').textContent = selected.size ? `${selected.size} of 4 selected` : '';
+    document.getElementById('tc-submit-btn').disabled = selected.size !== 4;
+  }
+
+  function toggle(name) {
+    if (selected.has(name)) {
+      selected.delete(name);
+    } else {
+      if (selected.size >= 4) { showToast('Deselect someone first'); return; }
+      selected.add(name);
+    }
+    renderGrid();
+  }
+
+  function deselectAll() { selected.clear(); renderGrid(); }
+
+  function shuffleGrid() {
+    const rem = shuffle(displayOrder.filter(n => !isSolved(n)));
+    displayOrder = [...displayOrder.filter(isSolved), ...rem];
+    renderGrid();
+  }
+
+  function submitGuess() {
+    if (selected.size !== 4) return;
+    const names = [...selected];
+    const keys = names.map(n => memberTeam[n]);
+
+    if (keys.every(k => k === keys[0])) {
+      const key = keys[0];
+      solvedTeams.add(key);
+      selected.clear();
+      addSolvedRow(key);
+      renderGrid(); renderClues();
+      if (solvedTeams.size === Object.keys(TEAMS).length) {
+        showToast('🎉 Got it! Hit ← Back to enter your team name.');
+      } else {
+        showToast('Correct! 🎉');
+      }
+    } else {
+      const counts = {};
+      keys.forEach(k => counts[k] = (counts[k] || 0) + 1);
+      const oneAway = Object.values(counts).some(c => c === 3);
+      names.forEach(name => {
+        const el = document.getElementById('tc-c-' + name.replace(/ /g, '_'));
+        if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+      });
+      showToast(oneAway ? '😬 One away...' : 'Not quite — try again');
+    }
+  }
+
+  function addSolvedRow(key) {
+    const t = TEAMS[key];
+    const el = document.createElement('div');
+    el.className = `solved-row ${t.bg}`;
+    el.innerHTML = `<div class="solved-team-name">${t.name} Team</div>
+      <div class="solved-members">${t.members.join(' · ')}</div>`;
+    document.getElementById('tc-solved-rows').appendChild(el);
+  }
+
+  let toastT;
+  function showToast(msg) {
+    const el = document.getElementById('tc-toast');
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  document.getElementById('tc-name-grid').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const name = card.dataset.name;
+    if (name) toggle(name);
+  });
+
+  renderClues();
+  renderGrid();
+
+  return { deselectAll, shuffleGrid, submitGuess };
+})();
 </script>
 </body>
 </html>

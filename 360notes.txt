@@ -1,24 +1,32 @@
-They will have a leader for each team that knows what is going on.
+Beignet
+Abigail Beadle, Sanil Parambil, Rahim Bhimani, Chris Bingham
+
+Lagniappe
+Matt Toms, Deji Oduntan, Aneesh Chakko, Arlene Radley
+
+Tchoupitoulas
+Rory Sewell, Chuck Foster, Kamran Kamal, Sharon Maxfield
+
+Rougarou
+Tim Sewell, Jeremy Sharp, Mo Zaman, Jason Atkins
+
+Team	Calls out to	Gives	Receives (types)
+Beignet	        LAGNIAPPE	    JAMBALAYA	gumbo
+Lagniappe	    BEIGNET	        GUMBO	    jambalaya
+Tchoupitoulas	ROUGAROU	    ETOUFFEE	muffeletta
+Rougarou	    TCHOUPITOULAS	MUFFELETTA	etouffee
+
+
 
 Concerned about bunching up. -give them options like a which way book
 
-They will provide ending location.
+Ghost Tour Elements - Oswald
 
-This will be first day of arrivals
 
-Ghost Tour Elements
 
-They will provide prizes.
-
-4 - 6
-
-4:30 start
 
 More interactivity the better
 
-Try on hats was a suggestion like old timey shop
-
-Fire Department t-shirt souvenir?
 
 Definitely want them to take pictures.
 
@@ -36,10 +44,14 @@ Best,
 
 Kelley
 
-4 35$ Fleurty Girl gift certificates.
+4 25$ Fleurty Girl gift certificates.
+-nope, Haiti Mamma gifts.
 
 protect names on web page
 
 FIND A WAY to send them in different directions.
 
 get a team to yell something out to lead other teams astray.
+
+
+post game links
