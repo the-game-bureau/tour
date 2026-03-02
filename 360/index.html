@@ -105,6 +105,14 @@
       border-bottom-left-radius: 4px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
+    .bubble.team-beignet   { background: #dceeff; border-left: 4px solid #6aaef7; }
+    .bubble.team-lagniappe { background: #fff3dc; border-left: 4px solid #f5a623; }
+    .bubble.team-rougarou  { background: #fde8eb; border-left: 4px solid #e85568; }
+    .bubble.team-tch       { background: #ddf6ee; border-left: 4px solid #4ecf98; }
+    .label.team-beignet   { color: #6aaef7; }
+    .label.team-lagniappe { color: #d4891e; }
+    .label.team-rougarou  { color: #e85568; }
+    .label.team-tch       { color: #2eaf7a; }
     .message.outgoing .bubble {
       background: #01b9d8;
       color: #fff;
@@ -207,6 +215,48 @@
     .copy-btn.copied svg {
       fill: #fff;
     }
+    .img-wrap {
+      position: relative;
+      display: block;
+      margin-top: 0.5rem;
+    }
+    .img-wrap img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 0;
+    }
+    .copy-img-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.55);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      transition: opacity 0.2s, background 0.2s;
+      z-index: 2;
+    }
+    .copy-img-btn:hover,
+    .copy-img-btn:active {
+      opacity: 1;
+    }
+    .copy-img-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+    .copy-img-btn.copied {
+      background: rgba(76,175,80,0.9);
+      opacity: 1;
+    }
 
     /* Tablet and up */
     @media (min-width: 768px) {
@@ -253,6 +303,12 @@
       </div>
       <div class="clearfix"></div>
 
+      <div class="message incoming">
+        <div class="label">Team Cipher</div>
+        <div class="bubble">Pick a team communicator. Have them send "GO!" directly to Kevin Kolb in Teams (not in the Channel).</div>
+      </div>
+      <div class="clearfix"></div>
+
       <div class="message outgoing">
         <div class="label">Player/Team</div>
         <div class="bubble">Go!</div>
@@ -277,7 +333,7 @@
       <div class="message incoming">
         <div class="label">Gamemaster</div>
         <div class="bubble">
-          Excellent. Are there any Hamilton fans on your team? The founding father, not the Tiger-Cats. HEAD OVER TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN ACCORDING TO HAMILTON. Google it if you must. Are the other teams following you? Hurry! -but beware of cars and streetcars. AFTER you get there, tell me the Frenchman's name.
+          Excellent. Are there any Hamilton fans on your team? The founding father, not the Tiger-Cats. HEAD OVER TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN (ACCORDING TO HAMILTON). Google it if you must. Are the other teams following you? Hurry! -but beware of cars and streetcars. AFTER you get there, tell me the Frenchman's name.
         </div>
       </div>
       <div class="clearfix"></div>
@@ -289,12 +345,44 @@
       <div class="clearfix"></div>
 
       <div class="message incoming">
-        <div class="label">Gamemaster</div>
-        <div class="bubble">
+        <div class="label team-beignet">Beignet Team · Abigail Beadle, Rahim Bhimani, Chris Bingham, Sanil Parambil</div>
+        <div class="bubble team-beignet">
           <p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square clue"></p>
-          <p><a href="https://the-game-bureau.github.io/tour/resources/lafayette.png" target="_blank">https://the-game-bureau.github.io/tour/resources/lafayette.png</a></p>
-          <p>As you can see New Orleans is deep in Mardi Gras prep mode. That's Gallier Hall getting Mardi Gras stands setup in front of it. Gallier Hall is New Orleans' original city hall. Now it's used as parade reviewing stands, for inaugurations and even for state funerals.</p>
-          <p>That boring building to the right isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it.</p>
+          <p>Welcome to Lafayette Square! I'm so glad you didn't go all the way to Jackson Square. Take a look around for a minute, but don't get too comfortable — your team has a specific position to hold: <a href="https://w3w.co/command.assets.hopping" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There's a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol' post office. Now let's look at the most boring looking building around for a minute.</p>
+          <p>Actually, the building to the right of Gallier Hall isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it. I know you're in a hurry.</p>
+          <p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label team-lagniappe">Lagniappe Team · Aneesh Chakko, Deji Oduntan, Arlene Radley, Matt Toms</div>
+        <div class="bubble team-lagniappe">
+          <p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square clue"></p>
+          <p>Welcome to Lafayette Square! I'm so glad you didn't go all the way to Jackson Square. Take a look around for a minute, but don't get too comfortable — your team has a specific position to hold: <a href="https://w3w.co/jacuzzi.bundles.planet" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There's a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol' post office. Now let's look at the most boring looking building around for a minute.</p>
+          <p>Actually, the building to the right of Gallier Hall isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it. I know you're in a hurry.</p>
+          <p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label team-rougarou">Rougarou Team · Jason Atkins, Tim Sewell, Jeremy Sharp, Mo Zaman</div>
+        <div class="bubble team-rougarou">
+          <p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square clue"></p>
+          <p>Welcome to Lafayette Square! I'm so glad you didn't go all the way to Jackson Square. Take a look around for a minute, but don't get too comfortable — your team has a specific position to hold: <a href="https://w3w.co/fashion.this.define" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There's a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol' post office. Now let's look at the most boring looking building around for a minute.</p>
+          <p>Actually, the building to the right of Gallier Hall isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it. I know you're in a hurry.</p>
+          <p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+
+      <div class="message incoming">
+        <div class="label team-tch">Tchoupitoulas Team · Chuck Foster, Kamran Kamal, Sharon Maxfield, Rory Sewell</div>
+        <div class="bubble team-tch">
+          <p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square clue"></p>
+          <p>Welcome to Lafayette Square! I'm so glad you didn't go all the way to Jackson Square. Take a look around for a minute, but don't get too comfortable — your team has a specific position to hold: <a href="https://w3w.co/sprouts.props.huddle" target="_blank">FIND YOUR SPOT</a>. This was the epi-center of New Orleans politics. Gallier Hall is the former City Hall here in New Orleans. Henry Clay is in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party. There's a huge building to the right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol' post office. Now let's look at the most boring looking building around for a minute.</p>
+          <p>Actually, the building to the right of Gallier Hall isn't as boring as it looks. TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. You can save the video for later after you get your answer from it. I know you're in a hurry.</p>
           <p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>
         </div>
       </div>
@@ -429,8 +517,43 @@
         btn.innerHTML = copyIcon;
         btn.setAttribute('aria-label', 'Copy message');
 
+        bubble.querySelectorAll('img').forEach(function(img) {
+          const wrap = document.createElement('span');
+          wrap.className = 'img-wrap';
+          img.parentNode.insertBefore(wrap, img);
+          wrap.appendChild(img);
+
+          const imgBtn = document.createElement('button');
+          imgBtn.className = 'copy-img-btn';
+          imgBtn.innerHTML = copyIcon;
+          imgBtn.setAttribute('aria-label', 'Copy image');
+          imgBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            fetch(img.src)
+              .then(function(r) { return r.blob(); })
+              .then(function(blob) {
+                return navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
+              })
+              .then(function() {
+                imgBtn.innerHTML = checkIcon;
+                imgBtn.classList.add('copied');
+                setTimeout(function() {
+                  imgBtn.innerHTML = copyIcon;
+                  imgBtn.classList.remove('copied');
+                }, 2000);
+              })
+              .catch(function() {
+                navigator.clipboard.writeText(img.src);
+              });
+          });
+          wrap.appendChild(imgBtn);
+        });
+
         btn.addEventListener('click', function() {
           const clone = bubble.cloneNode(true);
+          clone.querySelectorAll('img').forEach(function(img) {
+            img.remove();
+          });
           clone.querySelectorAll('a').forEach(function(a) {
             const href = a.getAttribute('href');
             const label = a.innerText.trim();
@@ -438,7 +561,7 @@
               a.replaceWith(label + ' ' + href);
             }
           });
-          const text = clone.innerText;
+          const text = clone.innerText.trim();
           navigator.clipboard.writeText(text).then(function() {
             btn.innerHTML = checkIcon;
             btn.classList.add('copied');

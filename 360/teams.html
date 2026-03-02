@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Team Puzzle · New Orleans Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d0d10;
-    --surface: #18181e;
-    --surface2: #222230;
-    --border: #2a2a38;
-    --text: #eaeaf2;
-    --muted: #5a5a78;
+    --bg: #020c18;
+    --surface: #041c2e;
+    --surface2: #07293f;
+    --border: rgba(1,185,216,0.35);
+    --border-hi: #01b9d8;
+    --text: #e0f8ff;
+    --muted: #4a8fa0;
+    --cyan: #01b9d8;
     --lag: #f5a623;
     --tch: #4ecf98;
     --rou: #e85568;
@@ -20,7 +22,7 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { font-size: 18px; }
+  html { font-size: 20px; }
 
   body {
     background: var(--bg);
@@ -28,66 +30,64 @@
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     display: flex; flex-direction: column; align-items: center;
-    padding: 20px 14px 80px;
+    padding: 24px 16px 80px;
     -webkit-tap-highlight-color: transparent;
   }
 
   .wrap { width: 100%; max-width: 640px; }
 
   /* HEADER */
-  header { text-align: center; margin-bottom: 22px; }
+  header { text-align: center; margin-bottom: 28px; }
   h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 12vw, 5.5rem);
-    letter-spacing: 0.05em; line-height: 0.9;
-    background: linear-gradient(130deg, var(--lag), var(--rou) 55%, var(--bei));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    font-size: clamp(3.5rem, 14vw, 5.5rem);
+    letter-spacing: 0.12em; line-height: 0.9;
+    color: #01b9d8;
+    text-shadow: 0 0 8px #01b9d8, 0 0 28px rgba(1,185,216,0.7), 0 0 60px rgba(1,185,216,0.3);
   }
   .sub {
-    margin-top: 8px; font-family: 'DM Mono', monospace;
-    font-size: 0.72rem; letter-spacing: 0.16em;
+    margin-top: 10px; font-family: 'DM Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 0.16em;
     text-transform: uppercase; color: var(--muted);
   }
-
-  /* TEAM LEGEND — removed */
 
   /* CLUE PANEL */
   .clue-panel {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;
+    border-radius: 16px; padding: 20px 20px; margin-bottom: 20px;
   }
   .panel-label {
-    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    font-family: 'DM Mono', monospace; font-size: 0.75rem;
     letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
-    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
   }
   .panel-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .clue-list { display: flex; flex-direction: column; gap: 14px; }
+  .clue-list { display: flex; flex-direction: column; gap: 20px; }
   .clue-row {
-    display: flex; align-items: flex-start; gap: 12px;
-    line-height: 1.65; color: #7a7a9a;
+    display: flex; align-items: flex-start; gap: 14px;
+    line-height: 1.7; color: var(--muted);
     transition: color 0.3s;
   }
   .clue-row.solved { color: var(--text); }
   .clue-left {
-    flex-shrink: 0; padding-top: 5px;
+    flex-shrink: 0; padding-top: 6px;
   }
-  .clue-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .clue-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
   .clue-row:not(.solved) .clue-dot { background: var(--muted) !important; }
   .clue-body { flex: 1; }
   .clue-team-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.05rem; letter-spacing: 0.1em;
-    line-height: 1; margin-bottom: 4px;
+    font-size: 1.3rem; letter-spacing: 0.1em;
+    line-height: 1; margin-bottom: 6px;
   }
-  .clue-text { font-size: 1rem; line-height: 1.65; }
-  .clue-row strong { font-weight: 600; }
+  .clue-text { font-size: 1rem; line-height: 1.7; }
+  .clue-row strong { font-weight: 600; color: var(--text); }
 
   /* SOLVED ROWS */
-  .solved-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .solved-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
   .solved-row {
-    border-radius: 12px; padding: 14px 18px;
+    border-radius: 14px; padding: 16px 20px;
     animation: popIn 0.38s cubic-bezier(.34,1.56,.64,1) both;
   }
   @keyframes popIn {
@@ -95,12 +95,12 @@
     to   { opacity: 1; transform: scale(1) translateY(0); }
   }
   .solved-team-name {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
-    letter-spacing: 0.1em; color: rgba(0,0,0,0.65); margin-bottom: 4px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+    letter-spacing: 0.1em; color: rgba(0,0,0,0.7); margin-bottom: 6px;
   }
   .solved-members {
-    font-family: 'DM Mono', monospace; font-size: 0.8rem;
-    color: rgba(0,0,0,0.55); line-height: 1.5;
+    font-family: 'DM Mono', monospace; font-size: 0.85rem;
+    color: rgba(0,0,0,0.6); line-height: 1.6;
   }
   .lag-bg { background: var(--lag); }
   .tch-bg { background: var(--tch); }
@@ -110,26 +110,27 @@
   /* NAME GRID — mobile first: 2 columns */
   .name-grid {
     display: grid; grid-template-columns: repeat(2, 1fr);
-    gap: 9px; margin-bottom: 12px;
+    gap: 12px; margin-bottom: 16px;
   }
   /* wider screens get 4 columns */
   @media (min-width: 480px) {
-    .name-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .name-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; }
   }
   .card {
     background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 12px; padding: 16px 8px; text-align: center;
+    border-radius: 14px; padding: 20px 10px; text-align: center;
     cursor: pointer; transition: background 0.12s, border-color 0.12s, transform 0.12s, box-shadow 0.12s;
     user-select: none; -webkit-user-select: none;
-    min-height: 72px; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 4px;
+    min-height: 90px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
     touch-action: manipulation;
   }
   .card:active { transform: scale(0.96); }
   .card.selected {
-    border-color: var(--text); background: var(--surface2);
+    border-color: var(--border-hi);
+    background: var(--surface2);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.55);
+    box-shadow: 0 0 14px rgba(1,185,216,0.45), 0 6px 20px rgba(0,0,0,0.5);
   }
   .card.team-lit {
     transform: translateY(-2px);
@@ -142,11 +143,11 @@
   .card.rou-lit  { background: var(--rou); border-color: var(--rou); }
   .card.bei-lit  { background: var(--bei); border-color: var(--bei); }
   .card-first {
-    font-family: 'DM Mono', monospace; font-size: 0.78rem;
+    font-family: 'DM Mono', monospace; font-size: 0.85rem;
     color: var(--muted); line-height: 1;
   }
   .card-last {
-    font-family: 'DM Mono', monospace; font-size: 0.95rem;
+    font-family: 'DM Mono', monospace; font-size: 1.05rem;
     font-weight: 500; color: var(--text); line-height: 1.2;
   }
   .card.shake { animation: shake 0.38s ease; }
@@ -158,23 +159,24 @@
 
   /* CONTROLS */
   .sel-count {
-    font-family: 'DM Mono', monospace; font-size: 0.85rem;
-    color: var(--muted); text-align: center; min-height: 20px; margin-bottom: 12px;
+    font-family: 'DM Mono', monospace; font-size: 0.9rem;
+    color: var(--muted); text-align: center; min-height: 24px; margin-bottom: 14px;
   }
-  .btn-row { display: flex; gap: 9px; justify-content: center; margin-bottom: 24px; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
   button {
-    font-family: 'DM Mono', monospace; font-size: 0.85rem;
+    font-family: 'DM Mono', monospace; font-size: 0.95rem;
     letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 14px 20px; border-radius: 10px; cursor: pointer;
+    padding: 16px 22px; border-radius: 12px; cursor: pointer;
     transition: all 0.12s; border: 1.5px solid var(--border);
     background: var(--surface); color: var(--text);
-    touch-action: manipulation; min-height: 52px;
+    touch-action: manipulation; min-height: 58px;
   }
   button:active { transform: scale(0.97); }
   button:disabled { opacity: 0.28; cursor: not-allowed; }
   .btn-submit {
-    background: var(--text); color: var(--bg); border-color: var(--text);
-    font-weight: 600; padding: 14px 28px;
+    background: var(--cyan); color: var(--bg); border-color: var(--cyan);
+    font-weight: 600; padding: 16px 32px;
+    box-shadow: 0 0 14px rgba(1,185,216,0.5);
   }
   .btn-submit:not(:disabled):active { opacity: 0.8; }
 
@@ -183,8 +185,8 @@
     position: fixed; top: 16px; left: 50%;
     transform: translateX(-50%) translateY(-80px);
     background: var(--text); color: var(--bg);
-    padding: 12px 24px; border-radius: 10px;
-    font-family: 'DM Mono', monospace; font-size: 0.95rem; font-weight: 500;
+    padding: 14px 28px; border-radius: 12px;
+    font-family: 'DM Mono', monospace; font-size: 1rem; font-weight: 500;
     transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
     z-index: 999; white-space: nowrap; pointer-events: none;
     box-shadow: 0 4px 24px rgba(0,0,0,0.5);
@@ -194,15 +196,15 @@
   /* WIN */
   .win-banner {
     display: none; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 32px 24px; text-align: center;
+    border-radius: 16px; padding: 36px 28px; text-align: center;
     animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
   }
   .win-banner h2 {
-    font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.08em;
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.08em;
     background: linear-gradient(130deg, var(--lag), var(--tch));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .win-banner p { color: var(--muted); margin-top: 10px; font-size: 1rem; font-family: 'DM Mono', monospace; }
+  .win-banner p { color: var(--muted); margin-top: 14px; font-size: 1rem; line-height: 1.6; font-family: 'DM Mono', monospace; }
 </style>
 </head>
 <body>
@@ -238,7 +240,7 @@
   <!-- WIN -->
   <div class="win-banner" id="win-banner">
     <h2>🎉 Laissez les bons temps rouler!</h2>
-    <p>Pick a team communicator. Have them send "GO!" directly to Kevin Kolb in Teams (not in the Channel).</p>
+    <p>Scroll down.</p>
   </div>
 
 </div>
