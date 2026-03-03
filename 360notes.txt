@@ -16,6 +16,13 @@ Lagniappe	    BEIGNET	        GUMBO	    jambalaya
 Tchoupitoulas	ROUGAROU	    ETOUFFEE	muffuletta
 Rougarou	    TCHOUPITOULAS	MUFFULETTA	etouffee
 
+Team	Order
+Tchoupitoulas	Ladies → Fed Reserve → Bush Tree → Sculpture
+Beignet	Fed Reserve → Bush Tree → Sculpture → Ladies
+Lagniappe	Bush Tree → Sculpture → Ladies → Fed Reserve
+Rougarou	Sculpture → Ladies → Fed Reserve → Bush Tree
+
+
 Ghost Tour Elements - Oswald
 
 Definitely want them to take pictures.

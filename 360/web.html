@@ -502,7 +502,7 @@ function buildSteps(teamKey) {
       // ── INTRO ──
       { name: 'tour-politics',     html: 'You\'re standing in the historical epicenter of New Orleans politics. Who\'s the guy above you? That\'s Henry Clay. He founded the Whig Party which, upon its collapse, made way for the Republican party. He is kinda gesturing toward a seemingly boring building but it may secretly be the most fascinating of all. To the left of that building is Gallier Hall, our old City Hall. Across the square on Camp Street, that massive building to the right started as a post office, now it\'s a federal court. Did you catch all that? It may come in handy later.' },
       { name: 'pwd-unlock',        html: 'Enough sightseeing. We were just stalling. Hopefully Team <strong>' + (def ? def.partner : '') + '</strong> has arrived. You need their help.' },
-      { name: 'pwd-callout',       html: 'Stay where you are. Call out <strong>HEY TEAM ' + (def ? def.partner.toUpperCase() : '') + '. YOUR PASSWORD IS ' + (def ? def.give : '') + '. WHAT IS OUR PASSWORD?</strong>' },
+      { name: 'pwd-callout',       html: 'Stay where you are. Call out &ldquo;HEY TEAM ' + (def ? def.partner.toUpperCase() : '') + '. YOUR PASSWORD IS ' + (def ? def.give : '') + '. WHAT IS OUR PASSWORD?&rdquo;' },
       { name: 'pwd-prompt',        html: '<p>What password did Team ' + (def ? def.partner.toUpperCase() : '') + ' give you?</p><p>A)&nbsp; Andouille<br>B)&nbsp; Boudin<br>C)&nbsp; Crawfish<br>D)&nbsp; Empanada<br>E)&nbsp; Etouffee<br>F)&nbsp; Falafel<br>G)&nbsp; Gumbo<br>H)&nbsp; Gyro<br>I)&nbsp; Jambalaya<br>J)&nbsp; Muffuletta<br>K)&nbsp; Paella<br>L)&nbsp; Pierogi<br>M)&nbsp; Poutine<br>N)&nbsp; Praline</p>' }
     ],
     // ── RESPONSE ──
@@ -589,7 +589,7 @@ function buildSteps(teamKey) {
     reveal: [
       // ── INTRO ──
       { name: 'fed-info',
-        html: '<p>Next, take a look at the plain building to the right of Gallier Hall — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch.</p>'
+        html: '<p>Next, take a look at the plain building to the right of Gallier Hall that Henry is gesturing to — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch.</p>'
           + '<p>TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.</p>'
           + '<p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_blank">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>'
       },
@@ -598,8 +598,7 @@ function buildSteps(teamKey) {
       }
     ],
     // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', '6million', '6000000', 'sixmillion', '6milliondollars'],
-      correct: [{ name: 'bush-correct', html: 'Bingo!' }] }
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', '6million', '6000000', 'sixmillion', '6milliondollars'] }
   };
 
   // ── CUBA ──────────────────────────────────────────────────────────────────
@@ -610,7 +609,7 @@ function buildSteps(teamKey) {
       name: 'cuba-task',
       html: '<p>There\'s a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López — who had designed what would become his adopted country\'s flag — sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p>'
         + '<p>Find the monument: <a href="https://what3words.com/remake.king.cloth" target="_blank">https://what3words.com/remake.king.cloth</a></p>'
-        + '<p>Oh shoot, that map tells you the name of the country. Tell you what, 📸 Take a team photo at the monument.</p>'
+        + '<p>Oh shoot, that map tells you the name of the country. We were going to ask you the name of the country. Tell you what, 📸 TAKE A TEAM PHOTO AT THE MONUMENT.</p>'
         + '<p>Type <strong>CLICK</strong> to continue.</p>'
     }],
     // ── RESPONSE ──
@@ -621,10 +620,10 @@ function buildSteps(teamKey) {
   const lighthouse = {
     reveal: [
       // ── INTRO ──
-      { name: 'light-task',     html: 'TAKE A PIC OF THE BEACON OF LIGHT STANDING BETWEEN JULIA AND HER BROTHER GIROD. Send us the name of the restaurant we\'re going to.' }
+      { name: 'light-task',     html: 'Hungry? Dinner is/was at 6:30 Central time. We have just one more challenge. Find the extinguished light on Camp Street between Julia Street and Girod Street. TAKE A TEAM PICTURE IN FRONT OF THE BUILDING WITH THE EXTINGUISHED LIGHT. TYPE CLICK WHEN DONE FOR WRAP UP DETAILS.' }
     ],
     // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'Restaurant name?', answers: ['junebug'] }
+    action: { type: 'text', placeholder: 'Type CLICK when done…', answers: ['click'] }
   };
 
   // ── HALE BOGGS ────────────────────────────────────────────────────────────
@@ -642,7 +641,7 @@ function buildSteps(teamKey) {
     action: { type: 'text', placeholder: 'Last name…', answers: ['haleboggs', 'hale boggs', 'boggs'],
       correct: [
         { name: 'boggs-newman', html: '<p><img src="https://the-game-bureau.github.io/tour/resources/newman.jpg" alt="Newman Building"></p>' },
-        { name: 'boggs-irony',  html: 'That\'s 544 Camp Street, where Oswald supposedly made his flyers. It "ain\'t there no more" as they say in New Orleans. It\'s been replaced by the Hale Boggs Federal Building. That\'s irony folks.' }
+        { name: 'boggs-irony',  html: 'That\'s 544 Camp Street, where Oswald supposedly made his flyers. It "ain\'t there no more" as they say in New Orleans. It\'s been replaced by the Hale Boggs Federal Building. That\'s irony folks. OK, we\'ll take off our tin foil hat now. Where were we...' }
       ] }
   };
 
@@ -650,7 +649,13 @@ function buildSteps(teamKey) {
   const win = {
     reveal: [
       // ── WRAP UP: Lighthouse ──
-      { name: 'win-end', html: '🎉 You\'ve completed the game! But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins.... if they have all of their pics timestamped BEFORE the text! 🏆' }
+      { name: 'win-end',  html: '🎉 You\'ve completed the game! But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins.... if they have all of their pics timestamped BEFORE the text! 🏆' },
+      { name: 'win-time', html: (() => {
+          const h = parseInt(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago', hour: 'numeric', hour12: false }), 10);
+          return h < 18
+            ? 'Junebug is right here and you\'ve got some time. It\'s got some pretty interesting past as a recording studio (<a href="https://www.junebugnola.com" target="_blank">https://www.junebugnola.com</a>). You can go have a drink at the bar or go back to the office for a few minutes.'
+            : 'Junebug is right here. It\'s got some pretty interesting past as a recording studio (<a href="https://www.junebugnola.com" target="_blank">https://www.junebugnola.com</a>) but you don\'t care about that right now, you\'re hungry! Check in with the host and meet us at the table or the bar, wherever we may be.';
+        })() }
     ],
     // ── RESPONSE ──
     action: { type: 'win' }
@@ -658,11 +663,11 @@ function buildSteps(teamKey) {
 
   // ── Team-specific tails ───────────────────────────────────────────────────
   const tail =
-    teamKey === 'tch'      ? [theLadies, federalReserve, henryClay, bushTree,  sculpture,      cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'beignet'  ? [federalReserve, henryClay, bushTree,  sculpture, theLadies,      cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'lagniappe'? [henryClay, bushTree,  sculpture,      theLadies, federalReserve, cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'rougarou' ? [bushTree,  sculpture, theLadies,      federalReserve, henryClay, cuba, haleBoggs, lighthouse, win] :
-                             [theLadies, federalReserve, henryClay, bushTree, sculpture, cuba, haleBoggs, lighthouse, win]; // fallback (no team)
+    teamKey === 'tch'      ? [theLadies, federalReserve, bushTree, sculpture, cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'beignet'  ? [federalReserve, bushTree, sculpture, theLadies, cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'lagniappe'? [bushTree, sculpture, theLadies, federalReserve, cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'rougarou' ? [sculpture, theLadies, federalReserve, bushTree, cuba, haleBoggs, lighthouse, win] :
+                             [theLadies, federalReserve, bushTree, sculpture, cuba, haleBoggs, lighthouse, win]; // fallback (no team)
 
   return [s0, s1, s2, s3, s4, s4photo, s4b, s5, ...tail];
 }
