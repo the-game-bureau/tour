@@ -91,7 +91,7 @@
     .msg-bubble p:last-child { margin-bottom: 0; }
     .msg-bubble a { color: #ffffff; word-break: break-all; }
     .msg.from-player .msg-bubble a { color: #01b9d8; }
-    .msg:has(.msg-bubble img) { max-width: 92%; }
+    .msg.has-img { max-width: 92%; }
     .msg-bubble p:has(> img:only-child) { margin: -0.6rem -0.9rem; }
     .msg-bubble p:has(> img:only-child) + p { margin-top: 0.6rem; }
     .msg-bubble img { width: 100%; max-width: 100%; display: block; border-radius: 0; cursor: zoom-in; }
@@ -777,6 +777,7 @@ function addMsg(msg, animate) {
   bubble.className = 'msg-bubble';
   if (msg.html) bubble.innerHTML = msg.html;
   else bubble.textContent = msg.text || '';
+  if (bubble.querySelector('img')) wrap.classList.add('has-img');
   wrap.appendChild(bubble);
 
   chatEl.appendChild(wrap);
