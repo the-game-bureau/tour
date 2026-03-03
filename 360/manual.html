@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Master Manual — NOLA 360</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.6; color: #111; background: #f5f5f5; padding: 1rem; }
+  h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+  h2 { font-size: 1.1rem; background: #222; color: #fff; padding: 0.4rem 0.75rem; margin: 1.5rem 0 0.5rem; border-radius: 6px; }
+  h3 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.08em; color: #555; margin: 1rem 0 0.25rem; }
+  .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .step { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }
+  .step + .step { margin-top: 0; }
+  .msg { background: #007AFF; color: #fff; border-radius: 14px 14px 14px 4px; padding: 0.5rem 0.8rem; margin-bottom: 0.4rem; display: inline-block; max-width: 90%; }
+  .answer { background: #e5e7eb; color: #111; border-radius: 14px 14px 4px 14px; padding: 0.4rem 0.75rem; margin: 0.25rem 0 0.25rem auto; display: block; width: fit-content; font-weight: 700; font-size: 0.9rem; }
+  .correct-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.5rem; }
+  .correct-msg { background: #007AFF; color: #fff; border-radius: 14px 14px 14px 4px; padding: 0.4rem 0.75rem; margin-top: 0.2rem; display: inline-block; max-width: 90%; font-size: 0.9rem; }
+  .team-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 0.75rem; }
+  @media (min-width: 600px) { .team-row { grid-template-columns: repeat(4, 1fr); } }
+  .team-card { border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.85rem; line-height: 1.5; }
+  .bei  { background: #dceeff; border-left: 4px solid #6aaef7; }
+  .lag  { background: #fff3dc; border-left: 4px solid #f5a623; }
+  .rou  { background: #fde8eb; border-left: 4px solid #e85568; }
+  .tch  { background: #ddf6ee; border-left: 4px solid #4ecf98; }
+  .team-name { font-weight: 700; font-size: 0.95rem; }
+  .cheat { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.85rem; }
+  .cheat th { background: #333; color: #fff; padding: 0.4rem 0.6rem; text-align: left; }
+  .cheat td { padding: 0.35rem 0.6rem; border-bottom: 1px solid #ddd; vertical-align: top; }
+  .cheat tr:nth-child(even) td { background: #f9f9f9; }
+  .note { background: #fffbe6; border: 1px solid #f5c842; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.85rem; margin-bottom: 0.75rem; }
+  .stop-order { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 1rem; }
+  .stop-order th { background: #444; color: #fff; padding: 0.4rem 0.6rem; text-align: left; }
+  .stop-order td { padding: 0.35rem 0.6rem; border-bottom: 1px solid #ddd; }
+  .stop-order tr:nth-child(even) td { background: #f9f9f9; }
+  kbd { background: #eee; border: 1px solid #ccc; border-radius: 4px; padding: 0.1rem 0.4rem; font-family: monospace; font-size: 0.85rem; }
+  .dim { color: #888; font-size: 0.85rem; }
+  hr { border: none; border-top: 2px solid #ddd; margin: 1rem 0; }
+  @media print {
+    body { background: #fff; padding: 0.5rem; font-size: 13px; }
+    h2 { break-before: always; }
+    .step { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🗺 Game Master Manual — NOLA 360</h1>
+<p class="subtitle">Plain-text fallback. Send messages manually if the app breaks.</p>
+
+<!-- ══════════════════════════════════════════════════ CHEAT SHEET -->
+<h2>⚡ CHEAT SHEET</h2>
+
+<div class="team-row">
+  <div class="team-card bei"><div class="team-name">BEIGNET</div>Abigail Beadle, Sanil Parambil, Rahim Bhimani, Chris Bingham</div>
+  <div class="team-card lag"><div class="team-name">LAGNIAPPE</div>Matt Toms, Deji Oduntan, Aneesh Chakko, Arlene Radley</div>
+  <div class="team-card rou"><div class="team-name">ROUGAROU</div>Tim Sewell, Jeremy Sharp, Mo Zaman, Jason Atkins</div>
+  <div class="team-card tch"><div class="team-name">TCHOUPITOULAS</div>Rory Sewell, Chuck Foster, Kamran Kamal, Sharon Maxfield</div>
+</div>
+
+<table class="cheat">
+  <tr><th>Team</th><th>Cipher Letter</th><th>Definition Answer</th><th>Calls out to</th><th>Gives password</th><th>Receives (answer letter)</th></tr>
+  <tr><td class="bei">Beignet</td><td>A</td><td>B — deep-fried French doughnut</td><td>LAGNIAPPE</td><td>JAMBALAYA</td><td>GUMBO (G)</td></tr>
+  <tr><td class="lag">Lagniappe</td><td>B</td><td>C — a little something extra</td><td>BEIGNET</td><td>GUMBO</td><td>JAMBALAYA (I)</td></tr>
+  <tr><td class="rou">Rougarou</td><td>C</td><td>D — a Cajun werewolf</td><td>TCHOUPITOULAS</td><td>MUFFULETTA</td><td>ETOUFFEE (E)</td></tr>
+  <tr><td class="tch">Tchoupitoulas</td><td>D</td><td>A — a Native American tribe</td><td>ROUGAROU</td><td>ETOUFFEE</td><td>MUFFULETTA (J)</td></tr>
+</table>
+
+<table class="stop-order">
+  <tr><th>Team</th><th>Slot 1</th><th>Slot 2</th><th>Slot 3</th><th>Slot 4</th><th colspan="4">Then all teams →</th></tr>
+  <tr><td class="tch">Tchoupitoulas</td><td>Ladies</td><td>Fed Reserve</td><td>Bush Tree</td><td>Sculpture</td><td>Cuba</td><td>Hale Boggs</td><td>Lighthouse</td><td>Win</td></tr>
+  <tr><td class="bei">Beignet</td><td>Fed Reserve</td><td>Ladies</td><td>Sculpture</td><td>Bush Tree</td><td>Cuba</td><td>Hale Boggs</td><td>Lighthouse</td><td>Win</td></tr>
+  <tr><td class="lag">Lagniappe</td><td>Bush Tree</td><td>Sculpture</td><td>Fed Reserve</td><td>Ladies</td><td>Cuba</td><td>Hale Boggs</td><td>Lighthouse</td><td>Win</td></tr>
+  <tr><td class="rou">Rougarou</td><td>Sculpture</td><td>Bush Tree</td><td>Ladies</td><td>Fed Reserve</td><td>Cuba</td><td>Hale Boggs</td><td>Lighthouse</td><td>Win</td></tr>
+</table>
+
+<p class="note">No two teams at the same stop at the same time. No Sculpture immediately before Ladies.</p>
+
+<h3>Quick answers</h3>
+<table class="cheat">
+  <tr><th>Stop</th><th>Question</th><th>Answer</th></tr>
+  <tr><td>Gallier Hall</td><td>President's funeral</td><td><kbd>DAVIS</kbd></td></tr>
+  <tr><td>Bush Tree</td><td>Type of tree planted by a Bush</td><td><kbd>C — Shumard Oak</kbd></td></tr>
+  <tr><td>Sculpture</td><td>Founding Father's last name</td><td><kbd>JAY</kbd> (John Jay, 1st Chief Justice)</td></tr>
+  <tr><td>The Ladies</td><td>Other D.C. French memorial</td><td><kbd>A — Lincoln Memorial</kbd></td></tr>
+  <tr><td>Federal Reserve</td><td>Dollars a day in the video</td><td><kbd>C — 6 MILLION DOLLARS</kbd></td></tr>
+  <tr><td>Hale Boggs</td><td>Congressman's last name</td><td><kbd>BOGGS</kbd></td></tr>
+</table>
+
+<!-- ══════════════════════════════════════════════════ STEP 0 -->
+<h2>STEP 0 — INTRO</h2>
+<div class="step">
+  <div class="msg">We lied. You still need to use some brain power this evening.</div>
+  <div class="msg">This IS a team building exercise, but it's NOT a walking tour. Think Escape Room meets Scavenger Hunt. Type PLAY to find out what team you're on.</div>
+  <div class="answer">PLAY</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 1 -->
+<h2>STEP 1 — TEAM CIPHER</h2>
+<div class="step">
+  <div class="msg">Figure out which team you're on using the Team Cipher puzzle. <a href="https://the-game-bureau.github.io/tour/360/teams.html">Open Team Cipher →</a></div>
+  <div class="answer">A, B, C, or D (or full team name)</div>
+  <p class="dim" style="margin-top:0.5rem">A = Beignet · B = Lagniappe · C = Rougarou · D = Tchoupitoulas</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 2 -->
+<h2>STEP 2 — RULES + TEAM DEFINITION</h2>
+<div class="step">
+  <div class="msg">Take turns reading text messages out loud. All team members can reply to text messages. But you absolutely have to designate a Team Photographer 📸. The winner will be the team that finishes first AND can show all of their pics. So, keep going no matter what, if the "winner" doesn't have all the pics, they will be disqualified.</div>
+  <div class="msg" id="s2-question">Ok, you're TEAM <strong>[NAME]</strong>, but what does [name] mean?<br><br>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</div>
+  <div class="answer">[Team-specific letter — see cheat sheet]</div>
+  <div class="correct-label">Correct response:</div>
+  <div class="team-card bei" style="margin:0.3rem 0 0.2rem; display:inline-block; border-radius:6px;">Beignet: "Correct! A beignet is a deep-fried French doughnut. We know, too much standing around. Let's get moving!"</div><br>
+  <div class="team-card lag" style="margin:0.2rem 0; display:inline-block; border-radius:6px;">Lagniappe: "Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let's get moving!"</div><br>
+  <div class="team-card rou" style="margin:0.2rem 0; display:inline-block; border-radius:6px;">Rougarou: "Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let's get moving!"</div><br>
+  <div class="team-card tch" style="margin:0.2rem 0; display:inline-block; border-radius:6px;">Tchoupitoulas: "Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let's get moving!"</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 3 -->
+<h2>STEP 3 — NAVIGATE TO LAFAYETTE SQUARE</h2>
+<div class="step">
+  <div class="msg">Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE.</div>
+  <div class="answer">LAFAYETTE</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 4 -->
+<h2>STEP 4 — ARRIVAL AT LAFAYETTE SQUARE</h2>
+<div class="step">
+  <p style="margin-bottom:0.4rem"><em>[Send Lafayette Square photo]</em></p>
+  <div class="msg">Welcome to Lafayette Square, Team <strong>[NAME]</strong>! We're so glad you didn't go all the way to Jackson Square. <strong>FIND THIS EXACT SPOT</strong> [w3w link below] and then we'll take a look around. Reply with <strong>HERE!</strong> when you get to the exact spot.</div>
+  <div class="answer">HERE!</div>
+  <hr>
+  <table class="cheat" style="margin-bottom:0">
+    <tr><th>Team</th><th>Exact Spot (what3words)</th></tr>
+    <tr><td class="bei">Beignet</td><td><a href="https://w3w.co/tend.snipped.national">w3w.co/tend.snipped.national</a></td></tr>
+    <tr><td class="lag">Lagniappe</td><td><a href="https://w3w.co/ideas.shorter.restore">w3w.co/ideas.shorter.restore</a></td></tr>
+    <tr><td class="rou">Rougarou</td><td><a href="https://w3w.co/bearings.student.seats">w3w.co/bearings.student.seats</a></td></tr>
+    <tr><td class="tch">Tchoupitoulas</td><td><a href="https://w3w.co/captures.sailor.clues">w3w.co/captures.sailor.clues</a></td></tr>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 4b -->
+<h2>STEP 4b — TEAM PHOTO HERE</h2>
+<div class="step">
+  <div class="msg">📸 TAKE A TEAM PHOTO HERE. Type <strong>CLICK</strong> after you've got the pic.</div>
+  <div class="answer">CLICK</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 4c -->
+<h2>STEP 4c — TOUR + PASSWORD EXCHANGE</h2>
+<div class="step">
+  <div class="msg">You're standing in the historical epicenter of New Orleans politics. Who's the guy above you? That's Henry Clay. He founded the Whig Party which, upon its collapse, made way for the Republican party. He is kinda gesturing toward a seemingly boring building but it may secretly be the most fascinating of all. To the left of that building is Gallier Hall, our old City Hall. -still used for ceremonies and as Mardi Gras reviewing stands, as you can tell. Across the square on Camp Street, that massive building to the right started as a post office, now it's a federal court. Did you catch all that? It may come in handy later.</div>
+  <div class="msg">Enough sightseeing. We were just stalling. Hopefully Team <strong>[PARTNER]</strong> has arrived. You need their help.</div>
+  <div class="msg">Stay where you are. Call out "HEY TEAM [PARTNER]. YOUR PASSWORD IS [PASSWORD]. WHAT IS OUR PASSWORD?"</div>
+  <div class="msg">What password did Team [PARTNER] give you?<br><br>A)&nbsp; Andouille<br>B)&nbsp; Boudin<br>C)&nbsp; Crawfish<br>D)&nbsp; Empanada<br>E)&nbsp; Etouffee<br>F)&nbsp; Falafel<br>G)&nbsp; Gumbo<br>H)&nbsp; Gyro<br>I)&nbsp; Jambalaya<br>J)&nbsp; Muffuletta<br>K)&nbsp; Paella<br>L)&nbsp; Pierogi<br>M)&nbsp; Poutine<br>N)&nbsp; Praline</div>
+  <div class="answer">[Team-specific letter — see cheat sheet]</div>
+  <div class="correct-label">Correct response + food blurb:</div>
+  <div class="team-card bei" style="margin:0.3rem 0 0.2rem;display:inline-block;border-radius:6px;"><strong>Beignet receives GUMBO (G):</strong> "Correct! Gumbo is the unofficial dish of Louisiana: a thick, dark-roux stew that takes all day and sparks arguments about the correct ingredients all week."</div><br>
+  <div class="team-card lag" style="margin:0.2rem 0;display:inline-block;border-radius:6px;"><strong>Lagniappe receives JAMBALAYA (I):</strong> "Correct! Jambalaya is Louisiana's answer to paella: rice, meat, and vegetables all cooked in one pot."</div><br>
+  <div class="team-card rou" style="margin:0.2rem 0;display:inline-block;border-radius:6px;"><strong>Rougarou receives ETOUFFEE (E):</strong> "Correct! Étouffée means 'smothered' in French: crawfish buried in a rich buttery sauce, served over rice."</div><br>
+  <div class="team-card tch" style="margin:0.2rem 0;display:inline-block;border-radius:6px;"><strong>Tchoupitoulas receives MUFFULETTA (J):</strong> "Correct! The muffuletta was invented at Central Grocery, right here in New Orleans: a round Sicilian loaf piled with olive salad and Italian meats."</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ STEP 5 -->
+<h2>STEP 5 — GALLIER HALL (all teams)</h2>
+<div class="step">
+  <div class="msg">Next, let's focus back on Gallier Hall. A president's funeral was held here — just not a United States president. Any Civil War buffs? WHAT WAS THE LAST NAME OF THE PRESIDENT THAT HAD HIS FUNERAL HERE? Yeah, you're just gonna have to ask ChatGPT for this one.</div>
+  <div class="answer">DAVIS</div>
+  <div class="correct-label">Correct — send Davis funeral photo + say:</div>
+  <div class="correct-msg">"Correct!" [photo] "Jefferson Davis was President of the CONFEDERATE States of America... not the United States! 😮 Here's a picture from his funeral, right at Gallier Hall, over 135 years ago."</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ SHUFFLED STOPS -->
+<h2>SHUFFLED STOPS — order varies by team (see cheat sheet above)</h2>
+<p class="note">After Gallier Hall, each team does their 4 stops in a different order. Cuba → Hale Boggs → Lighthouse → Win is the same for everyone.</p>
+
+<h3>🌳 Bush Tree</h3>
+<div class="step">
+  <div class="msg">Let's wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.</div>
+  <div class="msg">A)&nbsp; Bald Cypress<br>B)&nbsp; Crepe Myrtle<br>C)&nbsp; Shumard Oak<br>D)&nbsp; Weeping Willow</div>
+  <div class="answer">C — Shumard Oak</div>
+  <div class="correct-label">Correct — send Bush tree photo + say:</div>
+  <div class="correct-msg">"The original monument got replaced because of a misspelled word and the original tree got replaced because it died, but hey, it's the thought that counts!"</div>
+</div>
+
+<h3>🗿 Sculpture</h3>
+<div class="step">
+  <div class="msg">There's a sculpture across Camp Street — kinda looks like a pointing arrow. TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER AND TELL US HIS LAST NAME.</div>
+  <div class="msg">💡 HINT: Do NOT text Mission Control "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it. Is the answer hidden behind a tree? Is it to the left of a fire hydrant and up? Higher. Higher.</div>
+  <div class="answer">JAY</div>
+  <div class="correct-label">Correct:</div>
+  <div class="correct-msg">"John Jay! First Chief Justice of the United States. 🎉"</div>
+</div>
+
+<h3>👩‍🎨 The Ladies</h3>
+<div class="step">
+  <div class="msg">Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building (the one on Camp Street that we talked about) are four sets of bronze sculptures known as 'The Ladies': Agriculture, History, Industry and Arts. They were sculpted by Daniel Chester French. You may have to back up a little to see them.</div>
+  <p style="margin:0.4rem 0"><em>[Send The Ladies photo]</em></p>
+  <div class="msg">📸 Take a team photo of your team looking up at The Ladies.</div>
+  <div class="msg">Daniel Chester French also designed another famous U.S. memorial. Do you know which one?<br><br>A)&nbsp; The Lincoln Memorial<br>B)&nbsp; The Statue of Liberty<br>C)&nbsp; The Washington Monument<br>D)&nbsp; Mount Rushmore</div>
+  <div class="answer">A — The Lincoln Memorial</div>
+  <div class="correct-label">Correct:</div>
+  <div class="correct-msg">"Oh yeah! 🎉"</div>
+</div>
+
+<h3>🏦 Federal Reserve</h3>
+<div class="step">
+  <div class="msg">Next, take a look at the plain building to the right of Gallier Hall that Henry is gesturing to — that's the Federal Reserve Bank of Atlanta's New Orleans branch. Can you see it? Are there trees in the way? It doesn't matter.<br><br>TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.<br><br><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI">youtube.com/watch?v=mwCfK1oqRkI</a></div>
+  <div class="msg">A)&nbsp; $42.50<br>B)&nbsp; 1 MILLION DOLLARS<br>C)&nbsp; 6 MILLION DOLLARS<br>D)&nbsp; 1 TRILLION DOLLARS</div>
+  <div class="answer">C — 6 MILLION DOLLARS</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ CUBA -->
+<h2>CUBA MONUMENT (all teams)</h2>
+<div class="step">
+  <div class="msg">There's a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López, who designed what would become his adopted country's flag, sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.<br><br>Find the monument: <a href="https://what3words.com/remake.king.cloth">what3words.com/remake.king.cloth</a><br><br>Oh shoot, that map tells you the name of the country. We were going to ask you that. 😕 -tell you what, 📸 TAKE A TEAM PHOTO AT THE MONUMENT.<br><br>Type <strong>CLICK</strong> to continue.</div>
+  <div class="answer">CLICK</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ HALE BOGGS -->
+<h2>HALE BOGGS (all teams)</h2>
+<div class="step">
+  <p style="margin-bottom:0.4rem"><em>[Send Oswald flyer photo]</em></p>
+  <div class="msg">What do the Daily Delta, Lee Harvey Oswald, the CIA, FBI, and Secret Service all have in common? They all had offices in this neighborhood at one time or another.<br><br>The building behind you replaced the old Newman Building, where Oswald (the presumptive assassin of JFK) printed his leaflets in 1963. Now it bears the name of a Louisiana congressman who served on the Warren Commission. He signed the report, but later hinted that Oswald may not have acted alone. Then the congressman boarded a plane in Alaska and vanished. But sure, it's not like powerful political figures ever meet suspicious ends anymore.<br><br>What's the last name of the congressman we're talking about?</div>
+  <div class="answer">BOGGS</div>
+  <div class="correct-label">Correct — send Newman building photo + say:</div>
+  <div class="correct-msg">"That's 544 Camp Street, where Oswald supposedly made his flyers. It 'ain't there no more' as they say in New Orleans. It's been replaced by the Hale Boggs Federal Building. That's irony folks. OK, we'll take off our tin foil hat now. Where were we..."</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ LIGHTHOUSE -->
+<h2>LIGHTHOUSE (all teams)</h2>
+<div class="step">
+  <div class="msg">We have just one more challenge. Find the extinguished guiding light on Camp Street between Julia Street and Girod Street. 📸 TAKE A TEAM PICTURE IN FRONT OF THE BUILDING WITH THE EXTINGUISHED GUIDING LIGHT. TYPE CLICK WHEN DONE TO SEE HOW TO CROSS THE FINISH LINE!</div>
+  <div class="answer">CLICK</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ WIN -->
+<h2>WIN 🎉 (all teams)</h2>
+<div class="step">
+  <div class="msg">🎉 You've completed the game! But wait! Quick! 🏃 Text <strong>[TEAM NAME]</strong> to <strong>504.581.5652</strong> right now (don't type it here). The first team to do so wins.... if they have all of their pics timestamped BEFORE the text! 🏆</div>
+  <div class="msg"><strong>If before 6pm CT:</strong> "Junebug is right here and you've got some time. It's got a pretty interesting past as a recording studio (junebugnola.com). You can go have a drink at the bar or go back to the office for a few minutes."<br><br><strong>If after 6pm CT:</strong> "Junebug is right here. It's got a pretty interesting past as a recording studio (junebugnola.com) but you don't care about that right now, you're hungry! Check in with the host and meet us at the table or the bar, wherever we may be."</div>
+</div>
+
+<p style="text-align:center; color:#aaa; font-size:0.8rem; margin-top:2rem">NOLA 360 · Game Master Manual</p>
+
+</body>
+</html>
