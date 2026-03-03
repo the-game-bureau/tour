@@ -61,7 +61,7 @@
       border-radius: 20px;
       line-height: 1.5;
       word-wrap: break-word;
-      font-size: 0.97rem;
+      font-size: 1.5rem;
     }
     .msg.from-game .msg-bubble {
       background: #01b9d8;
@@ -598,9 +598,15 @@ function buildSteps(teamKey) {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let state = { step: 0, team: null };
-try { state.team = localStorage.getItem('nola360_team') || null; } catch(e) {}
+try {
+  state.team = localStorage.getItem('nola360_team') || null;
+  const s = parseInt(localStorage.getItem('nola360_step') || '0', 10);
+  if (!isNaN(s) && s > 0) state.step = s;
+} catch(e) {}
 
-function saveState() { /* step not persisted; team saved inline on setsTeam */ }
+function saveState() {
+  try { localStorage.setItem('nola360_step', state.step); } catch(e) {}
+}
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
 const chatEl      = document.getElementById('chat');
@@ -805,23 +811,33 @@ function doAdvance() {
   });
 }
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
-const steps = buildSteps(state.team);
-const bootStep = steps[0];
-
-const typing = addTyping();
-bootStep.reveal.forEach((msg, i) => {
-  setTimeout(() => {
-    if (i === bootStep.reveal.length - 1) typing.remove();
-    addMsg(msg, true);
-    scrollBottom(true);
-    if (i === bootStep.reveal.length - 1) renderInput();
-  }, 900 + i * 400);
-});
-
 // ── Team Cipher overlay ───────────────────────────────────────────────────────
 const teamOverlay = document.getElementById('team-overlay');
 let teamQuestionShown = false;
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+const steps = buildSteps(state.team);
+
+if (state.step > 0) {
+  // Restore: replay all reveal bubbles instantly up to current step
+  for (let i = 0; i <= state.step; i++) {
+    if (i < steps.length) steps[i].reveal.forEach(msg => addMsg(msg, false));
+  }
+  teamQuestionShown = true;
+  renderInput();
+  scrollBottom(false);
+} else {
+  const bootStep = steps[0];
+  const typing = addTyping();
+  bootStep.reveal.forEach((msg, i) => {
+    setTimeout(() => {
+      if (i === bootStep.reveal.length - 1) typing.remove();
+      addMsg(msg, true);
+      scrollBottom(true);
+      if (i === bootStep.reveal.length - 1) renderInput();
+    }, 900 + i * 400);
+  });
+}
 
 function openTeamOverlay() {
   teamOverlay.classList.add('open');
