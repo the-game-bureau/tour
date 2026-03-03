@@ -35,8 +35,9 @@
       border-radius: 50%;
       background: #01b9d8;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
+      flex-shrink: 0; overflow: hidden;
     }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .contact-info { flex: 1; }
     .contact-name { font-size: 1rem; font-weight: 600; color: #111827; line-height: 1.2; }
     .online-dot {
@@ -62,9 +63,11 @@
       line-height: 1.5;
       word-wrap: break-word;
       font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
     .msg.from-game .msg-bubble {
-      background: #01b9d8;
+      background: #007AFF;
       border-bottom-left-radius: 5px;
       color: #ffffff;
     }
@@ -225,7 +228,7 @@
 
       flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
       background: var(--tc-bg); color: var(--tc-text);
-      font-family: 'DM Sans', sans-serif; font-size: 24px;
+      font-family: 'DM Sans', sans-serif; font-size: 32px;
       display: flex; flex-direction: column; align-items: center;
       padding: 24px 16px 80px; -webkit-tap-highlight-color: transparent;
     }
@@ -266,9 +269,9 @@
     .tc-wrap .clue-body { flex: 1; }
     .tc-wrap .clue-team-name {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem; letter-spacing: 0.1em; line-height: 1; margin-bottom: 6px;
+      font-size: 1.8rem; letter-spacing: 0.1em; line-height: 1; margin-bottom: 6px;
     }
-    .tc-wrap .clue-text { font-size: 1rem; line-height: 1.7; }
+    .tc-wrap .clue-text { font-size: 1.4rem; line-height: 1.7; }
     .tc-wrap .clue-row strong { font-weight: 600; color: var(--tc-text); }
 
     .tc-wrap .solved-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
@@ -281,11 +284,11 @@
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
     .tc-wrap .solved-team-name {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
       letter-spacing: 0.1em; color: rgba(0,0,0,0.7); margin-bottom: 6px;
     }
     .tc-wrap .solved-members {
-      font-family: 'DM Mono', monospace; font-size: 0.85rem;
+      font-family: 'DM Mono', monospace; font-size: 1.1rem;
       color: rgba(0,0,0,0.6); line-height: 1.6;
     }
     .tc-wrap .lag-bg { background: var(--tc-lag); }
@@ -324,11 +327,11 @@
     .tc-wrap .card.rou-lit { background: var(--tc-rou); border-color: var(--tc-rou); }
     .tc-wrap .card.bei-lit { background: var(--tc-bei); border-color: var(--tc-bei); }
     .tc-wrap .card-first {
-      font-family: 'DM Mono', monospace; font-size: 0.85rem;
+      font-family: 'DM Mono', monospace; font-size: 1.1rem;
       color: var(--tc-muted); line-height: 1;
     }
     .tc-wrap .card-last {
-      font-family: 'DM Mono', monospace; font-size: 1.05rem;
+      font-family: 'DM Mono', monospace; font-size: 1.4rem;
       font-weight: 500; color: var(--tc-text); line-height: 1.2;
     }
     .tc-wrap .card.shake { animation: tcShake 0.38s ease; }
@@ -338,12 +341,12 @@
       75% { transform: translateX(7px); }
     }
     .tc-wrap .sel-count {
-      font-family: 'DM Mono', monospace; font-size: 0.9rem;
+      font-family: 'DM Mono', monospace; font-size: 1.2rem;
       color: var(--tc-muted); text-align: center; min-height: 24px; margin-bottom: 14px;
     }
     .tc-wrap .btn-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
     .tc-wrap button {
-      font-family: 'DM Mono', monospace; font-size: 0.95rem;
+      font-family: 'DM Mono', monospace; font-size: 1.2rem;
       letter-spacing: 0.08em; text-transform: uppercase;
       padding: 16px 22px; border-radius: 12px; cursor: pointer;
       transition: all 0.12s; border: 1.5px solid var(--tc-border);
@@ -373,7 +376,7 @@
 <body>
 
 <div class="contact-header">
-  <div class="avatar">📡</div>
+  <div class="avatar"><img src="https://the-game-bureau.github.io/tour/resources/360.png" alt="360"></div>
   <div class="contact-info">
     <div class="contact-name">Mission Control</div>
   </div>
