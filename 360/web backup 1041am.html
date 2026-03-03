@@ -416,10 +416,10 @@ const TEAM_KEY_MAP    = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitou
 const TEAM_LETTER_MAP = { a: 'beignet', b: 'lagniappe', c: 'rougarou', d: 'tch' };
 
 const TEAM_DEFS = {
-  beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe',     give: 'JAMBALAYA',  receive: 'gumbo',       receiveLetter: 'g', receiveBlurb: 'Gumbo is the unofficial dish of Louisiana — a thick, dark-roux stew that takes all day and sparks arguments about the correct ingredients all week.' },
-  lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',       give: 'GUMBO',      receive: 'jambalaya',   receiveLetter: 'i', receiveBlurb: 'Jambalaya is Louisiana\'s answer to paella — rice, meat, and vegetables all cooked in one pot.' },
-  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou', give: 'ETOUFFEE',   receive: 'muffuletta',  receiveLetter: 'j', receiveBlurb: 'The muffuletta was invented at Central Grocery, right here in New Orleans — a round Sicilian loaf piled with olive salad and Italian meats.' },
-  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee',    receiveLetter: 'e', receiveBlurb: 'Étouffée means \'smothered\' in French — crawfish buried in a rich buttery sauce, served over rice.' }
+  beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. 🍩 We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe',     give: 'JAMBALAYA',  receive: 'gumbo',       receiveLetter: 'b', receiveBlurb: 'Gumbo is the unofficial dish of Louisiana — a thick, dark-roux stew that takes all day and sparks arguments all week.' },
+  lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',       give: 'GUMBO',      receive: 'jambalaya',   receiveLetter: 'c', receiveBlurb: 'Jambalaya is Louisiana\'s answer to paella — rice, meat, and vegetables all cooked in one pot.' },
+  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou', give: 'ETOUFFEE',   receive: 'muffuletta',  receiveLetter: 'd', receiveBlurb: 'The muffuletta was invented at Central Grocery, right here in New Orleans — a round Sicilian loaf piled with olive salad and Italian meats.' },
+  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee',    receiveLetter: 'a', receiveBlurb: 'Étouffée means \'smothered\' in French — crawfish buried in a rich buttery sauce, served over rice.' }
 };
 
 // ── Build step sequence ───────────────────────────────────────────────────────
@@ -431,146 +431,135 @@ function buildSteps(teamKey) {
   // ── INTRO [all teams] ─────────────────────────────────────────────────────
   const s0 = {
     reveal: [
-      // ── INTRO ──
-      { name: 'intro-we-lied',   html: 'We lied. You still need to use some brain power this evening.' },
+      { name: 'intro-we-lied',   html: 'We lied.' },
       { name: 'intro-type-play', html: 'This IS a team building exercise, but it\'s NOT a walking tour. Think Escape Room meets Scavenger Hunt. Type PLAY to find out what team you\'re on.' }
     ],
-    // ── RESPONSE ──
     action: { type: 'text', answers: ['play'] }
   };
 
   // ── TEAM CIPHER [all teams] ───────────────────────────────────────────────
   const s1 = {
     reveal: [
-      // ── INTRO ──
       { name: 'cipher-btn', html: 'Figure out which team you\'re on using the Team Cipher puzzle.<button class="open-cipher-btn" onclick="openTeamOverlay()">Open Team Cipher →</button>' }
     ],
-    // ── RESPONSE ──
     action: { type: 'text', placeholder: 'A, B, C or D', answers: ['a', 'b', 'c', 'd', 'beignet', 'lagniappe', 'rougarou', 'tchoupitoulas'], setsTeam: true }
   };
 
   // ── TEAM DEFINITION [all teams — team-aware: name + correct answer varies] ─
   const s2 = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'def-ask',
-        html: '<p>Ok, you\'re TEAM <strong>' + (t ? t.name.toUpperCase() : 'X') + '</strong>, but what does ' + (t ? t.name : 'your team name') + ' mean?</p>'
-          + '<p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>'
-      }
-    ],
-    // ── RESPONSE ──
+    reveal: [{
+      name: 'def-ask',
+      html: '<p>Ok, you\'re TEAM <strong>' + (t ? t.name.toUpperCase() : 'X') + '</strong>, but what does ' + (t ? t.name : 'your team name') + ' mean?</p>'
+        + '<p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>'
+    }],
     action: { type: 'text', placeholder: 'A, B, C or D', answers: [def ? def.letter : 'a'] }
   };
 
   // ── TEAM DEFINITION CORRECT + NAVIGATION [all teams — correct msg varies] ─
   const s3 = {
     reveal: [
-      // ── WRAP UP: Team Definition ──
-      { name: 'def-correct',         html: def ? def.correctMsg : 'Correct! We know, too much standing around. Let\'s get moving!' },
-      // ── INTRO ──
+      { name: 'def-correct',       html: def ? def.correctMsg : 'Correct! We know, too much standing around. Let\'s get moving!' },
       { name: 'nav-go-to-lafayette', html: 'Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA\'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN\'S NAME ONCE YOU ARRIVE.' }
     ],
-    // ── RESPONSE ──
     action: { type: 'text', placeholder: 'The Frenchman\'s name…', answers: ['lafayette'] }
   };
 
   // ── ARRIVAL ───────────────────────────────────────────────────────────────
   const s4 = {
     reveal: [
-      // ── INTRO ──
       { name: 'arrival-photo',   html: '<p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square"></p>' },
       { name: 'arrival-welcome',
-        html: 'Welcome to Lafayette Square, Team <strong>' + (t ? t.name : '???') + '</strong>! We\'re so glad you didn\'t go all the way to Jackson Square. <a href="' + (t ? t.w3w : '#') + '" target="_blank"><strong>FIND THIS EXACT SPOT</strong></a> and then we\'ll take a look around. Reply with <strong>HERE!</strong> when you get to the <strong>exact spot</strong>.' }
+        html: 'Welcome to Lafayette Square, Team <strong>' + (t ? t.name : '???') + '</strong>! I\'m so glad you didn\'t go all the way to Jackson Square. <a href="' + (t ? t.w3w : '#') + '" target="_blank"><strong>FIND THIS EXACT SPOT</strong></a> and then we\'ll take a look around. Reply with <strong>HERE!</strong> when you get to the <strong>exact spot</strong>.' }
     ],
-    // ── RESPONSE ──
     action: { type: 'text', placeholder: 'Type HERE! when you arrive…', answers: ['here', 'here!'] }
   };
 
   // ── PHOTOGRAPHER [all teams] ─────────────────────────────────────────────
   const s4photo = {
     reveal: [
-      // ── INTRO ──
-      { name: 'photo-prompt', html: '📸 Designate a team photographer. TAKE A TEAM PHOTO HERE. The winner will be the team that finishes first AND can show all of their pics. So, keep going no matter what, if the &#8220;winner&#8221; doesn\'t have all the pics, they will be disqualified. Type <strong>CLICK</strong> after you\'ve got the pic.' }
+      { name: 'photo-prompt', html: '📸 Designate a team photographer. Take a team photo here. To win this game you not only need to be the first to finish, you also need to show all of your pics! Type <strong>CLICK</strong> to continue.' }
     ],
-    // ── RESPONSE ──
     action: { type: 'text', placeholder: 'Type CLICK to continue…', answers: ['click'] }
   };
 
   // ── TOUR + PASSWORD ───────────────────────────────────────────────────────
   const s4b = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'tour-politics',     html: 'You\'re standing in the historical epicenter of New Orleans politics. Who\'s the guy above you? That\'s Henry Clay. He founded the Whig Party which, upon its collapse, made way for the Republican party. He is kinda gesturing toward a seemingly boring building but it may secretly be the most fascinating of all. To the left of that building is Gallier Hall, our old City Hall. Across the square on Camp Street, that massive building to the right started as a post office, now it\'s a federal court. Did you catch all that? It may come in handy later.' },
-      { name: 'pwd-unlock',        html: 'Enough sightseeing. We were just stalling. Hopefully Team <strong>' + (def ? def.partner : '') + '</strong> has arrived. You need their help.' },
-      { name: 'pwd-callout',       html: 'Stay where you are. Call out <strong>HEY TEAM ' + (def ? def.partner.toUpperCase() : '') + '. YOUR PASSWORD IS ' + (def ? def.give : '') + '. WHAT IS OUR PASSWORD?</strong>' },
-      { name: 'pwd-prompt',        html: '<p>What password did Team ' + (def ? def.partner.toUpperCase() : '') + ' give you?</p><p>A)&nbsp; Andouille<br>B)&nbsp; Boudin<br>C)&nbsp; Crawfish<br>D)&nbsp; Empanada<br>E)&nbsp; Etouffee<br>F)&nbsp; Falafel<br>G)&nbsp; Gumbo<br>H)&nbsp; Gyro<br>I)&nbsp; Jambalaya<br>J)&nbsp; Muffuletta<br>K)&nbsp; Paella<br>L)&nbsp; Pierogi<br>M)&nbsp; Poutine<br>N)&nbsp; Praline</p>' }
+    reveal: t ? [
+      // ── TOUR ──
+      { name: 'tour-politics',     html: 'You\'re standing in the former epicenter of New Orleans politics.' },
+      { name: 'tour-clay',         html: 'Henry Clay is here in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party.' },
+      { name: 'tour-gallier',      html: 'Straight across the street, on St. Charles Avenue (where the streetcar runs) is Gallier Hall, that used to be our City Hall.' },
+      { name: 'tour-federal',      html: 'To the right of Gallier Hall is a boring looking building that Henry Clay is kind of gesturing towards, and it may secretly be the most fascinating of all.' },
+      { name: 'tour-courthouse',   html: 'Opposite St. Charles Avenue, on Camp Street, there\'s a huge building to your right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office. Can you see the statues on top?' },
+      // ── PASSWORD ──
+      { name: 'pwd-unlock',        html: 'Enough sightseeing. I was stalling. Hopefully Team <strong>' + def.partner + '</strong> has arrived. We need their help.' },
+      { name: 'pwd-callout',       html: 'Stay where you are. Call out <strong>HEY TEAM ' + def.partner.toUpperCase() + '. YOUR PASSWORD IS ' + def.give + '. WHAT IS OUR PASSWORD?</strong>' },
+      { name: 'pwd-prompt',        html: '<p>What password did Team ' + def.partner.toUpperCase() + ' give you?</p><p>A)&nbsp; Etouffee<br>B)&nbsp; Gumbo<br>C)&nbsp; Jambalaya<br>D)&nbsp; Muffuletta</p>' }
+    ] : [
+      // ── TOUR ──
+      { name: 'tour-politics',     html: 'You\'re standing in the former epicenter of New Orleans politics.' },
+      { name: 'tour-clay',         html: 'Henry Clay is here in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party.' },
+      { name: 'tour-gallier',      html: 'Straight across the street, on St. Charles Avenue (where the streetcar runs) is Gallier Hall, that used to be our City Hall.' },
+      { name: 'tour-federal',      html: 'To the right of Gallier Hall is a boring looking building that Henry Clay is kind of gesturing towards, and it may secretly be the most fascinating of all.' },
+      { name: 'tour-courthouse',   html: 'Opposite St. Charles Avenue, on Camp Street, there\'s a huge building to your right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol\' post office. Can you see the statues on top?' },
+      // ── PASSWORD ──
+      { name: 'pwd-unlock',        html: 'Enough sightseeing. I was stalling. Hopefully your partner team have arrived. We need their help.' },
+      { name: 'pwd-callout',       html: 'Stay where you are. Call out to your partner team with their password and ask for yours. WHAT IS OUR PASSWORD?' },
+      { name: 'pwd-prompt',        html: '<p>What password did your partner team give you?</p><p>A)&nbsp; Etouffee<br>B)&nbsp; Gumbo<br>C)&nbsp; Jambalaya<br>D)&nbsp; Muffuletta</p>' }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'A through N', answers: def ? [def.receiveLetter, def.receive] : [],
-      correct: [{ name: 'gallier-correct', html: 'Correct! ' + (def ? def.receiveBlurb : '') }] }
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: def ? [def.receiveLetter, def.receive] : [] }
   };
 
   // ── GALLIER HALL ──────────────────────────────────────────────────────────
   const s5 = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'gallier-question',  html: 'Next, let\'s focus back on Gallier Hall. A president\'s funeral was held here — just not a United States president. Any Civil War buffs? WHAT WAS THE LAST NAME OF THE PRESIDENT THAT HAD HIS FUNERAL HERE? Yeah, you\'re just gonna have to ask ChatGPT for this one.' }
+    reveal: teamKey === 'tch' ? [
+      // { name: 'gallier-photo',   html: 'Head over to Gallier Hall and take a picture of you and your team on the steps. Save it for later.' },
+      { name: 'gallier-correct',   html: 'Correct! ' + (def ? def.receiveBlurb : '') },
+      { name: 'gallier-question',  html: 'Next, let\'s focus back on Gallier Hall. A president\'s funeral was held here — just not a United States president. The Confederate States of America had a president too. What was his last name?' }
+    ] : [
+      { name: 'gallier-correct',   html: 'Correct! ' + (def ? def.receiveBlurb : '') },
+      { name: 'gallier-question',  html: 'Next, let\'s focus back on Gallier Hall. A president\'s funeral was held here — just not a United States president. The Confederate States of America had a president too. What was his last name?' }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'Last name…', answers: ['jeffersondavis', 'jeffdavis', 'davis'],
-      correct: [
-        { name: 'ladies-correct',  html: 'Correct!' },
-        // ── WRAP UP: Gallier Hall ──
-        { name: 'davis-photo',     html: '<p><img src="https://the-game-bureau.github.io/tour/resources/davis.jpg" alt="Jefferson Davis funeral"></p>' },
-        { name: 'gallier-wrapup',  html: 'Jefferson Davis was President of the CONFEDERATE States of America — not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, over 135 years ago.' }
-      ] }
+    action: { type: 'text', placeholder: 'Last name…', answers: ['jeffersondavis', 'jeffdavis', 'davis'] }
   };
 
   // ── Reusable challenge steps ──────────────────────────────────────────────
   const henryClay = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'henry-clay-task',
-        html: '<p>Now send Mission Control a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, we\'ll never know.</p>'
-      }
-    ],
-    // ── RESPONSE ──
+    reveal: [{
+      name: 'henry-clay-photo',
+      html: '<p>Jefferson Davis was President of the CONFEDERATE States of America — not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, 135 years ago: <a href="https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18" target="_blank">https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18</a></p>'
+        + '<p>Now send me a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, I\'ll never know.</p>'
+    }],
     action: { type: 'button', text: 'Photo sent ✓', playerText: '[photo]' }
   };
 
   // ── BUSH TREE ─────────────────────────────────────────────────────────────
   const bushTree = {
     reveal: [
-      // ── INTRO ──
+      { name: 'bush-correct',  html: 'Bingo!' },
       { name: 'bush-task',     html: 'Let\'s wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.' },
       { name: 'bush-question', html: '<p>A)&nbsp; Bald Cypress<br>B)&nbsp; Crepe Myrtle<br>C)&nbsp; Shumard Oak<br>D)&nbsp; Weeping Willow</p>' }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', 'shumardoak', 'shumard'],
-      correct: [
-        { name: 'sculp-photo',   html: '<p><img src="https://the-game-bureau.github.io/tour/resources/Bush.jpg" alt="Bush tree photo"></p>' },
-        { name: 'sculp-context', html: 'The original monument got replaced because of a misspelled word and the original tree got replaced because it died, but hey, it\'s the thought that counts!' }
-      ] }
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', 'shumardoak', 'shumard'] }
   };
 
   // ── SCULPTURE ─────────────────────────────────────────────────────────────
   const sculpture = {
     reveal: [
-      // ── INTRO ──
-      { name: 'sculp-task',    html: 'There\'s a sculpture across Camp Street — kinda looks like a pointing arrow. TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER AND TELL US HIS LAST NAME.' },
-      { name: 'sculp-hint',    html: '💡 HINT: Do NOT text Mission Control "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it.' }
+      { name: 'sculp-photo',   html: '<p><img src="https://the-game-bureau.github.io/tour/resources/Bush.jpg" alt="Bush tree photo"></p>' },
+      { name: 'sculp-context', html: 'The original monument got replaced because of a misspelled word and the original tree got replaced because it died, but hey, it\'s the thought that counts!' },
+      { name: 'sculp-task',    html: 'There\'s a sculpture across Camp Street — kinda looks like a pointing arrow. TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER. TELL ME HIS LAST NAME.' },
+      { name: 'sculp-hint',    html: '💡 HINT: Do NOT text me "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it.' }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'His last name…', answers: ['johnjay', 'jay'],
-      correct: [{ name: 'sculp-correct', html: 'John Jay! First Chief Justice of the United States. 🎉' }] }
+    action: { type: 'text', placeholder: 'His last name…', answers: ['johnjay', 'jay'] }
   };
 
   // ── THE LADIES ────────────────────────────────────────────────────────────
   const theLadies = {
     reveal: [
-      // ── INTRO ──
+      { name: 'ladies-correct',       html: 'Correct!' },
       { name: 'ladies-info',
-        html: '<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building — the one on Camp Street that we talked about — are four sets of bronze sculptures known as \'The Ladies\': Agriculture, History, Industry and Arts. They were sculpted by Daniel Chester French.</p>'
+        html: '<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building — the one across from you on Camp Street — are four sets of bronze sculptures known as \'The Ladies\': Agriculture, History, Industry and Arts. Actually there are 16 ladies because there are 4 identical statues on the roof. One on each corner. They were sculpted by <strong>Daniel Chester French</strong>.</p>'
       },
       { name: 'ladies-photo',         html: '<p><img src="https://the-game-bureau.github.io/tour/resources/theladies.jpg" alt="The Ladies sculptures"></p>' },
       { name: 'ladies-photo-prompt',  html: '📸 Take a team photo of your team looking up at The Ladies.' },
@@ -579,15 +568,13 @@ function buildSteps(teamKey) {
           + '<p>A)&nbsp; The Lincoln Memorial<br>B)&nbsp; The Statue of Liberty<br>C)&nbsp; The Washington Monument<br>D)&nbsp; Mount Rushmore</p>'
       }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['a', 'lincolnmemorial', 'thelincolnmemorial'],
-      correct: [{ name: 'fed-correct', html: 'Oh yeah! 🎉' }] }
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['a', 'lincolnmemorial', 'thelincolnmemorial'] }
   };
 
   // ── FEDERAL RESERVE ───────────────────────────────────────────────────────
   const federalReserve = {
     reveal: [
-      // ── INTRO ──
+      { name: 'fed-correct',   html: 'Oh yeah! 🎉' },
       { name: 'fed-info',
         html: '<p>Next, take a look at the plain building to the right of Gallier Hall — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch.</p>'
           + '<p>TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.</p>'
@@ -597,72 +584,58 @@ function buildSteps(teamKey) {
         html: '<p>A)&nbsp; $42.50<br>B)&nbsp; 1 MILLION DOLLARS<br>C)&nbsp; 6 MILLION DOLLARS<br>D)&nbsp; 1 TRILLION DOLLARS</p>'
       }
     ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', '6million', '6000000', 'sixmillion', '6milliondollars'],
-      correct: [{ name: 'bush-correct', html: 'Bingo!' }] }
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', '6million', '6000000', 'sixmillion', '6milliondollars'] }
   };
 
   // ── CUBA ──────────────────────────────────────────────────────────────────
   const cuba = {
-    reveal: [
-    // ── INTRO ──
-    {
+    reveal: [{
       name: 'cuba-task',
       html: '<p>There\'s a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López — who had designed what would become his adopted country\'s flag — sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p>'
         + '<p>Find the monument: <a href="https://what3words.com/remake.king.cloth" target="_blank">https://what3words.com/remake.king.cloth</a></p>'
-        + '<p>Oh shoot, that map tells you the name of the country. Tell you what, 📸 Take a team photo at the monument.</p>'
+        + '<p>Oh shoot, that map tells you the name of the country. I tell you what...</p>'
         + '<p>Type <strong>CLICK</strong> to continue.</p>'
     }],
-    // ── RESPONSE ──
+    action: { type: 'text', placeholder: 'Type CLICK to continue…', answers: ['click'] }
+  };
+  const cubaPhoto = {
+    reveal: [{
+      name: 'cuba-photo',
+      html: '<p>📸 Take a team photo at the monument. Save it for later.</p><p>Type <strong>CLICK</strong> to continue.</p>'
+    }],
     action: { type: 'text', placeholder: 'Type CLICK to continue…', answers: ['click'] }
   };
 
   // ── LIGHTHOUSE ────────────────────────────────────────────────────────────
   const lighthouse = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'light-task',     html: 'TAKE A PIC OF THE BEACON OF LIGHT STANDING BETWEEN JULIA AND HER BROTHER GIROD. Send us the name of the restaurant we\'re going to.' }
-    ],
-    // ── RESPONSE ──
+    reveal: [{ name: 'light-task', html: 'TAKE A PIC OF THE BEACON OF LIGHT STANDING BETWEEN JULIA AND HER BROTHER GIROD. Send me the name of the restaurant we\'re going to.' }],
     action: { type: 'text', placeholder: 'Restaurant name?', answers: ['junebug'] }
   };
 
   // ── HALE BOGGS ────────────────────────────────────────────────────────────
   const haleBoggs = {
-    reveal: [
-      // ── INTRO ──
-      { name: 'boggs-flyer',    html: '<p><img src="https://the-game-bureau.github.io/tour/resources/flyer.jpg" alt="Oswald flyer"></p>' },
-      { name: 'boggs-question',
-        html: '<p>What do the Daily Delta, Lee Harvey Oswald, the CIA, FBI, and Secret Service all have in common? They all had offices in this neighborhood at one time or another.</p>'
-          + '<p>The building behind you replaced the old Newman Building, where Oswald — the presumptive assassin of JFK — printed his leaflets in 1963. Now it bears the name of a Louisiana congressman who served on the Warren Commission. He signed the report, but later hinted that Oswald may not have acted alone. Then the congressman boarded a plane in Alaska and vanished. But sure, it\'s not like powerful political figures ever meet suspicious ends anymore.</p>'
-          + '<p>What\'s the last name of the congressman we\'re talking about?</p>'
-      },
-    ],
-    // ── RESPONSE ──
-    action: { type: 'text', placeholder: 'Last name…', answers: ['haleboggs', 'hale boggs', 'boggs'],
-      correct: [
-        { name: 'boggs-newman', html: '<p><img src="https://the-game-bureau.github.io/tour/resources/newman.jpg" alt="Newman Building"></p>' },
-        { name: 'boggs-irony',  html: 'That\'s 544 Camp Street, where Oswald supposedly made his flyers. It "ain\'t there no more" as they say in New Orleans. It\'s been replaced by the Hale Boggs Federal Building. That\'s irony folks.' }
-      ] }
+    reveal: [{
+      name: 'boggs-question',
+      html: '<p>What do Lee Harvey Oswald, the CIA, FBI and Secret Service all have in common? They all had offices in this neighborhood at one time or another.</p>'
+        + '<p>📸 Take a team photo in front of the building. Save it for later.</p>'
+        + '<p>He investigated a murder. He questioned the answer. He boarded a plane and vanished. The building next to you bears his name. Who was he?</p>'
+    }],
+    action: { type: 'text', placeholder: 'Who was he?', answers: ['haleboggs', 'hale boggs', 'boggs'] }
   };
 
   // ── WIN ───────────────────────────────────────────────────────────────────
   const win = {
-    reveal: [
-      // ── WRAP UP: Lighthouse ──
-      { name: 'win-end', html: '🎉 You\'ve completed the game! But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins.... if they have all of their pics timestamped BEFORE the text! 🏆' }
-    ],
-    // ── RESPONSE ──
+    reveal: [{ name: 'win-end', html: '🎉 You\'ve completed the game! But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins a prize! 🏆' }],
     action: { type: 'win' }
   };
 
   // ── Team-specific tails ───────────────────────────────────────────────────
   const tail =
-    teamKey === 'tch'      ? [theLadies, federalReserve, henryClay, bushTree,  sculpture,      cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'beignet'  ? [federalReserve, henryClay, bushTree,  sculpture, theLadies,      cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'lagniappe'? [henryClay, bushTree,  sculpture,      theLadies, federalReserve, cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'rougarou' ? [bushTree,  sculpture, theLadies,      federalReserve, henryClay, cuba, haleBoggs, lighthouse, win] :
-                             [theLadies, federalReserve, henryClay, bushTree, sculpture, cuba, haleBoggs, lighthouse, win]; // fallback (no team)
+    teamKey === 'tch'      ? [theLadies, federalReserve, bushTree,      sculpture,      cuba, cubaPhoto, haleBoggs, lighthouse, win] :
+    teamKey === 'beignet'  ? [henryClay, theLadies,      federalReserve, bushTree,       sculpture, cuba, cubaPhoto, haleBoggs, lighthouse, win] :
+    teamKey === 'lagniappe'? [sculpture, henryClay,      theLadies,      federalReserve, bushTree,  cuba, cubaPhoto, haleBoggs, lighthouse, win] :
+    teamKey === 'rougarou' ? [bushTree,  sculpture,      henryClay,      theLadies,      federalReserve, cuba, cubaPhoto, haleBoggs, lighthouse, win] :
+                             [henryClay, theLadies, federalReserve, bushTree, sculpture, cuba, cubaPhoto, haleBoggs, lighthouse, win]; // fallback (no team)
 
   return [s0, s1, s2, s3, s4, s4photo, s4b, s5, ...tail];
 }
@@ -823,9 +796,6 @@ function renderInput() {
 
 // ── Advance ───────────────────────────────────────────────────────────────────
 function doAdvance() {
-  const steps = buildSteps(state.team);
-  const correctBubbles = (steps[state.step].action.correct || []);
-
   state.step++;
   saveState();
 
@@ -833,18 +803,19 @@ function doAdvance() {
   inputAreaEl.querySelectorAll('input, button').forEach(el => el.disabled = true);
   scrollBottom(true);
 
+  const steps = buildSteps(state.team);
   if (state.step >= steps.length) { renderInput(); return; }
 
-  const allBubbles = [...correctBubbles, ...(steps[state.step].reveal || [])];
-  if (!allBubbles.length) { renderInput(); return; }
+  const reveals = steps[state.step].reveal;
+  if (!reveals.length) { renderInput(); return; }
 
   const typing = addTyping();
-  allBubbles.forEach((msg, i) => {
+  reveals.forEach((msg, i) => {
     setTimeout(() => {
-      if (i === allBubbles.length - 1) typing.remove();
+      if (i === reveals.length - 1) typing.remove();
       addMsg(msg, true);
       scrollBottom(true);
-      if (i === allBubbles.length - 1) renderInput();
+      if (i === reveals.length - 1) renderInput();
     }, 700 + i * 400);
   });
 }
@@ -853,14 +824,9 @@ function doAdvance() {
 const steps = buildSteps(state.team);
 
 if (state.step > 0) {
-  // Restore: replay all reveal + correct bubbles up to current step
+  // Restore: replay all reveal bubbles instantly up to current step
   for (let i = 0; i <= state.step; i++) {
-    if (i < steps.length) {
-      steps[i].reveal.forEach(msg => addMsg(msg, false));
-      if (i < state.step && steps[i].action && steps[i].action.correct) {
-        steps[i].action.correct.forEach(msg => addMsg(msg, false));
-      }
-    }
+    if (i < steps.length) steps[i].reveal.forEach(msg => addMsg(msg, false));
   }
   if (state.team) teamQuestionShown = true;
   renderInput();
@@ -894,7 +860,7 @@ function closeTeamOverlay() {
     const t = addTyping();
     setTimeout(() => {
       t.remove();
-      addMsg({ name: 'team-question', html: '<p>OK, what\'s your team name?</p><p>A)&nbsp; Beignet<br>B)&nbsp; Lagniappe<br>C)&nbsp; Rougarou<br>D)&nbsp; Tchoupitoulas</p>' }, true);
+      addMsg({ name: 'team-question', html: '<p>Which team are you on?</p><p>A)&nbsp; Beignet<br>B)&nbsp; Lagniappe<br>C)&nbsp; Rougarou<br>D)&nbsp; Tchoupitoulas</p>' }, true);
       scrollBottom(true);
       renderInput();
     }, 500);
