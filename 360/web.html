@@ -428,8 +428,8 @@ const TEAM_KEY_MAP = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas
 const TEAM_DEFS = {
   beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. 🍩 We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe', give: 'JAMBALAYA', receive: 'gumbo'      },
   lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',   give: 'GUMBO',     receive: 'jambalaya' },
-  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou',  give: 'ETOUFFEE',  receive: 'muffeletta'},
-  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFELETTA', receive: 'etouffee'}
+  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou',  give: 'ETOUFFEE',  receive: 'muffuletta'},
+  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee'}
 };
 
 // ── Build step sequence ───────────────────────────────────────────────────────
@@ -545,7 +545,7 @@ function buildSteps(teamKey) {
         + '<p><img src="https://the-game-bureau.github.io/tour/resources/newman.jpg" alt="Newman building"></p>'
         + '<p><img src="https://the-game-bureau.github.io/tour/resources/flyer.jpg" alt="Oswald flyer"></p>'
     }],
-    action: { type: 'text', placeholder: 'The founding father\'s name?', answers: ['johnjay'] }
+    action: { type: 'text', placeholder: 'The founding father\'s name?', answers: ['johnjay', 'jay'] }
   };
 
   const theLadies = {

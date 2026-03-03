@@ -13,8 +13,8 @@ Tim Sewell, Jeremy Sharp, Mo Zaman, Jason Atkins
 Team	Calls out to	Gives	Receives (types)
 Beignet	        LAGNIAPPE	    JAMBALAYA	gumbo
 Lagniappe	    BEIGNET	        GUMBO	    jambalaya
-Tchoupitoulas	ROUGAROU	    ETOUFFEE	muffeletta
-Rougarou	    TCHOUPITOULAS	MUFFELETTA	etouffee
+Tchoupitoulas	ROUGAROU	    ETOUFFEE	muffuletta
+Rougarou	    TCHOUPITOULAS	MUFFULETTA	etouffee
 
 Ghost Tour Elements - Oswald
 
@@ -61,3 +61,5 @@ How did you feel having the teams chosen beforehand for you?
 How did you like screaming in public?
 
 Did your team ever gel? Does everyone on your team feel that way?
+
+Make an answer key for Kelley and I.
