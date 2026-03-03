@@ -1,51 +1,34 @@
 Beignet
 Abigail Beadle, Sanil Parambil, Rahim Bhimani, Chris Bingham
+Exact Spot: https://w3w.co/tend.snipped.national
 
 Lagniappe
 Matt Toms, Deji Oduntan, Aneesh Chakko, Arlene Radley
+Exact Spot: https://w3w.co/ideas.shorter.restore
 
 Tchoupitoulas
 Rory Sewell, Chuck Foster, Kamran Kamal, Sharon Maxfield
+Exact Spot: https://w3w.co/captures.sailor.clues
 
 Rougarou
 Tim Sewell, Jeremy Sharp, Mo Zaman, Jason Atkins
+Exact Spot: https://w3w.co/bearings.student.seats
 
-Team	Calls out to	Gives	Receives (types)
+Team	        Calls out to	Gives	    Receives
 Beignet	        LAGNIAPPE	    JAMBALAYA	gumbo
 Lagniappe	    BEIGNET	        GUMBO	    jambalaya
 Tchoupitoulas	ROUGAROU	    ETOUFFEE	muffuletta
 Rougarou	    TCHOUPITOULAS	MUFFULETTA	etouffee
 
-Team	Order
+Team Stop Order
 Tchoupitoulas	Ladies → Fed Reserve → Bush Tree → Sculpture
 Beignet	Fed Reserve → Bush Tree → Sculpture → Ladies
 Lagniappe	Bush Tree → Sculpture → Ladies → Fed Reserve
 Rougarou	Sculpture → Ladies → Fed Reserve → Bush Tree
 
-
-Ghost Tour Elements - Oswald
-
-Definitely want them to take pictures.
-
-final answer is texted to record a winning time
-
-say that it's not timed?
-
-Hi all,
-
-Before heading to dinner on Tuesday, March 3rd, the team will meet at the office at 5:30 PM CT for a walking tour lasting approximately one hour. The tour will begin at the office and conclude at the restaurant in time for our 6:30 PM reservation.
-
-Please note that comfortable walking shoes are strongly encouraged.
-
--nope, Haiti Mamma gifts.
-
-protect names on web page
-
-
-post game links
-
-
 DEBRIEF QUESTIONS
+
+Too long? Too short?
 
 How did you feel when you had to rely on, or wait for other teams, to continue?
 
@@ -68,5 +51,3 @@ How did you feel having the teams chosen beforehand for you?
 How did you like screaming in public?
 
 Did your team ever gel? Does everyone on your team feel that way?
-
-Make an answer key for Kelley and I.
