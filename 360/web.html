@@ -375,7 +375,7 @@
 <body>
 
 <div class="contact-header">
-  <div class="avatar"><img src="https://the-game-bureau.github.io/tour/resources/360.png" alt="360"></div>
+  <div class="avatar" id="logo-avatar"><img src="https://the-game-bureau.github.io/tour/resources/360.png" alt="360"></div>
   <div class="contact-info">
     <div class="contact-name">Mission Control</div>
   </div>
@@ -613,6 +613,20 @@ function saveState() {
 // ── DOM ───────────────────────────────────────────────────────────────────────
 const chatEl      = document.getElementById('chat');
 const inputAreaEl = document.getElementById('input-area');
+
+// Triple-click logo to reset
+(function() {
+  let clicks = 0, clickT;
+  document.getElementById('logo-avatar').addEventListener('click', () => {
+    clicks++;
+    clearTimeout(clickT);
+    clickT = setTimeout(() => { clicks = 0; }, 500);
+    if (clicks >= 3) {
+      try { localStorage.removeItem('nola360_team'); localStorage.removeItem('nola360_step'); } catch(e) {}
+      location.reload();
+    }
+  });
+})();
 
 function norm(s) { return s.toLowerCase().replace(/[$,.\s]/g, ''); }
 
