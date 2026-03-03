@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node -e \"console.log\\(''W\\\\u0336A\\\\u0336L\\\\u0336K\\\\u0336I\\\\u0336N\\\\u0336G\\\\u0336 \\\\u0336T\\\\u0336O\\\\u0336U\\\\u0336R\\\\u0336''\\)\")"
+      "Bash(node -e \"console.log\\(''W\\\\u0336A\\\\u0336L\\\\u0336K\\\\u0336I\\\\u0336N\\\\u0336G\\\\u0336 \\\\u0336T\\\\u0336O\\\\u0336U\\\\u0336R\\\\u0336''\\)\")",
+      "WebFetch(domain:www.wordplays.com)",
+      "WebFetch(domain:anagrammer.com)",
+      "WebFetch(domain:www.thewordfinder.com)",
+      "WebFetch(domain:wordsmith.org)"
     ]
   }
 }
