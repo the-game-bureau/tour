@@ -73,6 +73,7 @@
       word-wrap: break-word;
       font-size: 1.5rem;
       font-weight: 700;
+      overflow: hidden;
     }
     .msg.from-game .msg-bubble {
       background: #007AFF;
@@ -90,7 +91,20 @@
     .msg-bubble p:last-child { margin-bottom: 0; }
     .msg-bubble a { color: #ffffff; word-break: break-all; }
     .msg.from-player .msg-bubble a { color: #01b9d8; }
-    .msg-bubble img { max-width: 100%; border-radius: 10px; display: block; margin-top: 0.5rem; }
+    .msg:has(.msg-bubble img) { max-width: 92%; }
+    .msg-bubble p:has(> img:only-child) { margin: -0.6rem -0.9rem; }
+    .msg-bubble p:has(> img:only-child) + p { margin-top: 0.6rem; }
+    .msg-bubble img { width: 100%; max-width: 100%; display: block; border-radius: 0; cursor: zoom-in; }
+
+    /* ── Lightbox ──────────────────────────────────────────────────── */
+    .lb {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.93); z-index: 9999;
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lb.open { display: flex; }
+    .lb img { max-width: 100vw; max-height: 100vh; object-fit: contain; }
 
     /* ── Open-cipher button inside a chat bubble ─────────────────── */
     .open-cipher-btn {
@@ -419,10 +433,10 @@ const TEAM_KEY_MAP    = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitou
 const TEAM_LETTER_MAP = { a: 'beignet', b: 'lagniappe', c: 'rougarou', d: 'tch' };
 
 const TEAM_DEFS = {
-  beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe',     give: 'JAMBALAYA',  receive: 'gumbo',       receiveLetter: 'g', receiveBlurb: 'Gumbo is the unofficial dish of Louisiana — a thick, dark-roux stew that takes all day and sparks arguments about the correct ingredients all week.' },
-  lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',       give: 'GUMBO',      receive: 'jambalaya',   receiveLetter: 'i', receiveBlurb: 'Jambalaya is Louisiana\'s answer to paella — rice, meat, and vegetables all cooked in one pot.' },
-  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou', give: 'ETOUFFEE',   receive: 'muffuletta',  receiveLetter: 'j', receiveBlurb: 'The muffuletta was invented at Central Grocery, right here in New Orleans — a round Sicilian loaf piled with olive salad and Italian meats.' },
-  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee',    receiveLetter: 'e', receiveBlurb: 'Étouffée means \'smothered\' in French — crawfish buried in a rich buttery sauce, served over rice.' }
+  beignet:   { letter: 'b', text: 'A deep-fried French doughnut', correctMsg: 'Correct! A beignet is a deep-fried French doughnut. We know, too much standing around. Let\'s get moving!', partner: 'Lagniappe',     give: 'JAMBALAYA',  receive: 'gumbo',       receiveLetter: 'g', receiveBlurb: 'Gumbo is the unofficial dish of Louisiana: a thick, dark-roux stew that takes all day and sparks arguments about the correct ingredients all week.' },
+  lagniappe: { letter: 'c', text: 'A little something extra',     correctMsg: 'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',   partner: 'Beignet',       give: 'GUMBO',      receive: 'jambalaya',   receiveLetter: 'i', receiveBlurb: 'Jambalaya is Louisiana\'s answer to paella: rice, meat, and vegetables all cooked in one pot.' },
+  tch:       { letter: 'a', text: 'A Native American tribe',      correctMsg: 'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, this is too much standing around! Let\'s get moving!', partner: 'Rougarou', give: 'ETOUFFEE',   receive: 'muffuletta',  receiveLetter: 'j', receiveBlurb: 'The muffuletta was invented at Central Grocery, right here in New Orleans: a round Sicilian loaf piled with olive salad and Italian meats.' },
+  rougarou:  { letter: 'd', text: 'A Cajun werewolf',             correctMsg: 'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',             partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee',    receiveLetter: 'e', receiveBlurb: 'Étouffée means \'smothered\' in French: crawfish buried in a rich buttery sauce, served over rice.' }
 };
 
 // ── Build step sequence ───────────────────────────────────────────────────────
@@ -456,6 +470,7 @@ function buildSteps(teamKey) {
   const s2 = {
     reveal: [
       // ── INTRO ──
+      { name: 'def-rules', html: 'Take turns reading text messages out loud. All team members can reply to text messages. But you absolutely have to designate a Team Photographer 📸. The winner will be the team that finishes first AND can show all of their pics. So, keep going no matter what, if the &#8220;winner&#8221; doesn\'t have all the pics, they will be disqualified.' },
       { name: 'def-ask',
         html: '<p>Ok, you\'re TEAM <strong>' + (t ? t.name.toUpperCase() : 'X') + '</strong>, but what does ' + (t ? t.name : 'your team name') + ' mean?</p>'
           + '<p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>'
@@ -493,7 +508,7 @@ function buildSteps(teamKey) {
   const s4photo = {
     reveal: [
       // ── INTRO ──
-      { name: 'photo-prompt', html: '📸 Designate a team photographer. TAKE A TEAM PHOTO HERE. The winner will be the team that finishes first AND can show all of their pics. So, keep going no matter what, if the &#8220;winner&#8221; doesn\'t have all the pics, they will be disqualified. Type <strong>CLICK</strong> after you\'ve got the pic.' }
+      { name: 'photo-prompt', html: '📸 TAKE A TEAM PHOTO HERE. Type <strong>CLICK</strong> after you\'ve got the pic.' }
     ],
     // ── RESPONSE ──
     action: { type: 'text', placeholder: 'Type CLICK to continue…', answers: ['click'] }
@@ -525,7 +540,7 @@ function buildSteps(teamKey) {
         { name: 'ladies-correct',  html: 'Correct!' },
         // ── WRAP UP: Gallier Hall ──
         { name: 'davis-photo',     html: '<p><img src="https://the-game-bureau.github.io/tour/resources/davis.jpg" alt="Jefferson Davis funeral"></p>' },
-        { name: 'gallier-wrapup',  html: 'Jefferson Davis was President of the CONFEDERATE States of America — not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, over 135 years ago.' }
+        { name: 'gallier-wrapup',  html: 'Jefferson Davis was President of the CONFEDERATE States of America... not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, over 135 years ago.' }
       ] }
   };
 
@@ -534,7 +549,7 @@ function buildSteps(teamKey) {
     reveal: [
       // ── INTRO ──
       { name: 'henry-clay-task',
-        html: '<p>Now send Mission Control a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, we\'ll never know.</p>'
+        html: '<p>📸 Now send Mission Control a photo of you or your team with Henry Clay in the background. Why he\'s hanging out in Lafayette Square, we\'ll never know.</p>'
       }
     ],
     // ── RESPONSE ──
@@ -561,7 +576,7 @@ function buildSteps(teamKey) {
     reveal: [
       // ── INTRO ──
       { name: 'sculp-task',    html: 'There\'s a sculpture across Camp Street — kinda looks like a pointing arrow. TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER AND TELL US HIS LAST NAME.' },
-      { name: 'sculp-hint',    html: '💡 HINT: Do NOT text Mission Control "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it.' }
+      { name: 'sculp-hint',    html: '💡 HINT: Do NOT text Mission Control "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it. Is the answer hidden behind a tree? Is it to the left of a fire hydrant and up? Higher. Higher.' }
     ],
     // ── RESPONSE ──
     action: { type: 'text', placeholder: 'His last name…', answers: ['johnjay', 'jay'],
@@ -573,7 +588,7 @@ function buildSteps(teamKey) {
     reveal: [
       // ── INTRO ──
       { name: 'ladies-info',
-        html: '<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building — the one on Camp Street that we talked about — are four sets of bronze sculptures known as \'The Ladies\': Agriculture, History, Industry and Arts. They were sculpted by Daniel Chester French.</p>'
+        html: '<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building (the one on Camp Street that we talked about) are four sets of bronze sculptures known as \'The Ladies\': Agriculture, History, Industry and Arts. They were sculpted by Daniel Chester French. You may have to back up a little to see them.</p>'
       },
       { name: 'ladies-photo',         html: '<p><img src="https://the-game-bureau.github.io/tour/resources/theladies.jpg" alt="The Ladies sculptures"></p>' },
       { name: 'ladies-photo-prompt',  html: '📸 Take a team photo of your team looking up at The Ladies.' },
@@ -592,7 +607,7 @@ function buildSteps(teamKey) {
     reveal: [
       // ── INTRO ──
       { name: 'fed-info',
-        html: '<p>Next, take a look at the plain building to the right of Gallier Hall that Henry is gesturing to — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch.</p>'
+        html: '<p>Next, take a look at the plain building to the right of Gallier Hall that Henry is gesturing to — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch. Can you see it? Are there trees in the way? It doesn\'t matter.</p>'
           + '<p>TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.</p>'
           + '<p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_self">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>'
       },
@@ -610,9 +625,9 @@ function buildSteps(teamKey) {
     // ── INTRO ──
     {
       name: 'cuba-task',
-      html: '<p>There\'s a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López — who had designed what would become his adopted country\'s flag — sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p>'
+      html: '<p>There\'s a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López, who designed what would become his adopted country\'s flag, sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p>'
         + '<p>Find the monument: <a href="https://what3words.com/remake.king.cloth" target="_self">https://what3words.com/remake.king.cloth</a></p>'
-        + '<p>Oh shoot, that map tells you the name of the country. We were going to ask you the name of the country. Tell you what, 📸 TAKE A TEAM PHOTO AT THE MONUMENT.</p>'
+        + '<p>Oh shoot, that map tells you the name of the country. We were going to ask you that. 😕 -tell you what, 📸 TAKE A TEAM PHOTO AT THE MONUMENT.</p>'
         + '<p>Type <strong>CLICK</strong> to continue.</p>'
     }],
     // ── RESPONSE ──
@@ -623,7 +638,7 @@ function buildSteps(teamKey) {
   const lighthouse = {
     reveal: [
       // ── INTRO ──
-      { name: 'light-task',     html: 'Hungry? Dinner is/was at 6:30 Central time. We have just one more challenge. Find the extinguished light on Camp Street between Julia Street and Girod Street. TAKE A TEAM PICTURE IN FRONT OF THE BUILDING WITH THE EXTINGUISHED LIGHT. TYPE CLICK WHEN DONE FOR WRAP UP DETAILS.' }
+      { name: 'light-task',     html: 'We have just one more challenge. Find the extinguished guiding light on Camp Street between Julia Street and Girod Street. 📸 TAKE A TEAM PICTURE IN FRONT OF THE BUILDING WITH THE EXTINGUISHED GUIDING LIGHT. TYPE CLICK WHEN DONE TO SEE HOW TO CROSS THE FINISH LINE!' }
     ],
     // ── RESPONSE ──
     action: { type: 'text', placeholder: 'Type CLICK when done…', answers: ['click'] }
@@ -636,7 +651,7 @@ function buildSteps(teamKey) {
       { name: 'boggs-flyer',    html: '<p><img src="https://the-game-bureau.github.io/tour/resources/flyer.jpg" alt="Oswald flyer"></p>' },
       { name: 'boggs-question',
         html: '<p>What do the Daily Delta, Lee Harvey Oswald, the CIA, FBI, and Secret Service all have in common? They all had offices in this neighborhood at one time or another.</p>'
-          + '<p>The building behind you replaced the old Newman Building, where Oswald — the presumptive assassin of JFK — printed his leaflets in 1963. Now it bears the name of a Louisiana congressman who served on the Warren Commission. He signed the report, but later hinted that Oswald may not have acted alone. Then the congressman boarded a plane in Alaska and vanished. But sure, it\'s not like powerful political figures ever meet suspicious ends anymore.</p>'
+          + '<p>The building behind you replaced the old Newman Building, where Oswald (the presumptive assassin of JFK) printed his leaflets in 1963. Now it bears the name of a Louisiana congressman who served on the Warren Commission. He signed the report, but later hinted that Oswald may not have acted alone. Then the congressman boarded a plane in Alaska and vanished. But sure, it\'s not like powerful political figures ever meet suspicious ends anymore.</p>'
           + '<p>What\'s the last name of the congressman we\'re talking about?</p>'
       },
     ],
@@ -666,11 +681,11 @@ function buildSteps(teamKey) {
 
   // ── Team-specific tails ───────────────────────────────────────────────────
   const tail =
-    teamKey === 'tch'      ? [theLadies, federalReserve, bushTree, sculpture, cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'beignet'  ? [federalReserve, bushTree, sculpture, theLadies, cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'lagniappe'? [bushTree, sculpture, theLadies, federalReserve, cuba, haleBoggs, lighthouse, win] :
-    teamKey === 'rougarou' ? [sculpture, theLadies, federalReserve, bushTree, cuba, haleBoggs, lighthouse, win] :
-                             [theLadies, federalReserve, bushTree, sculpture, cuba, haleBoggs, lighthouse, win]; // fallback (no team)
+    teamKey === 'tch'      ? [theLadies, federalReserve, bushTree,    sculpture,   cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'beignet'  ? [federalReserve, theLadies, sculpture,  bushTree,    cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'lagniappe'? [bushTree, sculpture,    federalReserve, theLadies,  cuba, haleBoggs, lighthouse, win] :
+    teamKey === 'rougarou' ? [sculpture, bushTree,    theLadies,    federalReserve, cuba, haleBoggs, lighthouse, win] :
+                             [theLadies, federalReserve, bushTree,    sculpture,   cuba, haleBoggs, lighthouse, win]; // fallback (no team)
 
   return [s0, s1, s2, s3, s4, s4photo, s4b, s5, ...tail];
 }
@@ -726,6 +741,23 @@ let teamQuestionShown = false;
     clearTimeout(clickT);
     clickT = setTimeout(() => { clicks = 0; }, 500);
     if (clicks >= 3) doReset();
+  });
+})();
+
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+(function() {
+  const lb = document.createElement('div');
+  lb.className = 'lb';
+  const li = document.createElement('img');
+  lb.appendChild(li);
+  document.body.appendChild(lb);
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('click', e => {
+    const img = e.target.closest('.msg-bubble img');
+    if (!img) return;
+    li.src = img.src;
+    li.alt = img.alt;
+    lb.classList.add('open');
   });
 })();
 
@@ -941,7 +973,7 @@ const TC = (() => {
       name: 'Lagniappe',
       members: ['Matt Toms', 'Deji Oduntan', 'Aneesh Chakko', 'Arlene Radley'],
       bg: 'lag-bg', color: 'var(--tc-lag)',
-      clue: 'Three members of this team each have a first name and last name with <strong>equal letter counts</strong> — but those counts are <strong>not necessarily the same</strong> as other team members. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+      clue: 'Three members of this team each have a first name and last name with <strong>equal letter counts</strong>, but those counts are <strong>not necessarily the same</strong> as other team members. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
     },
     tchoupitoulas: {
       name: 'Tchoupitoulas',
