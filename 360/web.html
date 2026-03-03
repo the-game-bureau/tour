@@ -64,7 +64,6 @@
       word-wrap: break-word;
       font-size: 1.5rem;
       font-weight: 700;
-      text-transform: uppercase;
     }
     .msg.from-game .msg-bubble {
       background: #007AFF;
@@ -584,7 +583,7 @@ function buildSteps(teamKey) {
   };
 
   const win = {
-    reveal: [{ name: 'win', html: '🥳 You win! Head back to the office (<a href="https://what3words.com/blur.trek.searches" target="_blank">https://what3words.com/blur.trek.searches</a>) for a frosty beverage! Text VICTORY when you get there and I\'ll buzz you in.' }],
+    reveal: [{ name: 'win', html: '🎉 You\'ve completed the game! But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins a prize! 🏆' }],
     action: { type: 'win' }
   };
 
@@ -655,11 +654,7 @@ function renderInput() {
   const action = steps[state.step].action;
 
   if (action.type === 'win') {
-    const p = document.createElement('p');
-    p.className = 'win-msg';
-    p.textContent = '🎉 Congratulations!';
-    inputAreaEl.appendChild(p);
-    // fall through to also render the (disabled) text input below
+    return;
   }
 
   if (action.type === 'button') {
@@ -826,7 +821,7 @@ if (state.step > 0) {
   for (let i = 0; i <= state.step; i++) {
     if (i < steps.length) steps[i].reveal.forEach(msg => addMsg(msg, false));
   }
-  teamQuestionShown = true;
+  if (state.team) teamQuestionShown = true;
   renderInput();
   scrollBottom(false);
 } else {
