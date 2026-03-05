@@ -21,7 +21,7 @@ if (location.search.includes('reset')) {
   history.replaceState(null, '', location.pathname);
 }
 
-let state = { step: 0, team: null, vars: {} };
+let state = { step: 0, team: null };
 let stops = [];
 const DEFAULT_HEADER = {
   title: 'Scavenger Hunt',
@@ -36,22 +36,13 @@ try {
   state.team = localStorage.getItem('nola360_team') || null;
   const savedStep = parseInt(localStorage.getItem('nola360_step') || '0', 10);
   if (!isNaN(savedStep) && savedStep > 0) state.step = savedStep;
-  const savedVars = localStorage.getItem('nola360_vars');
-  if (savedVars) state.vars = JSON.parse(savedVars);
 } catch (e) {}
 
 function saveState() {
   try {
     localStorage.setItem('nola360_step', String(state.step));
     if (state.team) localStorage.setItem('nola360_team', state.team);
-    localStorage.setItem('nola360_vars', JSON.stringify(state.vars));
   } catch (e) {}
-}
-
-function interpolate(str) {
-  return String(str || '').replace(/\{\{(\w+)\}\}/g, (_, key) => {
-    return key in state.vars ? state.vars[key] : '{{' + key + '}}';
-  });
 }
 
 const chatEl = document.getElementById('chat');
@@ -96,7 +87,7 @@ function addMsg(msg, animate) {
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
   if (msg.html) {
-    bubble.innerHTML = interpolate(msg.html);
+    bubble.innerHTML = msg.html;
   } else {
     bubble.textContent = msg.text || '';
   }
@@ -174,16 +165,6 @@ function normalizePlayerReply(playerReply) {
   if (type === 'win') {
     return {
       type: 'win',
-      correct: firstOrEmpty(playerReply.correct),
-      incorrect: firstOrEmpty(playerReply.incorrect)
-    };
-  }
-
-  if (type === 'any') {
-    return {
-      type: 'any',
-      placeholder: playerReply.placeholder || '',
-      storesAs: playerReply.storesAs || '',
       correct: firstOrEmpty(playerReply.correct),
       incorrect: firstOrEmpty(playerReply.incorrect)
     };
@@ -281,31 +262,11 @@ function renderInput() {
   input.setAttribute('autocomplete', 'off');
   input.setAttribute('autocorrect', 'off');
   input.setAttribute('spellcheck', 'false');
-  input.setAttribute('autocapitalize', 'off');
+  input.setAttribute('autocapitalize', 'characters');
 
   const sendBtn = document.createElement('button');
   sendBtn.className = 'submit-btn';
   sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
-
-  if (playerReply.type === 'any') {
-    const submitAny = () => {
-      const val = input.value.trim();
-      if (!val) return;
-      if (playerReply.storesAs) {
-        state.vars[playerReply.storesAs] = val;
-        saveState();
-      }
-      addMsg({ fromPlayer: true, text: val }, true);
-      doAdvance();
-    };
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAny(); });
-    sendBtn.addEventListener('click', submitAny);
-    row.appendChild(input);
-    row.appendChild(sendBtn);
-    inputAreaEl.appendChild(row);
-    setTimeout(() => input.focus(), 150);
-    return;
-  }
 
   const submit = () => {
     const val = input.value.trim();
@@ -403,10 +364,6 @@ function buildRevealPlayerReplyMessage(playerReply) {
   if (playerReply.type === 'button') {
     return { fromPlayer: true, text: playerReply.playerText || playerReply.text || 'Continue' };
   }
-  if (playerReply.type === 'any') {
-    const stored = playerReply.storesAs && state.vars[playerReply.storesAs];
-    return { fromPlayer: true, text: stored || '[any answer]' };
-  }
   const answers = Array.isArray(playerReply.answers) ? playerReply.answers.filter(Boolean) : [];
   return { fromPlayer: true, text: answers.length ? answers.join(' / ') : 'Player reply' };
 }
@@ -428,14 +385,8 @@ function replayProgress() {
   for (let i = 0; i <= state.step; i += 1) {
     if (i >= stops.length) break;
     (stops[i].setup || []).forEach((msg) => addMsg(msg, false));
-    if (i < state.step && stops[i].playerReply) {
-      const pr = stops[i].playerReply;
-      if (pr.type === 'any' && pr.storesAs && state.vars[pr.storesAs]) {
-        addMsg({ fromPlayer: true, text: state.vars[pr.storesAs] }, false);
-      }
-      if (Array.isArray(pr.correct)) {
-        pr.correct.forEach((msg) => addMsg(msg, false));
-      }
+    if (i < state.step && stops[i].playerReply && Array.isArray(stops[i].playerReply.correct)) {
+      stops[i].playerReply.correct.forEach((msg) => addMsg(msg, false));
     }
   }
   renderInput();

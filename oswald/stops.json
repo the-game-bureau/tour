@@ -9,52 +9,6 @@
   },
   "stops": [
     {
-      "id": "naym",
-      "setup": [
-        {
-          "name": "naym-setup-1",
-          "html": "What's your name?",
-          "callToAction": false
-        }
-      ],
-      "playerReply": {
-        "type": "any",
-        "correct": [
-          {
-            "name": "naym-correct-1",
-            "html": "Mice to neet you, {{playerName}}.",
-            "callToAction": false
-          }
-        ],
-        "incorrect": [],
-        "placeholder": "Tell me!",
-        "storesAs": "playerName"
-      }
-    },
-    {
-      "id": "team",
-      "setup": [
-        {
-          "name": "team1",
-          "html": "What's your team name?",
-          "callToAction": false
-        }
-      ],
-      "playerReply": {
-        "type": "any",
-        "correct": [
-          {
-            "name": "teamc-1",
-            "html": "Go team {{teamName}}.",
-            "callToAction": false
-          }
-        ],
-        "incorrect": [],
-        "placeholder": "Tell me!",
-        "storesAs": "teamName"
-      }
-    },
-    {
       "id": "intro-briefing",
       "setup": [
         {
@@ -175,13 +129,9 @@
       "id": "game-win",
       "setup": [],
       "playerReply": {
-        "type": "text",
+        "type": "win",
         "correct": [],
-        "incorrect": [],
-        "placeholder": "",
-        "answers": [],
-        "setsTeam": false,
-        "goTo": ""
+        "incorrect": []
       }
     }
   ]

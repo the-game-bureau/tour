@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!-- File: index.html | Purpose: Main game shell. Loads index.css for UI and engine.js for all gameplay logic and stops.json data. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <link rel="icon" href="index.ico" type="image/x-icon">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="icon-preload" aria-hidden="true"></div>
+  <div class="contact-header">
+    <div class="avatar"><img id="header-logo" src="logo.png" alt="Game Logo"></div>
+    <div class="contact-name" id="header-title"></div>
+    <div class="contact-name" id="header-subtitle"></div>
+    <div class="contact-status"><div class="online-dot"></div><span id="header-status">online</span></div>
+    <button class="restart-btn" id="restartBtn" type="button">↺ RESTART</button>
+  </div>
+
+  <div class="chat" id="chat"></div>
+  <div class="input-area" id="input-area"></div>
+
+  <script src="engine.js"></script>
+</body>
+</html>

@@ -349,8 +349,6 @@
       <div class="card">
         <div class="toolbar">
           <button id="addStopBtn" class="primary" type="button">Add Stop</button>
-          <button id="copyStopBtn" type="button">Copy</button>
-          <button id="pasteStopBtn" type="button" disabled>Paste</button>
           <button id="removeStopBtn" class="danger" type="button">Remove Stop</button>
         </div>
         <div id="stopList" class="stack"></div>
@@ -401,7 +399,8 @@
                 <label for="replyType">Reply Type</label>
                 <select id="replyType">
                   <option value="text">text</option>
-                  <option value="any">any (accepts anything)</option>
+                  <option value="button">button</option>
+                  <option value="win">win</option>
                 </select>
               </div>
             </div>
@@ -412,29 +411,32 @@
                   <label for="replyPlaceholder">Placeholder</label>
                   <input id="replyPlaceholder" type="text">
                 </div>
+                <div>
+                  <label for="replyGoTo">goTo (optional)</label>
+                  <input id="replyGoTo" type="text" placeholder="teams.html">
+                </div>
               </div>
               <div class="row full">
                 <div>
                   <label for="replyAnswers">Answers (comma or newline separated)</label>
                   <textarea id="replyAnswers"></textarea>
+                  <label class="check"><input id="replySetsTeam" type="checkbox">setsTeam</label>
                 </div>
               </div>
             </div>
 
-            <div id="anyReplyFields" style="display:none;">
+            <div id="buttonReplyFields" style="display:none;">
               <div class="row">
                 <div>
-                  <label for="replyAnyPlaceholder">Placeholder</label>
-                  <input id="replyAnyPlaceholder" type="text" placeholder="Your name&hellip;">
+                  <label for="replyButtonText">Button Text</label>
+                  <input id="replyButtonText" type="text">
                 </div>
                 <div>
-                  <label for="replyStoresAs">Store answer as variable</label>
-                  <input id="replyStoresAs" type="text" placeholder="playerName">
-                  <p style="margin:4px 0 0;font-size:0.8em;color:#888;">Use <code>{{playerName}}</code> in any bubble HTML.</p>
+                  <label for="replyPlayerText">Player Text</label>
+                  <input id="replyPlayerText" type="text">
                 </div>
               </div>
             </div>
-
           </div>
 
           <div id="correctBubbles"></div>
@@ -512,11 +514,13 @@
       addSetupBtn: document.getElementById('addSetupBtn'),
       replyType: document.getElementById('replyType'),
       textReplyFields: document.getElementById('textReplyFields'),
-      anyReplyFields: document.getElementById('anyReplyFields'),
-      replyAnyPlaceholder: document.getElementById('replyAnyPlaceholder'),
-      replyStoresAs: document.getElementById('replyStoresAs'),
+      buttonReplyFields: document.getElementById('buttonReplyFields'),
       replyPlaceholder: document.getElementById('replyPlaceholder'),
+      replyGoTo: document.getElementById('replyGoTo'),
       replyAnswers: document.getElementById('replyAnswers'),
+      replySetsTeam: document.getElementById('replySetsTeam'),
+      replyButtonText: document.getElementById('replyButtonText'),
+      replyPlayerText: document.getElementById('replyPlayerText'),
       correctBubbles: document.getElementById('correctBubbles'),
       addCorrectBtn: document.getElementById('addCorrectBtn'),
       incorrectBubbles: document.getElementById('incorrectBubbles'),
@@ -626,12 +630,14 @@
         warnings.push('Two stops cannot have the same name: ' + displayNames.join(', '));
       }
 
+      const allBubbleIds = [];
       state.stops.forEach((stop) => {
-        const dupes = findDuplicates(collectBubbleIds(stop));
-        if (dupes.length) {
-          warnings.push('Stop \u201c' + stop.id + '\u201d has duplicate bubble IDs: ' + dupes.join(', '));
-        }
+        collectBubbleIds(stop).forEach((id) => allBubbleIds.push(id));
       });
+      const duplicateBubbleIds = findDuplicates(allBubbleIds);
+      if (duplicateBubbleIds.length) {
+        warnings.push('Duplicate bubble IDs: ' + duplicateBubbleIds.join(', '));
+      }
 
       state.stops.forEach((stop) => {
         const ctaCount = Array.isArray(stop.setup) ? stop.setup.filter((b) => b && b.callToAction).length : 0;
@@ -695,17 +701,18 @@
         const list = Array.isArray(arr) ? arr.map(ensureBubble) : [];
         return list.length ? [list[0]] : [];
       };
-      const type = r.type === 'any' ? r.type : 'text';
+      const type = r.type === 'button' || r.type === 'win' ? r.type : 'text';
       const base = {
         type,
         correct: firstOrEmpty(r.correct),
         incorrect: firstOrEmpty(r.incorrect)
       };
-      if (type === 'any') {
-        base.placeholder = String(r.placeholder || '');
-        base.storesAs = String(r.storesAs || '');
+      if (type === 'button') {
+        base.text = String(r.text || 'Continue');
+        base.playerText = String(r.playerText || r.text || 'Continue');
         return base;
       }
+      if (type === 'win') return base;
       base.placeholder = String(r.placeholder || '');
       base.answers = Array.isArray(r.answers) ? r.answers.map((x) => String(x)) : [];
       base.setsTeam = !!r.setsTeam;
@@ -754,6 +761,35 @@
       };
     }
 
+    function createGameWinStop() {
+      return {
+        id: 'game-win',
+        setup: [],
+        playerReply: { type: 'win', correct: [], incorrect: [] }
+      };
+    }
+
+    function isGameWinStop(stop) {
+      return !!(stop && stop.playerReply && stop.playerReply.type === 'win');
+    }
+
+    function ensureGameWinStop() {
+      if (!Array.isArray(state.stops)) state.stops = [];
+      let winIndex = state.stops.findIndex(isGameWinStop);
+      if (winIndex === -1) {
+        state.stops.push(createGameWinStop());
+        winIndex = state.stops.length - 1;
+      }
+      if (winIndex !== state.stops.length - 1) {
+        const [winStop] = state.stops.splice(winIndex, 1);
+        state.stops.push(winStop);
+        if (selectedStopIndex === winIndex) {
+          selectedStopIndex = state.stops.length - 1;
+        } else if (selectedStopIndex > winIndex) {
+          selectedStopIndex -= 1;
+        }
+      }
+    }
 
     function renderStopList() {
       els.stopList.innerHTML = '';
@@ -772,27 +808,31 @@
       if (!state.stops.length) return;
 
       state.stops.forEach((stop, i) => {
+        const locked = i === state.stops.length - 1 && isGameWinStop(stop);
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = 'stop-item' + (i === selectedStopIndex ? ' active' : '');
+        btn.className = 'stop-item' + (locked ? ' locked' : '') + (i === selectedStopIndex ? ' active' : '');
         btn.dataset.stopIndex = String(i);
-        btn.draggable = true;
+        btn.draggable = !locked;
         btn.innerHTML = '<div>' + stop.id + '</div><div class="stop-meta">' + (stop.playerReply.type || 'text') + ' · setup: ' + stop.setup.length + '</div>';
         btn.addEventListener('click', () => {
           selectedStopIndex = i;
           stopNameBlurValidated = false;
           renderAll();
         });
-        btn.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData('text/x-stop-index', String(i));
-          e.dataTransfer.effectAllowed = 'move';
-          btn.classList.add('dragging');
-        });
-        btn.addEventListener('dragend', () => {
-          clearStopDropIndicators();
-          btn.classList.remove('dragging');
-        });
+        if (!locked) {
+          btn.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/x-stop-index', String(i));
+            e.dataTransfer.effectAllowed = 'move';
+            btn.classList.add('dragging');
+          });
+          btn.addEventListener('dragend', () => {
+            clearStopDropIndicators();
+            btn.classList.remove('dragging');
+          });
+        }
         btn.addEventListener('dragover', (e) => {
+          if (locked) return;
           e.preventDefault();
           const rect = btn.getBoundingClientRect();
           const before = e.clientY < rect.top + rect.height / 2;
@@ -804,6 +844,7 @@
           btn.classList.remove('drag-over', 'drop-before', 'drop-after');
         });
         btn.addEventListener('drop', (e) => {
+          if (locked) return;
           e.preventDefault();
           const rect = btn.getBoundingClientRect();
           const before = e.clientY < rect.top + rect.height / 2;
@@ -943,6 +984,12 @@
 
     function previewReplyBubble(stop) {
       const reply = stop && stop.playerReply ? stop.playerReply : {};
+      if (reply.type === 'win') {
+        return '<div class="msg from-player"><div class="msg-bubble">WIN</div></div>';
+      }
+      if (reply.type === 'button') {
+        return '<div class="msg from-player"><div class="msg-bubble">' + escapeHtml(reply.playerText || reply.text || 'Continue') + '</div></div>';
+      }
       const answers = Array.isArray(reply.answers) ? reply.answers.filter(Boolean) : [];
       const replyText = answers.length ? answers.join(' / ') : 'Player reply';
       return '<div class="msg from-player"><div class="msg-bubble">' + escapeHtml(replyText) + '</div></div>';
@@ -1021,12 +1068,14 @@
       els.replyType.value = stop.playerReply.type;
 
       els.textReplyFields.style.display = stop.playerReply.type === 'text' ? 'block' : 'none';
-      els.anyReplyFields.style.display = stop.playerReply.type === 'any' ? 'block' : 'none';
+      els.buttonReplyFields.style.display = stop.playerReply.type === 'button' ? 'block' : 'none';
 
       els.replyPlaceholder.value = stop.playerReply.placeholder || '';
+      els.replyGoTo.value = stop.playerReply.goTo || '';
       els.replyAnswers.value = answersToText(stop.playerReply.answers || []);
-      els.replyAnyPlaceholder.value = stop.playerReply.placeholder || '';
-      els.replyStoresAs.value = stop.playerReply.storesAs || '';
+      els.replySetsTeam.checked = !!stop.playerReply.setsTeam;
+      els.replyButtonText.value = stop.playerReply.text || '';
+      els.replyPlayerText.value = stop.playerReply.playerText || '';
 
       renderBubbles(els.setupBubbles, stop.setup, 'setup');
       renderBubbles(els.correctBubbles, stop.playerReply.correct || [], 'correct');
@@ -1042,6 +1091,7 @@
     }
 
     function renderAll() {
+      ensureGameWinStop();
       renderHeader();
       renderStopList();
       renderStopEditor();
@@ -1084,8 +1134,10 @@
         const correct = Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
         const incorrect = Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
 
-        if (nextType === 'any') {
-          stop.playerReply = { type: 'any', placeholder: '', storesAs: '', correct, incorrect };
+        if (nextType === 'button') {
+          stop.playerReply = { type: 'button', text: 'Continue', playerText: 'Continue', correct, incorrect };
+        } else if (nextType === 'win') {
+          stop.playerReply = { type: 'win', correct, incorrect };
         } else {
           stop.playerReply = { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct, incorrect };
         }
@@ -1098,24 +1150,35 @@
         stop.playerReply.placeholder = e.target.value;
       });
 
+      els.replyGoTo.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.goTo = e.target.value;
+      });
+
       els.replyAnswers.addEventListener('input', (e) => {
         const stop = getSelectedStop();
         if (!stop || stop.playerReply.type !== 'text') return;
         stop.playerReply.answers = parseAnswers(e.target.value);
       });
 
-      els.replyAnyPlaceholder.addEventListener('input', (e) => {
+      els.replySetsTeam.addEventListener('change', (e) => {
         const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'any') return;
-        stop.playerReply.placeholder = e.target.value;
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.setsTeam = e.target.checked;
       });
 
-      els.replyStoresAs.addEventListener('input', (e) => {
+      els.replyButtonText.addEventListener('input', (e) => {
         const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'any') return;
-        stop.playerReply.storesAs = e.target.value;
+        if (!stop || stop.playerReply.type !== 'button') return;
+        stop.playerReply.text = e.target.value;
       });
 
+      els.replyPlayerText.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'button') return;
+        stop.playerReply.playerText = e.target.value;
+      });
 
       els.addSetupBtn.addEventListener('click', () => {
         const stop = getSelectedStop();
@@ -1224,43 +1287,14 @@
 
     document.getElementById('removeStopBtn').addEventListener('click', () => {
       if (selectedStopIndex < 0) return;
+      const selectedStop = state.stops[selectedStopIndex];
+      if (selectedStopIndex === state.stops.length - 1 && isGameWinStop(selectedStop)) {
+        setStatus('GAME WIN is fixed and cannot be removed.', 'warn');
+        return;
+      }
       state.stops.splice(selectedStopIndex, 1);
       if (!state.stops.length) selectedStopIndex = -1;
       else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
-      renderAll();
-    });
-
-    let copiedStop = null;
-    const pasteBtn = document.getElementById('pasteStopBtn');
-
-    document.getElementById('copyStopBtn').addEventListener('click', () => {
-      const stop = getSelectedStop();
-      if (!stop) return;
-      copiedStop = JSON.parse(JSON.stringify(stop));
-      pasteBtn.disabled = false;
-      setStatus('Stop copied.', 'ok');
-    });
-
-    pasteBtn.addEventListener('click', () => {
-      if (!copiedStop) return;
-      const clone = JSON.parse(JSON.stringify(copiedStop));
-      const oldId = clone.id;
-      clone.id = oldId + '-copy';
-      const renameBubble = (b) => {
-        if (b && b.name && String(b.name).startsWith(oldId)) {
-          b.name = clone.id + b.name.slice(oldId.length);
-        }
-        return b;
-      };
-      if (Array.isArray(clone.setup)) clone.setup = clone.setup.map(renameBubble);
-      if (clone.playerReply) {
-        if (Array.isArray(clone.playerReply.correct)) clone.playerReply.correct = clone.playerReply.correct.map(renameBubble);
-        if (Array.isArray(clone.playerReply.incorrect)) clone.playerReply.incorrect = clone.playerReply.incorrect.map(renameBubble);
-      }
-      const insertAt = selectedStopIndex >= 0 ? selectedStopIndex + 1 : state.stops.length;
-      state.stops.splice(insertAt, 0, clone);
-      selectedStopIndex = insertAt;
-      stopNameBlurValidated = false;
       renderAll();
     });
 

@@ -5,7 +5,9 @@
       "WebFetch(domain:www.wordplays.com)",
       "WebFetch(domain:anagrammer.com)",
       "WebFetch(domain:www.thewordfinder.com)",
-      "WebFetch(domain:wordsmith.org)"
+      "WebFetch(domain:wordsmith.org)",
+      "Read(//c/code/nolabound/**)",
+      "Bash(node -e \":*)"
     ],
     "additionalDirectories": [
       "\\tmp"
