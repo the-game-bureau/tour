@@ -1,0 +1,430 @@
+/*
+  File: engine.js
+  Purpose: Main game runtime. Loads stops.json, renders chat UI, validates answers, saves progress, and advances game state.
+*/
+
+const TEAMS = {
+  beignet: { name: 'Beignet', color: '#6aaef7', cls: 'team-beignet', w3w: 'https://w3w.co/tend.snipped.national' },
+  lagniappe: { name: 'Lagniappe', color: '#f5a623', cls: 'team-lagniappe', w3w: 'https://w3w.co/ideas.shorter.restore' },
+  rougarou: { name: 'Rougarou', color: '#e85568', cls: 'team-rougarou', w3w: 'https://w3w.co/bearings.student.seats' },
+  tch: { name: 'Tchoupitoulas', color: '#4ecf98', cls: 'team-tch', w3w: 'https://w3w.co/captures.sailor.clues' }
+};
+
+const TEAM_LETTER_MAP = { a: 'beignet', b: 'lagniappe', c: 'rougarou', d: 'tch' };
+const TEAM_KEY_MAP = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas: 'tch', rougarou: 'rougarou' };
+const REVEAL_ALL = new URLSearchParams(location.search).has('reveal');
+
+if (location.search.includes('reset')) {
+  try {
+    localStorage.clear();
+  } catch (e) {}
+  history.replaceState(null, '', location.pathname);
+}
+
+let state = { step: 0, team: null };
+let stops = [];
+const DEFAULT_HEADER = {
+  title: 'Scavenger Hunt',
+  subtitle: 'Mission Control',
+  logoUrl: 'logo.png',
+  logoAlt: 'Game Logo',
+  pageTitle: 'Scavenger Hunt',
+  status: 'online'
+};
+
+try {
+  state.team = localStorage.getItem('nola360_team') || null;
+  const savedStep = parseInt(localStorage.getItem('nola360_step') || '0', 10);
+  if (!isNaN(savedStep) && savedStep > 0) state.step = savedStep;
+} catch (e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('nola360_step', String(state.step));
+    if (state.team) localStorage.setItem('nola360_team', state.team);
+  } catch (e) {}
+}
+
+const chatEl = document.getElementById('chat');
+const inputAreaEl = document.getElementById('input-area');
+const headerTitleEl = document.getElementById('header-title');
+const headerSubtitleEl = document.getElementById('header-subtitle');
+const headerLogoEl = document.getElementById('header-logo');
+const headerStatusEl = document.getElementById('header-status');
+const restartBtnEl = document.getElementById('restartBtn');
+
+(function initLightbox() {
+  const lb = document.createElement('div');
+  lb.className = 'lb';
+  const img = document.createElement('img');
+  lb.appendChild(img);
+  document.body.appendChild(lb);
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('click', (e) => {
+    const bubbleImg = e.target.closest('.msg-bubble img');
+    if (!bubbleImg) return;
+    img.src = bubbleImg.src;
+    img.alt = bubbleImg.alt;
+    lb.classList.add('open');
+  });
+})();
+
+function norm(s) {
+  return String(s || '').toLowerCase().replace(/[$,.\s]/g, '');
+}
+
+function scrollBottom(smooth) {
+  chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+}
+
+function addMsg(msg, animate) {
+  const wrap = document.createElement('div');
+  const isCallToAction = !!(msg.callToAction || msg.red || msg.cmd);
+  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (isCallToAction ? ' cmd red call-to-action' : '');
+  if (msg.name) wrap.dataset.bubble = msg.name;
+  if (!animate) wrap.style.animation = 'none';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (msg.html) {
+    bubble.innerHTML = msg.html;
+  } else {
+    bubble.textContent = msg.text || '';
+  }
+  if (bubble.querySelector('img')) wrap.classList.add('has-img');
+  wrap.appendChild(bubble);
+  chatEl.appendChild(wrap);
+  return wrap;
+}
+
+function addTyping() {
+  const el = document.createElement('div');
+  el.className = 'typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  chatEl.appendChild(el);
+  scrollBottom(true);
+  return el;
+}
+
+function showBubbles(bubbles, onDone, opts) {
+  const think = (opts && opts.think) || 600;
+  const pause = (opts && opts.pause) || 150;
+
+  function next(i) {
+    if (i >= bubbles.length) {
+      if (onDone) onDone();
+      return;
+    }
+    const typing = addTyping();
+    setTimeout(() => {
+      typing.remove();
+      addMsg(bubbles[i], true);
+      scrollBottom(true);
+      if (i < bubbles.length - 1) {
+        setTimeout(() => next(i + 1), pause);
+      } else if (onDone) {
+        onDone();
+      }
+    }, think);
+  }
+
+  next(0);
+}
+
+function normalizeBubble(bubble) {
+  if (!bubble || typeof bubble !== 'object') return null;
+  const callToAction = !!(bubble.callToAction || bubble.red || bubble.cmd);
+  const out = {
+    name: bubble.name || undefined,
+    html: bubble.html || '',
+    callToAction,
+    cmd: callToAction,
+    red: callToAction
+  };
+  return out;
+}
+
+function normalizePlayerReply(playerReply) {
+  if (!playerReply || typeof playerReply !== 'object') return { type: 'text', placeholder: '', answers: [], correct: [], incorrect: [] };
+  const type = playerReply.type || 'text';
+  const firstOrEmpty = (arr) => {
+    const list = Array.isArray(arr) ? arr.map(normalizeBubble).filter(Boolean) : [];
+    return list.length ? [list[0]] : [];
+  };
+
+  if (type === 'button') {
+    return {
+      type: 'button',
+      text: playerReply.text || 'Continue',
+      playerText: playerReply.playerText || playerReply.text || 'Continue',
+      correct: firstOrEmpty(playerReply.correct),
+      incorrect: firstOrEmpty(playerReply.incorrect)
+    };
+  }
+
+  if (type === 'win') {
+    return {
+      type: 'win',
+      correct: firstOrEmpty(playerReply.correct),
+      incorrect: firstOrEmpty(playerReply.incorrect)
+    };
+  }
+
+  return {
+    type: 'text',
+    placeholder: playerReply.placeholder || '',
+    answers: Array.isArray(playerReply.answers) ? playerReply.answers.map((a) => String(a)) : [],
+    setsTeam: !!playerReply.setsTeam,
+    goTo: playerReply.goTo || undefined,
+    correct: firstOrEmpty(playerReply.correct),
+    incorrect: firstOrEmpty(playerReply.incorrect)
+  };
+}
+
+function normalizeStop(stop, index) {
+  const setup = Array.isArray(stop && stop.setup)
+    ? stop.setup.map(normalizeBubble).filter(Boolean)
+    : Array.isArray(stop && stop.reveal)
+      ? stop.reveal.map(normalizeBubble).filter(Boolean)
+      : [];
+  const playerReply = normalizePlayerReply((stop && stop.playerReply) || (stop && stop.action) || null);
+  return {
+    id: (stop && stop.id) || 'stop-' + (index + 1),
+    setup,
+    playerReply
+  };
+}
+
+async function loadStops() {
+  const resp = await fetch('stops.json', { cache: 'no-store' });
+  if (!resp.ok) throw new Error('Unable to load stops.json');
+  const payload = await resp.json();
+  const list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.stops) ? payload.stops : [];
+  const header = payload && typeof payload === 'object' && payload.header && typeof payload.header === 'object'
+    ? payload.header
+    : {};
+  return {
+    stops: list.map(normalizeStop),
+    header
+  };
+}
+
+function applyHeaderConfig(config) {
+  const header = Object.assign({}, DEFAULT_HEADER, config || {});
+  if (headerTitleEl) headerTitleEl.textContent = header.title;
+  if (headerSubtitleEl) headerSubtitleEl.textContent = header.subtitle;
+  if (headerStatusEl) headerStatusEl.textContent = header.status || 'online';
+  if (headerLogoEl) {
+    headerLogoEl.src = header.logoUrl || DEFAULT_HEADER.logoUrl;
+    headerLogoEl.alt = header.logoAlt || header.title;
+  }
+  document.title = header.pageTitle || header.title || DEFAULT_HEADER.pageTitle;
+}
+
+if (restartBtnEl) {
+  restartBtnEl.addEventListener('click', () => {
+    try {
+      localStorage.clear();
+    } catch (e) {}
+    location.reload();
+  });
+}
+
+function renderInput() {
+  inputAreaEl.innerHTML = '';
+  if (state.step >= stops.length) return;
+
+  const playerReply = stops[state.step].playerReply;
+  if (playerReply.type === 'win') return;
+
+  if (playerReply.type === 'button') {
+    const wrap = document.createElement('div');
+    wrap.className = 'btn-choices';
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn neutral';
+    btn.textContent = playerReply.text;
+    btn.addEventListener('click', () => {
+      addMsg({ fromPlayer: true, text: playerReply.playerText || playerReply.text }, true);
+      doAdvance();
+    });
+    wrap.appendChild(btn);
+    inputAreaEl.appendChild(wrap);
+    return;
+  }
+
+  const row = document.createElement('div');
+  row.className = 'answer-row';
+
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'answer-input';
+  input.placeholder = playerReply.placeholder || '';
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect', 'off');
+  input.setAttribute('spellcheck', 'false');
+  input.setAttribute('autocapitalize', 'characters');
+
+  const sendBtn = document.createElement('button');
+  sendBtn.className = 'submit-btn';
+  sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+
+  const submit = () => {
+    const val = input.value.trim();
+    if (!val) return;
+
+    const matchedAnswer = playerReply.answers.find((a) => norm(val) === norm(a));
+    const ok = !!matchedAnswer;
+    if (!ok) {
+      addMsg({ fromPlayer: true, text: val }, true);
+      input.value = '';
+      input.classList.add('wrong');
+      setTimeout(() => input.classList.remove('wrong'), 400);
+      if (Array.isArray(playerReply.incorrect) && playerReply.incorrect.length) {
+        playerReply.incorrect.forEach((msg) => addMsg(msg, true));
+      } else {
+        addMsg({
+          html: playerReply.setsTeam
+            ? 'Check that spelling. If needed, text <strong>504-581-5652</strong> for help from Mission Control.'
+            : 'Not quite. Text <strong>504-581-5652</strong> and Mission Control will help.'
+        }, true);
+      }
+      scrollBottom(true);
+      return;
+    }
+
+    addMsg({ fromPlayer: true, text: matchedAnswer || val }, true);
+
+    if (playerReply.goTo) {
+      state.step += 1;
+      saveState();
+      scrollBottom(true);
+      setTimeout(() => {
+        location.href = playerReply.goTo;
+      }, 400);
+      return;
+    }
+
+    if (playerReply.setsTeam) {
+      state.team = TEAM_LETTER_MAP[norm(val)] || TEAM_KEY_MAP[norm(val)] || norm(val);
+      saveState();
+    }
+
+    doAdvance();
+  };
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') submit();
+  });
+  sendBtn.addEventListener('click', submit);
+
+  row.appendChild(input);
+  row.appendChild(sendBtn);
+  inputAreaEl.appendChild(row);
+  setTimeout(() => input.focus(), 150);
+}
+
+function doAdvance() {
+  const current = stops[state.step];
+  const correctBubbles = (current && current.playerReply && current.playerReply.correct) || [];
+
+  state.step += 1;
+  saveState();
+
+  inputAreaEl.querySelectorAll('input, button').forEach((el) => {
+    el.disabled = true;
+  });
+  scrollBottom(true);
+
+  if (state.step >= stops.length) {
+    renderInput();
+    return;
+  }
+
+  const nextSetup = stops[state.step].setup || [];
+  const allBubbles = correctBubbles.concat(nextSetup);
+  if (!allBubbles.length) {
+    renderInput();
+    return;
+  }
+
+  showBubbles(allBubbles, () => renderInput());
+}
+
+function showNoStops(message) {
+  addMsg({ html: message || 'No tour stops found in stops.json.' }, false);
+  renderInput();
+  scrollBottom(false);
+}
+
+function buildRevealPlayerReplyMessage(playerReply) {
+  if (!playerReply || typeof playerReply !== 'object') return null;
+  if (playerReply.type === 'win') {
+    return { fromPlayer: true, text: 'WIN' };
+  }
+  if (playerReply.type === 'button') {
+    return { fromPlayer: true, text: playerReply.playerText || playerReply.text || 'Continue' };
+  }
+  const answers = Array.isArray(playerReply.answers) ? playerReply.answers.filter(Boolean) : [];
+  return { fromPlayer: true, text: answers.length ? answers.join(' / ') : 'Player reply' };
+}
+
+function revealAllBubbles() {
+  chatEl.innerHTML = '';
+  stops.forEach((stop) => {
+    (stop.setup || []).forEach((msg) => addMsg(msg, false));
+    const replyMsg = buildRevealPlayerReplyMessage(stop.playerReply);
+    if (replyMsg) addMsg(replyMsg, false);
+    ((stop.playerReply && stop.playerReply.correct) || []).forEach((msg) => addMsg(msg, false));
+    ((stop.playerReply && stop.playerReply.incorrect) || []).forEach((msg) => addMsg(msg, false));
+  });
+  inputAreaEl.innerHTML = '';
+  scrollBottom(false);
+}
+
+function replayProgress() {
+  for (let i = 0; i <= state.step; i += 1) {
+    if (i >= stops.length) break;
+    (stops[i].setup || []).forEach((msg) => addMsg(msg, false));
+    if (i < state.step && stops[i].playerReply && Array.isArray(stops[i].playerReply.correct)) {
+      stops[i].playerReply.correct.forEach((msg) => addMsg(msg, false));
+    }
+  }
+  renderInput();
+  scrollBottom(false);
+}
+
+async function initGame() {
+  try {
+    const loaded = await loadStops();
+    stops = loaded.stops;
+    applyHeaderConfig(loaded.header);
+  } catch (err) {
+    showNoStops('Failed to load stops.json. Run a local server and verify the file exists.');
+    return;
+  }
+
+  if (!stops.length) {
+    showNoStops('No tour stops yet. Build stops in builder.html and save to stops.json.');
+    return;
+  }
+
+  if (REVEAL_ALL) {
+    revealAllBubbles();
+    return;
+  }
+
+  if (state.step > stops.length - 1) {
+    state.step = 0;
+    saveState();
+  }
+
+  if (state.step > 0) {
+    replayProgress();
+    return;
+  }
+
+  setTimeout(() => showBubbles(stops[0].setup || [], () => renderInput()), 400);
+}
+
+initGame();
+

@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<!-- File: builder.html | Purpose: Form-based editor for stops.json. Add/edit stops and save directly to the JSON file. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f4f4;
+      --ink: #111111;
+      --panel: #eaf0f5;
+      --line: #111111;
+      --accent: #111111;
+      --danger: #c1121f;
+      --muted: #5a5a5a;
+      --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: "JetBrains Mono", "Courier New", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,0,0,0.035) 1px, transparent 1px),
+        var(--bg);
+      background-size: 28px 28px, 28px 28px, auto;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    .page {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 22px 18px 30px;
+    }
+
+    h1 {
+      margin: 0 0 2px;
+      font-size: clamp(1.55rem, 2.4vw, 2.3rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .sub {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 0;
+      padding: 9px 12px;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: #fff;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    button.danger {
+      border-color: #d9b7bf;
+      color: var(--danger);
+    }
+
+    .status {
+      font-size: 0.8rem;
+      min-height: 1.2rem;
+      margin-bottom: 12px;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .status.ok { color: var(--accent); font-weight: 700; }
+    .status.error { color: var(--danger); font-weight: 700; }
+    .status.warn { color: #9a5f00; font-weight: 700; }
+
+    .warnings {
+      font-size: 0.84rem;
+      color: #9a5f00;
+      background: #fff7e8;
+      border: 1px solid #f1d7a3;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      display: none;
+      line-height: 1.45;
+    }
+    .warnings ul { margin: 0 0 0 18px; padding: 0; }
+    .warnings strong { display: block; margin-bottom: 4px; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(460px, 1fr) minmax(340px, 0.9fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-radius: 0;
+      padding: 14px;
+      box-shadow: none;
+    }
+
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .stack { display: flex; flex-direction: column; gap: 8px; }
+
+    .stop-item {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 0;
+      padding: 9px 10px;
+      cursor: pointer;
+      text-align: left;
+      position: relative;
+    }
+    .stop-item.dragging { opacity: 0.45; }
+    .stop-item.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .stop-item.drop-before::before,
+    .stop-item.drop-after::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background: var(--accent);
+      pointer-events: none;
+    }
+    .stop-item.drop-before::before { top: -7px; }
+    .stop-item.drop-after::after { bottom: -7px; }
+    .stop-item.locked {
+      cursor: default;
+      background: #f7f3ec;
+    }
+
+    .stop-item.active {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .stop-meta {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 12px;
+    }
+
+    .row.full { grid-template-columns: 1fr; }
+
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font-size: 0.86rem;
+      font-family: var(--sans);
+    }
+
+    textarea {
+      min-height: 74px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .check input { accent-color: var(--accent); }
+
+    .section-title {
+      margin: 0 0 10px;
+      padding-top: 0;
+      border-top: 0;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .bubble {
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 12px;
+      cursor: grab;
+      position: relative;
+    }
+    .bubble.dragging { opacity: 0.45; }
+    .bubble.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .bubble.drop-before::before,
+    .bubble.drop-after::after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background: var(--accent);
+      pointer-events: none;
+    }
+    .bubble.drop-before::before { top: -7px; }
+    .bubble.drop-after::after { bottom: -7px; }
+
+    .bubble-top {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .empty {
+      font-size: 0.86rem;
+      color: var(--muted);
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .mini-tile {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px;
+    }
+
+    .inline-warning {
+      color: #c1121f;
+      font-weight: 700;
+      margin-left: 8px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-size: 0.78rem;
+    }
+
+    #headerEditor,
+    #stopEditor {
+      display: grid;
+      gap: 18px;
+    }
+
+    #stopEditor > .section-title,
+    #headerEditor > .section-title {
+      margin-top: 8px;
+    }
+
+    .preview-card {
+      min-height: 78vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    .preview-frame-wrap {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      min-height: 0;
+      height: 100%;
+    }
+
+    #gamePreviewFrame {
+      width: 100%;
+      height: 100%;
+      min-height: 72vh;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Game Builder</h1>
+    <p class="sub">The Game Bureau</p>
+
+    <div class="toolbar">
+      <button id="loadBtn" type="button">Load</button>
+      <button id="saveBtn" class="primary" type="button">Save</button>
+      <button id="newBtn" class="danger" type="button">New Empty</button>
+    </div>
+    <div id="status" class="status"></div>
+    <div id="warnings" class="warnings"></div>
+
+    <div class="layout">
+      <div class="card">
+        <div class="toolbar">
+          <button id="addStopBtn" class="primary" type="button">Add Stop</button>
+          <button id="removeStopBtn" class="danger" type="button">Remove Stop</button>
+        </div>
+        <div id="stopList" class="stack"></div>
+      </div>
+
+      <div class="card">
+        <div id="headerEditor">
+          <div class="row">
+            <div>
+              <label for="headerTitle">TITLE / PAGE TITLE</label>
+              <input id="headerTitle" type="text">
+            </div>
+            <div>
+              <label for="headerSubtitle">Subtitle</label>
+              <input id="headerSubtitle" type="text">
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="headerLogoUrl">Logo URL / Local File</label>
+              <input id="headerLogoUrl" type="text">
+            </div>
+            <div>
+              <label for="headerLogoAlt">LOGO ALTERNATE TEXT</label>
+              <input id="headerLogoAlt" type="text">
+            </div>
+          </div>
+        </div>
+
+        <div id="stopEditor" style="display:none;">
+          <div class="mini-tile">
+            <div class="row full" style="margin-bottom:0;">
+              <div>
+                <label for="stopId">STOP NAME <span id="stopNameInlineWarning" class="inline-warning" style="display:none;">DUPLICATE STOP NAME</span></label>
+                <input id="stopId" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div id="setupBubbles"></div>
+          <button id="addSetupBtn" type="button">Add Setup Bubble</button>
+
+          <div class="mini-tile">
+            <div class="section-title">Player Reply</div>
+            <div class="row">
+              <div>
+                <label for="replyType">Reply Type</label>
+                <select id="replyType">
+                  <option value="text">text</option>
+                  <option value="button">button</option>
+                  <option value="win">win</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="textReplyFields">
+              <div class="row">
+                <div>
+                  <label for="replyPlaceholder">Placeholder</label>
+                  <input id="replyPlaceholder" type="text">
+                </div>
+                <div>
+                  <label for="replyGoTo">goTo (optional)</label>
+                  <input id="replyGoTo" type="text" placeholder="teams.html">
+                </div>
+              </div>
+              <div class="row full">
+                <div>
+                  <label for="replyAnswers">Answers (comma or newline separated)</label>
+                  <textarea id="replyAnswers"></textarea>
+                  <label class="check"><input id="replySetsTeam" type="checkbox">setsTeam</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="buttonReplyFields" style="display:none;">
+              <div class="row">
+                <div>
+                  <label for="replyButtonText">Button Text</label>
+                  <input id="replyButtonText" type="text">
+                </div>
+                <div>
+                  <label for="replyPlayerText">Player Text</label>
+                  <input id="replyPlayerText" type="text">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="correctBubbles"></div>
+          <button id="addCorrectBtn" type="button">Add Correct Bubble</button>
+
+          <div id="incorrectBubbles"></div>
+          <button id="addIncorrectBtn" type="button">Add Incorrect Bubble</button>
+        </div>
+      </div>
+
+      <div class="card preview-card">
+        <div class="section-title">Preview</div>
+        <div class="preview-frame-wrap">
+          <iframe id="gamePreviewFrame" title="Game preview"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_DOC = {
+      _comment: 'File: stops.json | Purpose: Source-of-truth game stops data loaded by engine.js and edited via builder.html.',
+      header: {
+        title: 'Scavenger Hunt',
+        subtitle: 'Mission Control',
+        logoUrl: 'logo.png',
+        logoAlt: 'Game Logo',
+        pageTitle: 'WALKING TOUR'
+      },
+      stops: []
+    };
+
+    const CORRECT_BUBBLE_SUGGESTIONS = [
+      'Correct. Nice work.',
+      'Great answer. Moving on.',
+      'You got it.',
+      'Perfect. Next clue unlocked.',
+      'Exactly right.',
+      'Right on target.',
+      'Nice catch. Continue.',
+      'That is correct.',
+      'Excellent. Proceed.',
+      'Yes. Keep going.'
+    ];
+
+    const INCORRECT_BUBBLE_SUGGESTIONS = [
+      'Not quite. Try again.',
+      'Close, but not correct.',
+      'Incorrect. Give it another shot.',
+      'That answer does not match.',
+      'Nope. Try a different answer.',
+      'Almost. Re-read the clue.',
+      'Not yet. Check your spelling.',
+      'That is not the one.',
+      'Incorrect. One more try.',
+      'Try again before moving on.'
+    ];
+
+    let state = JSON.parse(JSON.stringify(DEFAULT_DOC));
+    let selectedStopIndex = -1;
+    let stopNameBlurValidated = false;
+
+    const els = {
+      status: document.getElementById('status'),
+      stopList: document.getElementById('stopList'),
+      headerEditor: document.getElementById('headerEditor'),
+      stopEditor: document.getElementById('stopEditor'),
+      headerTitle: document.getElementById('headerTitle'),
+      headerSubtitle: document.getElementById('headerSubtitle'),
+      headerLogoUrl: document.getElementById('headerLogoUrl'),
+      headerLogoAlt: document.getElementById('headerLogoAlt'),
+      stopId: document.getElementById('stopId'),
+      stopNameInlineWarning: document.getElementById('stopNameInlineWarning'),
+      setupBubbles: document.getElementById('setupBubbles'),
+      addSetupBtn: document.getElementById('addSetupBtn'),
+      replyType: document.getElementById('replyType'),
+      textReplyFields: document.getElementById('textReplyFields'),
+      buttonReplyFields: document.getElementById('buttonReplyFields'),
+      replyPlaceholder: document.getElementById('replyPlaceholder'),
+      replyGoTo: document.getElementById('replyGoTo'),
+      replyAnswers: document.getElementById('replyAnswers'),
+      replySetsTeam: document.getElementById('replySetsTeam'),
+      replyButtonText: document.getElementById('replyButtonText'),
+      replyPlayerText: document.getElementById('replyPlayerText'),
+      correctBubbles: document.getElementById('correctBubbles'),
+      addCorrectBtn: document.getElementById('addCorrectBtn'),
+      incorrectBubbles: document.getElementById('incorrectBubbles'),
+      addIncorrectBtn: document.getElementById('addIncorrectBtn')
+      ,
+      warnings: document.getElementById('warnings'),
+      gamePreviewFrame: document.getElementById('gamePreviewFrame')
+    };
+
+    function setStatus(msg, type) {
+      els.status.className = 'status' + (type ? ' ' + type : '');
+      els.status.textContent = msg || '';
+    }
+
+    function deepClone(v) {
+      return JSON.parse(JSON.stringify(v));
+    }
+
+    function parseAnswers(text) {
+      return String(text || '')
+        .split(/\n|,/g)
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    function pickRandomSuggestion(list) {
+      if (!Array.isArray(list) || !list.length) return '';
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function nextNameFromPrevious(previousName, fallbackBase) {
+      const prev = String(previousName || '').trim();
+      const base = String(fallbackBase || 'setup').trim() || 'setup';
+      if (!prev) return base + '-1';
+      const match = prev.match(/^(.*?)(\d+)$/);
+      if (!match) return prev + '-1';
+      const prefix = match[1];
+      const nextNum = String(parseInt(match[2], 10) + 1);
+      return prefix + nextNum;
+    }
+
+    function moveItem(arr, fromIndex, toIndex) {
+      if (!Array.isArray(arr)) return;
+      if (fromIndex === toIndex) return;
+      if (fromIndex < 0 || toIndex < 0 || fromIndex >= arr.length || toIndex >= arr.length) return;
+      const [moved] = arr.splice(fromIndex, 1);
+      arr.splice(toIndex, 0, moved);
+    }
+
+    function moveStopToInsertionIndex(arr, fromIndex, insertionIndex) {
+      if (!Array.isArray(arr)) return fromIndex;
+      if (fromIndex < 0 || fromIndex >= arr.length) return fromIndex;
+      const [moved] = arr.splice(fromIndex, 1);
+      let toIndex = insertionIndex;
+      if (toIndex > fromIndex) toIndex -= 1;
+      if (toIndex < 0) toIndex = 0;
+      if (toIndex > arr.length) toIndex = arr.length;
+      arr.splice(toIndex, 0, moved);
+      return toIndex;
+    }
+
+    function clearStopDropIndicators() {
+      els.stopList.querySelectorAll('.stop-item').forEach((el) => {
+        el.classList.remove('drag-over', 'drop-before', 'drop-after');
+      });
+    }
+
+    function clearBubbleDropIndicators(container) {
+      container.querySelectorAll('.bubble').forEach((el) => {
+        el.classList.remove('drag-over', 'drop-before', 'drop-after');
+      });
+    }
+
+    function collectBubbleIds(stop) {
+      const ids = [];
+      const setup = Array.isArray(stop.setup) ? stop.setup : [];
+      const correct = stop.playerReply && Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
+      const incorrect = stop.playerReply && Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
+      setup.forEach((b) => ids.push(String((b && b.name) || '').trim()));
+      correct.forEach((b) => ids.push(String((b && b.name) || '').trim()));
+      incorrect.forEach((b) => ids.push(String((b && b.name) || '').trim()));
+      return ids.filter(Boolean);
+    }
+
+    function findDuplicates(values) {
+      const seen = new Set();
+      const dupes = new Set();
+      values.forEach((v) => {
+        if (seen.has(v)) dupes.add(v);
+        else seen.add(v);
+      });
+      return Array.from(dupes);
+    }
+
+    function getValidationWarnings() {
+      const warnings = [];
+      const stopNamePairs = state.stops
+        .map((s) => String((s && s.id) || '').trim())
+        .filter(Boolean)
+        .map((name) => ({ raw: name, key: name.toLowerCase() }));
+      const duplicateStopNameKeys = findDuplicates(stopNamePairs.map((p) => p.key));
+      if (duplicateStopNameKeys.length) {
+        const displayNames = duplicateStopNameKeys.map((k) => {
+          const found = stopNamePairs.find((p) => p.key === k);
+          return found ? found.raw : k;
+        });
+        warnings.push('Two stops cannot have the same name: ' + displayNames.join(', '));
+      }
+
+      const allBubbleIds = [];
+      state.stops.forEach((stop) => {
+        collectBubbleIds(stop).forEach((id) => allBubbleIds.push(id));
+      });
+      const duplicateBubbleIds = findDuplicates(allBubbleIds);
+      if (duplicateBubbleIds.length) {
+        warnings.push('Duplicate bubble IDs: ' + duplicateBubbleIds.join(', '));
+      }
+      return warnings;
+    }
+
+    function renderWarnings() {
+      const warnings = getValidationWarnings();
+      if (!warnings.length) {
+        els.warnings.style.display = 'none';
+        els.warnings.innerHTML = '';
+        return warnings;
+      }
+      els.warnings.style.display = 'block';
+      els.warnings.innerHTML = '<strong>Validation Warnings</strong><ul>' + warnings.map((w) => '<li>' + w + '</li>').join('') + '</ul>';
+      return warnings;
+    }
+
+    function renderInlineStopNameWarning() {
+      const stop = getSelectedStop();
+      if (!stop || selectedStopIndex < 0) {
+        els.stopNameInlineWarning.style.display = 'none';
+        return;
+      }
+      if (!stopNameBlurValidated) {
+        els.stopNameInlineWarning.style.display = 'none';
+        return;
+      }
+      const name = String(stop.id || '').trim().toLowerCase();
+      if (!name) {
+        els.stopNameInlineWarning.style.display = 'none';
+        return;
+      }
+      const dupCount = state.stops.filter((s) => String((s && s.id) || '').trim().toLowerCase() === name).length;
+      els.stopNameInlineWarning.style.display = dupCount > 1 ? 'inline' : 'none';
+    }
+
+    function answersToText(arr) {
+      return Array.isArray(arr) ? arr.join('\n') : '';
+    }
+
+    function ensureBubble(b) {
+      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false };
+      return {
+        name: String(b.name || ''),
+        html: String(b.html || ''),
+        callToAction: !!(b.callToAction || b.red || b.cmd)
+      };
+    }
+
+    function ensurePlayerReply(r) {
+      if (!r || typeof r !== 'object') {
+        return { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
+      }
+      const firstOrEmpty = (arr) => {
+        const list = Array.isArray(arr) ? arr.map(ensureBubble) : [];
+        return list.length ? [list[0]] : [];
+      };
+      const type = r.type === 'button' || r.type === 'win' ? r.type : 'text';
+      const base = {
+        type,
+        correct: firstOrEmpty(r.correct),
+        incorrect: firstOrEmpty(r.incorrect)
+      };
+      if (type === 'button') {
+        base.text = String(r.text || 'Continue');
+        base.playerText = String(r.playerText || r.text || 'Continue');
+        return base;
+      }
+      if (type === 'win') return base;
+      base.placeholder = String(r.placeholder || '');
+      base.answers = Array.isArray(r.answers) ? r.answers.map((x) => String(x)) : [];
+      base.setsTeam = !!r.setsTeam;
+      base.goTo = String(r.goTo || '');
+      return base;
+    }
+
+    function ensureStop(s, i) {
+      return {
+        id: String((s && s.id) || ('stop-' + (i + 1))),
+        setup: Array.isArray(s && s.setup)
+          ? s.setup.map(ensureBubble)
+          : Array.isArray(s && s.reveal)
+            ? s.reveal.map(ensureBubble)
+            : [],
+        playerReply: ensurePlayerReply((s && s.playerReply) || (s && s.action) || null)
+      };
+    }
+
+    function ensureDoc(doc) {
+      if (!doc || typeof doc !== 'object' || Array.isArray(doc)) {
+        throw new Error('Top-level JSON must be an object.');
+      }
+      const out = deepClone(DEFAULT_DOC);
+      if (doc.header && typeof doc.header === 'object') {
+        out.header = Object.assign({}, out.header, doc.header);
+      }
+      if (!Array.isArray(doc.stops)) {
+        throw new Error('Missing "stops" array.');
+      }
+      out.stops = doc.stops.map(ensureStop);
+      if (typeof doc._comment === 'string') out._comment = doc._comment;
+      return out;
+    }
+
+    function getSelectedStop() {
+      if (selectedStopIndex < 0 || selectedStopIndex >= state.stops.length) return null;
+      return state.stops[selectedStopIndex];
+    }
+
+    function createEmptyStop() {
+      return {
+        id: 'new-stop-' + (state.stops.length + 1),
+        setup: [],
+        playerReply: { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] }
+      };
+    }
+
+    function createGameWinStop() {
+      return {
+        id: 'game-win',
+        setup: [],
+        playerReply: { type: 'win', correct: [], incorrect: [] }
+      };
+    }
+
+    function isGameWinStop(stop) {
+      return !!(stop && stop.playerReply && stop.playerReply.type === 'win');
+    }
+
+    function ensureGameWinStop() {
+      if (!Array.isArray(state.stops)) state.stops = [];
+      let winIndex = state.stops.findIndex(isGameWinStop);
+      if (winIndex === -1) {
+        state.stops.push(createGameWinStop());
+        winIndex = state.stops.length - 1;
+      }
+      if (winIndex !== state.stops.length - 1) {
+        const [winStop] = state.stops.splice(winIndex, 1);
+        state.stops.push(winStop);
+        if (selectedStopIndex === winIndex) {
+          selectedStopIndex = state.stops.length - 1;
+        } else if (selectedStopIndex > winIndex) {
+          selectedStopIndex -= 1;
+        }
+      }
+    }
+
+    function renderStopList() {
+      els.stopList.innerHTML = '';
+
+      const headerBtn = document.createElement('button');
+      headerBtn.type = 'button';
+      headerBtn.className = 'stop-item locked' + (selectedStopIndex === -1 ? ' active' : '');
+      headerBtn.innerHTML = '<div>GAME DETAILS</div>';
+      headerBtn.addEventListener('click', () => {
+        selectedStopIndex = -1;
+        stopNameBlurValidated = false;
+        renderAll();
+      });
+      els.stopList.appendChild(headerBtn);
+
+      if (!state.stops.length) return;
+
+      state.stops.forEach((stop, i) => {
+        const locked = i === state.stops.length - 1 && isGameWinStop(stop);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'stop-item' + (locked ? ' locked' : '') + (i === selectedStopIndex ? ' active' : '');
+        btn.dataset.stopIndex = String(i);
+        btn.draggable = !locked;
+        btn.innerHTML = '<div>' + stop.id + '</div><div class="stop-meta">' + (stop.playerReply.type || 'text') + ' • setup: ' + stop.setup.length + '</div>';
+        btn.addEventListener('click', () => {
+          selectedStopIndex = i;
+          stopNameBlurValidated = false;
+          renderAll();
+        });
+        if (!locked) {
+          btn.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/x-stop-index', String(i));
+            e.dataTransfer.effectAllowed = 'move';
+            btn.classList.add('dragging');
+          });
+          btn.addEventListener('dragend', () => {
+            clearStopDropIndicators();
+            btn.classList.remove('dragging');
+          });
+        }
+        btn.addEventListener('dragover', (e) => {
+          if (locked) return;
+          e.preventDefault();
+          const rect = btn.getBoundingClientRect();
+          const before = e.clientY < rect.top + rect.height / 2;
+          clearStopDropIndicators();
+          btn.classList.add('drag-over');
+          btn.classList.add(before ? 'drop-before' : 'drop-after');
+        });
+        btn.addEventListener('dragleave', () => {
+          btn.classList.remove('drag-over', 'drop-before', 'drop-after');
+        });
+        btn.addEventListener('drop', (e) => {
+          if (locked) return;
+          e.preventDefault();
+          const rect = btn.getBoundingClientRect();
+          const before = e.clientY < rect.top + rect.height / 2;
+          clearStopDropIndicators();
+          const fromIndex = parseInt(e.dataTransfer.getData('text/x-stop-index') || '-1', 10);
+          if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
+          const insertionIndex = i + (before ? 0 : 1);
+          const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
+
+          if (selectedStopIndex === fromIndex) {
+            selectedStopIndex = newIndex;
+          } else {
+            if (fromIndex < selectedStopIndex) selectedStopIndex -= 1;
+            if (newIndex <= selectedStopIndex) selectedStopIndex += 1;
+          }
+          renderAll();
+        });
+        els.stopList.appendChild(btn);
+      });
+    }
+
+    function renderBubbles(container, bubbles, listKey) {
+      container.innerHTML = '';
+      if (!bubbles.length) return;
+
+      bubbles.forEach((bubble, idx) => {
+        if (!String(bubble.html || '').trim()) {
+          const suggestions = listKey === 'correct'
+            ? CORRECT_BUBBLE_SUGGESTIONS
+            : listKey === 'incorrect'
+              ? INCORRECT_BUBBLE_SUGGESTIONS
+              : null;
+          if (suggestions && suggestions.length) {
+            bubble.html = pickRandomSuggestion(suggestions);
+          }
+        }
+        const wrap = document.createElement('div');
+        wrap.className = 'bubble';
+        wrap.draggable = true;
+        const showCallToActionToggle = listKey === 'setup';
+        const nameLabel = listKey === 'setup'
+          ? '<label>SETUP BUBBLE</label>'
+          : listKey === 'correct'
+            ? '<label>CORRECT BUBBLE</label>'
+            : listKey === 'incorrect'
+              ? '<label>INCORRECT BUBBLE</label>'
+              : '';
+        wrap.innerHTML = [
+          nameLabel,
+          '<div class="bubble-top">',
+          '  <input type="text" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
+          showCallToActionToggle
+            ? '  <label class="check"><input type="checkbox" ' + (bubble.callToAction ? 'checked' : '') + '>call-to-action</label>'
+            : '',
+          '  <button type="button" class="danger">Remove</button>',
+          '</div>',
+          '<label>HTML</label>',
+          '<textarea>' + String(bubble.html || '') + '</textarea>'
+        ].join('');
+
+        const nameInput = wrap.querySelector('input[type="text"]');
+        const redInput = wrap.querySelector('input[type="checkbox"]');
+        const removeBtn = wrap.querySelector('button');
+        const htmlInput = wrap.querySelector('textarea');
+
+        nameInput.addEventListener('input', (e) => {
+          bubbles[idx].name = e.target.value;
+        });
+        if (redInput) {
+          redInput.addEventListener('change', (e) => {
+            bubbles[idx].callToAction = e.target.checked;
+          });
+        }
+        htmlInput.addEventListener('input', (e) => {
+          bubbles[idx].html = e.target.value;
+        });
+        removeBtn.addEventListener('click', () => {
+          bubbles.splice(idx, 1);
+          renderAll();
+        });
+        wrap.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('application/x-bubble', JSON.stringify({ listKey, index: idx }));
+          e.dataTransfer.effectAllowed = 'move';
+          wrap.classList.add('dragging');
+        });
+        wrap.addEventListener('dragend', () => {
+          clearBubbleDropIndicators(container);
+          wrap.classList.remove('dragging');
+        });
+        wrap.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          const rect = wrap.getBoundingClientRect();
+          const before = e.clientY < rect.top + rect.height / 2;
+          clearBubbleDropIndicators(container);
+          wrap.classList.add('drag-over');
+          wrap.classList.add(before ? 'drop-before' : 'drop-after');
+        });
+        wrap.addEventListener('dragleave', () => {
+          wrap.classList.remove('drag-over', 'drop-before', 'drop-after');
+        });
+        wrap.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const rect = wrap.getBoundingClientRect();
+          const before = e.clientY < rect.top + rect.height / 2;
+          clearBubbleDropIndicators(container);
+          let payload = null;
+          try {
+            payload = JSON.parse(e.dataTransfer.getData('application/x-bubble') || 'null');
+          } catch (_) {
+            return;
+          }
+          if (!payload || payload.listKey !== listKey) return;
+          const fromIndex = parseInt(payload.index, 10);
+          if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= bubbles.length) return;
+          const insertionIndex = idx + (before ? 0 : 1);
+          moveStopToInsertionIndex(bubbles, fromIndex, insertionIndex);
+          renderAll();
+        });
+
+        container.appendChild(wrap);
+      });
+    }
+
+    function escapeHtml(text) {
+      return String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function previewBubbleHtml(bubble, fromPlayer) {
+      const classes = ['msg', fromPlayer ? 'from-player' : 'from-game'];
+      if (bubble && bubble.callToAction) classes.push('call-to-action');
+      const html = String((bubble && bubble.html) || '');
+      return '<div class="' + classes.join(' ') + '"><div class="msg-bubble">' + html + '</div></div>';
+    }
+
+    function previewReplyBubble(stop) {
+      const reply = stop && stop.playerReply ? stop.playerReply : {};
+      if (reply.type === 'win') {
+        return '<div class="msg from-player"><div class="msg-bubble">WIN</div></div>';
+      }
+      if (reply.type === 'button') {
+        return '<div class="msg from-player"><div class="msg-bubble">' + escapeHtml(reply.playerText || reply.text || 'Continue') + '</div></div>';
+      }
+      const answers = Array.isArray(reply.answers) ? reply.answers.filter(Boolean) : [];
+      const replyText = answers.length ? answers.join(' / ') : 'Player reply';
+      return '<div class="msg from-player"><div class="msg-bubble">' + escapeHtml(replyText) + '</div></div>';
+    }
+
+    function previewInputPlaceholder() {
+      const selected = getSelectedStop();
+      if (selected && selected.playerReply && selected.playerReply.type === 'text') {
+        return String(selected.playerReply.placeholder || '');
+      }
+      const firstTextStop = state.stops.find((s) => s && s.playerReply && s.playerReply.type === 'text');
+      return firstTextStop ? String(firstTextStop.playerReply.placeholder || '') : '';
+    }
+
+    function renderPreview() {
+      const h = state.header || {};
+      const title = String(h.title || '');
+      const subtitle = String(h.subtitle || '');
+      const status = String(h.status || 'online');
+      const logoUrl = String(h.logoUrl || '');
+      const logoAlt = String(h.logoAlt || '');
+
+      const stopsHtml = state.stops.map((stop) => {
+        const setup = Array.isArray(stop.setup) ? stop.setup : [];
+        const correct = stop.playerReply && Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
+        const incorrect = stop.playerReply && Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
+
+        const setupHtml = setup.map((b) => previewBubbleHtml(b, false)).join('');
+        const replyHtml = previewReplyBubble(stop);
+        const correctHtml = correct.map((b) => previewBubbleHtml(b, false)).join('');
+        const incorrectHtml = incorrect.map((b) => previewBubbleHtml(b, false)).join('');
+
+        return [
+          setupHtml,
+          replyHtml,
+          correctHtml,
+          incorrectHtml
+        ].join('');
+      }).join('');
+
+      const doc = [
+        '<!DOCTYPE html>',
+        '<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><base href="./">',
+        '<link rel="stylesheet" href="index.css">',
+        '<style>body{height:auto;overflow:auto;display:block}.chat{padding:1rem;gap:.5rem}.restart-btn{pointer-events:none}</style>',
+        '<title>Preview</title></head><body>',
+        '<div class="contact-header"><div class="avatar">' + (logoUrl ? '<img src="' + logoUrl + '" alt="' + escapeHtml(logoAlt) + '">' : '') + '</div><div class="contact-name">' + escapeHtml(title) + '</div><div class="contact-name">' + escapeHtml(subtitle) + '</div><div class="contact-status"><div class="online-dot"></div><span>' + escapeHtml(status) + '</span></div><button class="restart-btn" type="button">RESTART</button></div>',
+        '<main class="chat">' + stopsHtml + '</main>',
+        '<div class="input-area"><div class="answer-row"><input class="answer-input" type="text" placeholder="' + escapeHtml(previewInputPlaceholder()) + '" disabled><button class="submit-btn" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div></div>',
+        '</body></html>'
+      ].join('');
+
+      if (els.gamePreviewFrame) {
+        els.gamePreviewFrame.srcdoc = doc;
+      }
+    }
+
+    function renderStopEditor() {
+      const stop = getSelectedStop();
+      if (selectedStopIndex === -1) {
+        els.headerEditor.style.display = 'grid';
+        els.stopEditor.style.display = 'none';
+        return;
+      }
+
+      if (!stop) {
+        els.headerEditor.style.display = 'none';
+        els.stopEditor.style.display = 'none';
+        return;
+      }
+
+      els.headerEditor.style.display = 'none';
+      els.stopEditor.style.display = 'grid';
+
+      els.stopId.value = stop.id;
+      els.replyType.value = stop.playerReply.type;
+
+      els.textReplyFields.style.display = stop.playerReply.type === 'text' ? 'block' : 'none';
+      els.buttonReplyFields.style.display = stop.playerReply.type === 'button' ? 'block' : 'none';
+
+      els.replyPlaceholder.value = stop.playerReply.placeholder || '';
+      els.replyGoTo.value = stop.playerReply.goTo || '';
+      els.replyAnswers.value = answersToText(stop.playerReply.answers || []);
+      els.replySetsTeam.checked = !!stop.playerReply.setsTeam;
+      els.replyButtonText.value = stop.playerReply.text || '';
+      els.replyPlayerText.value = stop.playerReply.playerText || '';
+
+      renderBubbles(els.setupBubbles, stop.setup, 'setup');
+      renderBubbles(els.correctBubbles, stop.playerReply.correct || [], 'correct');
+      renderBubbles(els.incorrectBubbles, stop.playerReply.incorrect || [], 'incorrect');
+    }
+
+    function renderHeader() {
+      const h = state.header || DEFAULT_DOC.header;
+      els.headerTitle.value = h.title || '';
+      els.headerSubtitle.value = h.subtitle || '';
+      els.headerLogoUrl.value = h.logoUrl || '';
+      els.headerLogoAlt.value = h.logoAlt || '';
+    }
+
+    function renderAll() {
+      ensureGameWinStop();
+      renderHeader();
+      renderStopList();
+      renderStopEditor();
+      renderPreview();
+      renderWarnings();
+      renderInlineStopNameWarning();
+    }
+
+    function attachHeaderEvents() {
+      els.headerTitle.addEventListener('input', (e) => {
+        state.header.title = e.target.value;
+        state.header.pageTitle = e.target.value;
+      });
+      els.headerSubtitle.addEventListener('input', (e) => { state.header.subtitle = e.target.value; });
+      els.headerLogoUrl.addEventListener('input', (e) => { state.header.logoUrl = e.target.value; });
+      els.headerLogoAlt.addEventListener('input', (e) => { state.header.logoAlt = e.target.value; });
+    }
+
+    function attachStopEvents() {
+      els.stopId.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        stop.id = e.target.value;
+        stopNameBlurValidated = false;
+        renderStopList();
+        renderInlineStopNameWarning();
+      });
+
+      els.stopId.addEventListener('blur', () => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        stopNameBlurValidated = true;
+        renderInlineStopNameWarning();
+      });
+
+      els.replyType.addEventListener('change', (e) => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        const nextType = e.target.value;
+        const correct = Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
+        const incorrect = Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
+
+        if (nextType === 'button') {
+          stop.playerReply = { type: 'button', text: 'Continue', playerText: 'Continue', correct, incorrect };
+        } else if (nextType === 'win') {
+          stop.playerReply = { type: 'win', correct, incorrect };
+        } else {
+          stop.playerReply = { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct, incorrect };
+        }
+        renderAll();
+      });
+
+      els.replyPlaceholder.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.placeholder = e.target.value;
+      });
+
+      els.replyGoTo.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.goTo = e.target.value;
+      });
+
+      els.replyAnswers.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.answers = parseAnswers(e.target.value);
+      });
+
+      els.replySetsTeam.addEventListener('change', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'text') return;
+        stop.playerReply.setsTeam = e.target.checked;
+      });
+
+      els.replyButtonText.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'button') return;
+        stop.playerReply.text = e.target.value;
+      });
+
+      els.replyPlayerText.addEventListener('input', (e) => {
+        const stop = getSelectedStop();
+        if (!stop || stop.playerReply.type !== 'button') return;
+        stop.playerReply.playerText = e.target.value;
+      });
+
+      els.addSetupBtn.addEventListener('click', () => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        const previous = stop.setup.length ? stop.setup[stop.setup.length - 1] : null;
+        const nextName = nextNameFromPrevious(previous && previous.name, stop.id + '-setup');
+        stop.setup.push({ name: nextName, html: '', callToAction: false });
+        renderAll();
+      });
+
+      els.addCorrectBtn.addEventListener('click', () => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        if (!Array.isArray(stop.playerReply.correct)) stop.playerReply.correct = [];
+        stop.playerReply.correct = [{ name: stop.id + '-correct-1', html: '', callToAction: false }];
+        renderAll();
+      });
+
+      els.addIncorrectBtn.addEventListener('click', () => {
+        const stop = getSelectedStop();
+        if (!stop) return;
+        if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
+        stop.playerReply.incorrect = [{ name: stop.id + '-incorrect-1', html: '', callToAction: true }];
+        renderAll();
+      });
+    }
+
+    function toDoc() {
+      const doc = {
+        _comment: state._comment || DEFAULT_DOC._comment,
+        header: Object.assign({}, DEFAULT_DOC.header, state.header || {}),
+        stops: state.stops.map((s, i) => {
+          const normalized = ensureStop(s, i);
+          return {
+            id: normalized.id,
+            setup: normalized.setup,
+            playerReply: normalized.playerReply
+          };
+        })
+      };
+      doc.header.pageTitle = doc.header.title || '';
+      return doc;
+    }
+
+    async function loadStopsFile() {
+      try {
+        const resp = await fetch('stops.json', { cache: 'no-store' });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const doc = ensureDoc(await resp.json());
+        state = doc;
+        selectedStopIndex = -1;
+        renderAll();
+        setStatus('Loaded ./stops.json from this folder.', 'ok');
+      } catch (err) {
+        setStatus('Unable to load ./stops.json: ' + err.message, 'error');
+      }
+    }
+
+    function downloadStops(text) {
+      const blob = new Blob([text], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'stops.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function saveStops() {
+      try {
+        const doc = toDoc();
+        const text = JSON.stringify(doc, null, 2) + '\n';
+        downloadStops(text);
+        const warnings = renderWarnings();
+        if (warnings.length) {
+          setStatus('Downloaded stops.json with validation warnings shown below.', 'warn');
+        } else {
+          setStatus('Downloaded stops.json. Replace ./stops.json in this folder with the downloaded file.', 'ok');
+        }
+      } catch (err) {
+        setStatus(err.message || 'Save cancelled.', 'error');
+      }
+    }
+
+    document.getElementById('loadBtn').addEventListener('click', loadStopsFile);
+    document.getElementById('saveBtn').addEventListener('click', saveStops);
+
+    document.getElementById('newBtn').addEventListener('click', () => {
+      state = deepClone(DEFAULT_DOC);
+      selectedStopIndex = -1;
+      stopNameBlurValidated = false;
+      renderAll();
+      setStatus('New empty document ready.', 'ok');
+    });
+
+    document.getElementById('addStopBtn').addEventListener('click', () => {
+      const stop = createEmptyStop();
+      const insertAt = Math.max(0, state.stops.length - 1);
+      state.stops.splice(insertAt, 0, stop);
+      selectedStopIndex = insertAt;
+      stopNameBlurValidated = false;
+      renderAll();
+    });
+
+    document.getElementById('removeStopBtn').addEventListener('click', () => {
+      if (selectedStopIndex < 0) return;
+      const selectedStop = state.stops[selectedStopIndex];
+      if (selectedStopIndex === state.stops.length - 1 && isGameWinStop(selectedStop)) {
+        setStatus('GAME WIN is fixed and cannot be removed.', 'warn');
+        return;
+      }
+      state.stops.splice(selectedStopIndex, 1);
+      if (!state.stops.length) selectedStopIndex = -1;
+      else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
+      renderAll();
+    });
+
+    attachHeaderEvents();
+    attachStopEvents();
+    renderAll();
+    loadStopsFile();
+  </script>
+</body>
+</html>
+

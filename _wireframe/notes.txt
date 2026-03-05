@@ -1,3 +1,6 @@
+FILE: notes.txt
+PURPOSE: Human planning/reference notes for tour script, teams, and prompts used by the scavenger hunt.
+
 PRE-TOUR BANTER
 Hi. I'm Kevin Kolb.
 You get to kick back and relax now as I take you on a walking tour around the neighborhood. You're done thinking for the day.

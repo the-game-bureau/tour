@@ -1,0 +1,122 @@
+They will have a leader for each team that knows what is going on.
+
+Concerned about bunching up. -give them options like a which way book
+
+They will provide ending location.
+
+This will be first day of arrivals
+
+Ghost Tour Elements
+
+They will provide prizes.
+
+4 - 6
+
+4:30 start
+
+More interactivity the better
+
+Try on hats was a suggestion like old timey shop
+
+Fire Department t-shirt souvenir?
+
+Definitely want them to take pictures.
+
+4 people from Florida. Most from Cleveland.
+
+3:30 4:30 Hat workshop.
+
+Give each team a key to the Girod street door so they have to figure out which door it is and "break-in" to the office.
+
+Send "after game" links"
+
+-------------------------
+GAME STOP TEMPLATES
+-------------------------
+
+Where to put these:
+- Add each stop inside STOP_BUILDERS in dt/index.html.
+- Then add the stop id to baseRoute, rotatingRouteByTeam, or closingRoute.
+
+General stop shape:
+stopIdHere: () => ({
+  reveal: [
+    { name: 'unique-bubble-id-1', html: 'Message text' },
+    { name: 'unique-bubble-id-2', cmd: true, html: 'Command text' }
+  ],
+  action: { type: 'text', placeholder: 'Type answer...', answers: ['answer1', 'answer2'] }
+}),
+
+1) REGULAR STOP (simple answer check)
+regularExample: () => ({
+  reveal: [
+    { name: 'reg-1', html: 'Welcome to this stop.' },
+    { name: 'reg-2', cmd: true, html: 'What is the secret word?' }
+  ],
+  action: {
+    type: 'text',
+    placeholder: 'Type the secret word...',
+    answers: ['secretword', 'secret word']
+  }
+}),
+
+2) PHOTO STOP (take photo, then type CLICK)
+photoExample: () => ({
+  reveal: [
+    { name: 'photo-1', cmd: true, html: 'Take a team photo here.' },
+    { name: 'photo-2', cmd: true, html: 'Reply <strong>CLICK</strong> when done.' }
+  ],
+  action: {
+    type: 'text',
+    placeholder: 'REPLY CLICK...',
+    answers: ['click']
+  }
+}),
+
+3) REPLY STOP (specific reply like HERE/PLAY/TEAM)
+replyExample: () => ({
+  reveal: [
+    { name: 'reply-1', cmd: true, html: 'Reply <strong>HERE</strong> when you arrive.' }
+  ],
+  action: {
+    type: 'text',
+    placeholder: 'Type HERE...',
+    answers: ['here', 'here!']
+  }
+}),
+
+4) MULTIPLE-CHOICE STOP (letters + optional full answer words)
+multipleChoiceExample: () => ({
+  reveal: [
+    { name: 'mc-1', html: '<p>Which answer is correct?</p><p>A) Red<br>B) Blue<br>C) Green<br>D) Yellow</p>' }
+  ],
+  action: {
+    type: 'text',
+    placeholder: 'A, B, C, or D',
+    answers: ['b', 'blue']
+  }
+}),
+
+5) VARIABLE BY TEAM STOP (changes by team name/data)
+// Uses:
+// - t from TEAMS[teamKey] (name, w3w, etc.)
+// - def from TEAM_DEFS[teamKey] (letter, partner, passwords, etc.)
+teamVariableExample: () => ({
+  reveal: [
+    { name: 'teamvar-1', html: 'Team <strong>' + (t ? t.name : 'Unknown') + '</strong>, this clue is for you.' },
+    { name: 'teamvar-2', cmd: true, html: 'Call Team <strong>' + (def ? def.partner : 'Partner') + '</strong> and ask for your password.' }
+  ],
+  action: {
+    type: 'text',
+    placeholder: 'Type your team password...',
+    answers: def ? [def.receiveLetter, def.receive] : [],
+    correct: [
+      { name: 'teamvar-correct', html: 'Correct for Team ' + (t ? t.name : '') + '!' }
+    ]
+  }
+}),
+
+Optional add-ons you can use with any text stop:
+- setsTeam: true       // Saves team from answer (used in team selection)
+- goTo: 'teams.html'   // Redirect on correct answer
+- correct: [ ... ]     // Extra bubbles shown after correct answer

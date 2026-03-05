@@ -1,0 +1,373 @@
+/*
+  File: index.css
+  Purpose: Visual styles for the chat-based scavenger hunt UI used by index.html and engine.js.
+  Edit guide: Sections are grouped by screen area so designers can safely tweak one area at a time.
+*/
+
+/* Hidden icon preload node so CSS also references local index.ico */
+.icon-preload {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-image: url("index.ico");
+}
+
+/* Global reset and layout baseline */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Page frame: full-height app shell with fixed header/footer and scrolling chat */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #ffffff;
+  color: #111827;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header: mission control identity block at top */
+.contact-header {
+  background: #f9f9f9;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Header logo container */
+.avatar {
+  height: 36px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-bottom: 0.2rem;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* Header logo image */
+.avatar img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  filter: brightness(0) saturate(100%);
+}
+
+/* Header title lines */
+.contact-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.3;
+}
+
+/* Header online status row */
+.contact-status {
+  font-size: 0.72rem;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Green online indicator dot */
+.online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ecf98;
+  flex-shrink: 0;
+}
+
+/* Restart button pinned to top-right of header */
+.restart-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Restart button press feedback */
+.restart-btn:active { background: #f3f4f6; }
+
+/* Main chat transcript scroll region */
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Message wrapper and animation */
+.msg {
+  max-width: 80%;
+  animation: slideIn 0.25s ease;
+}
+
+/* Left aligned game messages */
+.msg.from-game { align-self: flex-start; }
+
+/* Right aligned player messages */
+.msg.from-player { align-self: flex-end; }
+
+/* Shared bubble shape and typography */
+.msg-bubble {
+  padding: 0.6rem 0.9rem;
+  border-radius: 20px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  font-size: 1.5rem;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+/* Blue game bubble styling */
+.msg.from-game .msg-bubble {
+  background: #1a73e8;
+  border-bottom-left-radius: 5px;
+  color: #ffffff;
+}
+
+/* Gray player bubble styling */
+.msg.from-player .msg-bubble {
+  background: #e5e7eb;
+  color: #111827;
+  border-bottom-right-radius: 5px;
+}
+
+/* Call-to-action bubbles */
+.msg.call-to-action .msg-bubble,
+.msg.cmd .msg-bubble,
+.msg.red .msg-bubble {
+  background: #cc0000;
+}
+
+/* Text spacing inside bubbles */
+.msg-bubble p { margin: 0 0 0.6rem; }
+.msg-bubble p:last-child { margin-bottom: 0; }
+
+/* Links inside bubbles */
+.msg-bubble a { color: #ffffff; word-break: break-all; }
+.msg.from-player .msg-bubble a { color: #1a73e8; }
+
+/* Larger max width for image-heavy bubbles */
+.msg.has-img { max-width: 92%; }
+
+/* Remove internal padding around single image paragraphs */
+.msg-bubble p:has(> img:only-child) { margin: -0.6rem -0.9rem; }
+.msg-bubble p:has(> img:only-child) + p { margin-top: 0.6rem; }
+
+/* Bubble images */
+.msg-bubble img {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  border-radius: 0;
+  cursor: zoom-in;
+}
+
+/* Fullscreen image lightbox overlay */
+.lb {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.93);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+/* Lightbox visible state */
+.lb.open { display: flex; }
+
+/* Lightbox image scaling */
+.lb img {
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+}
+
+/* Typing indicator bubble */
+.typing {
+  align-self: flex-start;
+  background: #1a73e8;
+  border-radius: 20px;
+  border-bottom-left-radius: 5px;
+  padding: 0.55rem 0.9rem;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Typing indicator dots */
+.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  animation: typingBounce 1.2s infinite;
+}
+
+/* Staggered dot timings */
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Footer input region */
+.input-area {
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  padding: 0.6rem 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Input row layout */
+.answer-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Text input control */
+.answer-input {
+  flex: 1;
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 0.6rem 1rem;
+  color: #111827;
+  font-size: 1rem;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+
+/* Input focus state */
+.answer-input:focus { border-color: #1a73e8; }
+
+/* Disabled input state */
+.answer-input:disabled { opacity: 0.4; }
+
+/* Wrong-answer shake state */
+.answer-input.wrong {
+  border-color: #e85568;
+  animation: shake 0.35s ease;
+}
+
+/* Placeholder color */
+.answer-input::placeholder { color: #9ca3af; }
+
+/* Hide iOS autofill contact/password icons in this UI */
+.answer-input::-webkit-contacts-auto-fill-button,
+.answer-input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Circular send button */
+.submit-btn {
+  background: #1a73e8;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.1s, opacity 0.2s;
+}
+
+/* Send button press feedback */
+.submit-btn:active {
+  transform: scale(0.9);
+  background: #1557b0;
+}
+
+/* Send button disabled state */
+.submit-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Vertical group for multi-choice buttons */
+.btn-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Generic choice button base */
+.choice-btn {
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  border: 2px solid;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+
+/* Choice button press feedback */
+.choice-btn:active { opacity: 0.6; }
+
+/* Team color variants for choice buttons */
+.choice-btn.team-beignet { border-color: #6aaef7; color: #6aaef7; }
+.choice-btn.team-lagniappe { border-color: #f5a623; color: #f5a623; }
+.choice-btn.team-rougarou { border-color: #e85568; color: #e85568; }
+.choice-btn.team-tch { border-color: #4ecf98; color: #4ecf98; }
+
+/* Neutral choice button variant */
+.choice-btn.neutral { border-color: #d1d5db; color: #374151; }
+
+/* Bubble entrance animation */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Wrong-answer input shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-7px); }
+  75% { transform: translateX(7px); }
+}
+
+/* Typing-dot bounce animation */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}

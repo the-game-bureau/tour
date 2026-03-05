@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WALKING TOUR</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23222' stroke='%23555' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='28' fill='%23444' stroke='%23666' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23888'/%3E%3Cline x1='50' y1='22' x2='50' y2='40' stroke='%23888' stroke-width='4'/%3E%3Cline x1='50' y1='60' x2='50' y2='78' stroke='%23888' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='40' y2='50' stroke='%23888' stroke-width='4'/%3E%3Cline x1='60' y1='50' x2='78' y2='50' stroke='%23888' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='43' y2='43' stroke='%23888' stroke-width='4'/%3E%3Cline x1='57' y1='57' x2='70' y2='70' stroke='%23888' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='57' y2='43' stroke='%23888' stroke-width='4'/%3E%3Cline x1='43' y1='57' x2='30' y2='70' stroke='%23888' stroke-width='4'/%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #ffffff;
+      color: #111827;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Messaging app contact header ─────────────────────────── */
+    .contact-header {
+      background: #f9f9f9;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.5rem 1rem 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .avatar {
+      height: 36px; width: auto;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
+      margin-bottom: 0.2rem;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+    .avatar img { height: 100%; width: auto; object-fit: contain; pointer-events: none; filter: invert(1); }
+    .contact-name {
+      font-size: 0.9rem; font-weight: 600; color: #111827; line-height: 1.3;
+    }
+    .contact-status {
+      font-size: 0.72rem; color: #6b7280; display: flex; align-items: center; gap: 4px;
+    }
+    .online-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4ecf98; flex-shrink: 0;
+    }
+    .restart-btn {
+      position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+      background: none; border: 1px solid #d1d5db; border-radius: 8px;
+      color: #6b7280; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em;
+      padding: 0.25rem 0.55rem; cursor: pointer; line-height: 1;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .restart-btn:active { background: #f3f4f6; }
+
+    /* ── Chat scroll area ────────────────────────────────────────── */
+    .chat {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 1rem 0.75rem;
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+
+    /* ── Message bubbles ─────────────────────────────────────────── */
+    .msg { max-width: 80%; animation: slideIn 0.25s ease; }
+    .msg.from-game   { align-self: flex-start; }
+    .msg.from-player { align-self: flex-end; }
+
+    .msg-bubble {
+      padding: 0.6rem 0.9rem;
+      border-radius: 20px;
+      line-height: 1.5;
+      word-wrap: break-word;
+      font-size: 1.5rem;
+      font-weight: 700;
+      overflow: hidden;
+    }
+    .msg.from-game .msg-bubble {
+      background: #1a73e8;
+      border-bottom-left-radius: 5px;
+      color: #ffffff;
+    }
+    .msg.from-player .msg-bubble {
+      background: #e5e7eb; color: #111827;
+      border-bottom-right-radius: 5px;
+    }
+    .msg.cmd .msg-bubble {
+      background: #cc0000;
+    }
+
+
+
+    .msg-bubble p { margin: 0 0 0.6rem; }
+    .msg-bubble p:last-child { margin-bottom: 0; }
+    .msg-bubble a { color: #ffffff; word-break: break-all; }
+    .msg.from-player .msg-bubble a { color: #1a73e8; }
+    .msg.has-img { max-width: 92%; }
+    .msg-bubble p:has(> img:only-child) { margin: -0.6rem -0.9rem; }
+    .msg-bubble p:has(> img:only-child) + p { margin-top: 0.6rem; }
+    .msg-bubble img { width: 100%; max-width: 100%; display: block; border-radius: 0; cursor: zoom-in; }
+
+    /* ── Lightbox ──────────────────────────────────────────────────── */
+    .lb {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.93); z-index: 9999;
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lb.open { display: flex; }
+    .lb img { max-width: 100vw; max-height: 100vh; object-fit: contain; }
+
+    /* ── Typing indicator ─────────────────────────────────────────── */
+    .typing {
+      align-self: flex-start;
+      background: #1a73e8; border-radius: 20px; border-bottom-left-radius: 5px;
+      padding: 0.55rem 0.9rem;
+      display: flex; gap: 4px; align-items: center;
+    }
+    .typing span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,0.7);
+      animation: typingBounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* ── Input area ──────────────────────────────────────────────── */
+    .input-area {
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      padding: 0.6rem 0.75rem;
+      flex-shrink: 0;
+    }
+    .answer-row { display: flex; gap: 0.5rem; align-items: center; }
+    .answer-input {
+      flex: 1;
+      background: #f3f4f6;
+      border: 2px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 0.6rem 1rem;
+      color: #111827; font-size: 1rem;
+      outline: none;
+      -webkit-appearance: none; appearance: none;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+    .answer-input:focus { border-color: #1a73e8; }
+    .answer-input:disabled { opacity: 0.4; }
+    .answer-input.wrong { border-color: #e85568; animation: shake 0.35s ease; }
+    .answer-input::placeholder { color: #9ca3af; }
+    .answer-input::-webkit-contacts-auto-fill-button,
+    .answer-input::-webkit-credentials-auto-fill-button { visibility: hidden; pointer-events: none; }
+
+    .submit-btn {
+      background: #1a73e8; border: none; border-radius: 50%;
+      width: 44px; height: 44px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.1s, opacity 0.2s;
+    }
+    .submit-btn:active { transform: scale(0.9); background: #1557b0; }
+    .submit-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* Choice buttons */
+    .btn-choices { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.4rem; }
+    .choice-btn {
+      padding: 0.7rem 1rem; border-radius: 12px; border: 2px solid;
+      background: transparent; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; text-align: left; transition: opacity 0.15s;
+    }
+    .choice-btn:active { opacity: 0.6; }
+    .choice-btn.team-beignet   { border-color: #6aaef7; color: #6aaef7; }
+    .choice-btn.team-lagniappe { border-color: #f5a623; color: #f5a623; }
+    .choice-btn.team-rougarou  { border-color: #e85568; color: #e85568; }
+    .choice-btn.team-tch       { border-color: #4ecf98; color: #4ecf98; }
+    .choice-btn.neutral        { border-color: #d1d5db; color: #374151; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-7px); }
+      75% { transform: translateX(7px); }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="contact-header">
+  <div class="avatar" id="logo-avatar"><img src="https://www.dealertire.com/wp-content/uploads/2016/10/logo_type_white.png" alt="DealerTire"></div>
+  <div class="contact-name">Scavenger Hunt</div>
+  <div class="contact-name">Mission Control</div>
+  <div class="contact-status"><div class="online-dot"></div>online</div>
+  <button class="restart-btn"
+    onclick="try{localStorage.removeItem('nola360_team');localStorage.removeItem('nola360_step')}catch(e){}location.reload()">↺ RESTART</button>
+</div>
+
+<div class="chat" id="chat"></div>
+<div class="input-area" id="input-area"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   GAME CONFIG
+   Edit this section to customize the game. You shouldn't need to touch
+   anything below the "ENGINE" divider.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Teams ─────────────────────────────────────────────────────────────────────
+// name:  display name shown in chat bubbles
+// color: hex color for team choice buttons
+// cls:   CSS class (must match .choice-btn.team-* in the stylesheet)
+// w3w:   what3words link to the exact meet-up spot for this team
+const TEAMS = {
+  beignet:   { name: 'Beignet',       color: '#6aaef7', cls: 'team-beignet',   w3w: 'https://w3w.co/tend.snipped.national'  },
+  lagniappe: { name: 'Lagniappe',     color: '#f5a623', cls: 'team-lagniappe', w3w: 'https://w3w.co/ideas.shorter.restore'  },
+  rougarou:  { name: 'Rougarou',      color: '#e85568', cls: 'team-rougarou',  w3w: 'https://w3w.co/bearings.student.seats' },
+  tch:       { name: 'Tchoupitoulas', color: '#4ecf98', cls: 'team-tch',       w3w: 'https://w3w.co/captures.sailor.clues'  }
+};
+
+// ── Team answer maps ──────────────────────────────────────────────────────────
+// Maps what a player can type to the team key above.
+// TEAM_LETTER_MAP: letter A/B/C/D → team key
+// TEAM_KEY_MAP:    full team name  → team key (for players who type it out)
+const TEAM_LETTER_MAP = { a: 'beignet', b: 'lagniappe', c: 'rougarou', d: 'tch' };
+const TEAM_KEY_MAP    = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas: 'tch', rougarou: 'rougarou' };
+
+// ── Team-specific content ─────────────────────────────────────────────────────
+// letter:        correct answer (A/B/C/D) to the "what does your name mean?" quiz
+// correctMsg:    message shown after they answer correctly
+// partner:       the other team they exchange passwords with at the venue
+// give:          password your team yells to the partner team
+// receive:       password the partner team yells back (also a valid typed answer)
+// receiveLetter: letter (A–N) for the password multiple-choice question
+// receiveBlurb:  fun fact revealed after entering the correct password
+const TEAM_DEFS = {
+  beignet: {
+    letter: 'b',
+    correctMsg:    'Correct! A beignet is a deep-fried French doughnut. We know, too much standing around. Let\'s get moving!',
+    partner: 'Lagniappe', give: 'JAMBALAYA', receive: 'gumbo', receiveLetter: 'g',
+    receiveBlurb:  'Gumbo is the unofficial dish of Louisiana: a thick, dark-roux stew that takes all day and sparks arguments about the correct ingredients all week.'
+  },
+  lagniappe: {
+    letter: 'c',
+    correctMsg:    'Correct! Lagniappe means a little something extra. 🎁 We know, too much standing around. Let\'s get moving!',
+    partner: 'Beignet', give: 'GUMBO', receive: 'jambalaya', receiveLetter: 'i',
+    receiveBlurb:  'Jambalaya is Louisiana\'s answer to paella: rice, meat, and vegetables all cooked in one pot.'
+  },
+  tch: {
+    letter: 'a',
+    correctMsg:    'Correct! The Tchoupitoulas were a Native American tribe. 🪶 We know, we know, too much standing around! Let\'s get moving!',
+    partner: 'Rougarou', give: 'ETOUFFEE', receive: 'muffuletta', receiveLetter: 'j',
+    receiveBlurb:  'The muffuletta was invented at Central Grocery, right here in New Orleans: a round Sicilian loaf piled with olive salad and Italian meats.'
+  },
+  rougarou: {
+    letter: 'd',
+    correctMsg:    'Correct! The Rougarou is a Cajun werewolf. 🐺 We know, too much standing around. Let\'s get moving!',
+    partner: 'Tchoupitoulas', give: 'MUFFULETTA', receive: 'etouffee', receiveLetter: 'e',
+    receiveBlurb:  'Étouffée means \'smothered\' in French: crawfish buried in a rich buttery sauce, served over rice.'
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STOPS
+   Each stop is one stage of the game. A stop has:
+     reveal  — array of chat bubbles shown to the player
+     action  — what the player must do to advance
+
+   BUBBLE FORMAT:
+     { name: 'id', html: 'text' }              → blue info bubble
+     { name: 'id', html: 'text', cmd: true }   → red command bubble
+
+   ACTION TYPES:
+     { type: 'text', answers: ['word', …], placeholder: '…' }
+     { type: 'text', …, setsTeam: true }   → saves the team from the answer
+     { type: 'text', …, goTo: 'page.htm' } → navigates to another page on correct
+     { type: 'text', …, correct: […] }     → shows extra bubbles on correct answer
+     { type: 'button', text: 'Label', playerText: '[chat text]' }
+     { type: 'win' }                        → end of game, no input shown
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+function buildStops(teamKey) {
+  // Shorthand — null before the player's team is known
+  const t   = teamKey ? TEAMS[teamKey]     : null;
+  const def = teamKey ? TEAM_DEFS[teamKey] : null;
+
+  // ── STOP 0 · INTRO ────────────────────────────────────────────────────────
+  const intro = {
+    reveal: [
+      { name: 'intro-1', html: 'We lied. You still need to use some brain power this evening.' },
+      { name: 'intro-2', html: 'This IS a team building exercise, but it\'s NOT a walking tour. Think Escape Room meets Scavenger Hunt.' },
+      { name: 'intro-3', cmd: true, html: 'Reply PLAY to find out what team you\'re on.' }
+    ],
+    action: { type: 'text', answers: ['play'] }
+  };
+
+  // ── STOP 1 · TEAM CIPHER ──────────────────────────────────────────────────
+  // Sends players to teams.html to figure out their team, then returns here.
+  const teamCipher = {
+    reveal: [
+      { name: 'cipher-1', html: 'Figure out which team you\'re on using the Team Cipher puzzle.' },
+      { name: 'cipher-2', cmd: true, html: 'REPLY <strong>TEAM</strong> to open the Team Cipher.' }
+    ],
+    action: { type: 'text', placeholder: 'REPLY TEAM…', answers: ['team'], goTo: 'teams.html' }
+  };
+
+  // ── STOP 1B · TEAM SELECTION ──────────────────────────────────────────────
+  // Player returns from teams.html and enters their team name.
+  const teamSelect = {
+    reveal: [
+      { name: 'team-q', html: '<p>OK, what\'s your team name?</p><p>A)&nbsp; Beignet<br>B)&nbsp; Lagniappe<br>C)&nbsp; Rougarou<br>D)&nbsp; Tchoupitoulas</p>' }
+    ],
+    action: {
+      type: 'text', placeholder: 'A, B, C or D',
+      answers: ['a', 'b', 'c', 'd', 'beignet', 'lagniappe', 'rougarou', 'tchoupitoulas'],
+      setsTeam: true
+    }
+  };
+
+  // ── STOP 2 · ROLES + TEAM QUIZ ────────────────────────────────────────────
+  // Assigns team roles and quizzes on what their team name means.
+  const teamQuiz = {
+    reveal: [
+      { name: 'roles', html: '<p>Assign your roles now:</p><ul style="margin:0.5rem 0 0.5rem 1.2rem;line-height:2"><li>📖 <strong>Designated Reader</strong> — reads messages out loud</li><li>⌨️ <strong>Designated Replier</strong> — types the answers</li><li>📸 <strong>Designated Photographer</strong> — takes all the photos</li></ul><p>The winner is the first team to finish with all their pics. Keep going no matter what — if the &#8220;winner&#8221; doesn\'t have all the pics, they\'re disqualified.</p>' },
+      { name: 'team-quiz', cmd: true,
+        html: '<p>Ok, you\'re TEAM <strong>' + (t ? t.name.toUpperCase() : 'X') + '</strong>, but what does ' + (t ? t.name : 'your team name') + ' mean?</p>'
+            + '<p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>'
+      }
+    ],
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: [def ? def.letter : 'a'] }
+  };
+
+  // ── STOP 3 · NAVIGATE TO THE VENUE ───────────────────────────────────────
+  const navigate = {
+    reveal: [
+      { name: 'nav-correct', html: def ? def.correctMsg : 'Correct! Let\'s get moving!' },
+      { name: 'nav-1', html: 'Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA\'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars.' },
+      { name: 'nav-2', cmd: true, html: 'TELL ME THE FRENCHMAN\'S NAME ONCE YOU ARRIVE.' }
+    ],
+    action: { type: 'text', placeholder: 'The Frenchman\'s name…', answers: ['lafayette'] }
+  };
+
+  // ── STOP 4 · ARRIVAL AT LAFAYETTE SQUARE ─────────────────────────────────
+  const arrival = {
+    reveal: [
+      { name: 'arrival-img',     html: '<p><img src="https://the-game-bureau.github.io/tour/resources/lafayette.png" alt="Lafayette Square"></p>' },
+      { name: 'arrival-welcome', html: 'Welcome to Lafayette Square, Team <strong>' + (t ? t.name : '???') + '</strong>! We\'re so glad you didn\'t go all the way to Jackson Square.' },
+      { name: 'arrival-spot',    cmd: true, html: '<a href="' + (t ? t.w3w : '#') + '" target="_self"><strong>FIND THIS EXACT SPOT</strong></a> and then we\'ll take a look around.' },
+      { name: 'arrival-here',    cmd: true, html: 'Reply with <strong>HERE!</strong> when you get to the <strong>exact spot</strong>.' }
+    ],
+    action: { type: 'text', placeholder: 'REPLY HERE! when you arrive…', answers: ['here', 'here!'] }
+  };
+
+  // ── STOP 4A · TEAM PHOTO ──────────────────────────────────────────────────
+  const teamPhoto = {
+    reveal: [
+      { name: 'photo-1', cmd: true, html: '📸 TAKE A TEAM PHOTO HERE. REPLY <strong>CLICK</strong> after you\'ve got the pic.' }
+    ],
+    action: { type: 'text', placeholder: 'REPLY CLICK to continue…', answers: ['click'] }
+  };
+
+  // ── STOP 4B · VENUE TOUR + PARTNER PASSWORD EXCHANGE ─────────────────────
+  const passwordExchange = {
+    reveal: [
+      { name: 'tour-1', html: 'You\'re standing in the historical epicenter of New Orleans politics. Who\'s the guy above you? That\'s Henry Clay. He founded the Whig Party which, upon its collapse, made way for the Republican party. He is kinda gesturing toward a seemingly boring building but it may secretly be the most fascinating of all. To the left of that building is Gallier Hall, our old City Hall. -still used for ceremonies and as Mardi Gras reviewing stands, as you can tell. Across the square on Camp Street, that massive building to the right started as a post office, now it\'s a federal court. Did you catch all that? It may come in handy later.' },
+      { name: 'tour-2',      html: 'Enough sightseeing. We were just stalling. Hopefully Team <strong>' + (def ? def.partner : '') + '</strong> has arrived. You need their help.' },
+      { name: 'pwd-callout', cmd: true, html: 'Stay where you are. Call out &ldquo;HEY TEAM ' + (def ? def.partner.toUpperCase() : '') + '. YOUR PASSWORD IS ' + (def ? def.give : '') + '. WHAT IS OUR PASSWORD?&rdquo;' },
+      { name: 'pwd-prompt',  cmd: true, html: '<p>What password did Team ' + (def ? def.partner.toUpperCase() : '') + ' give you?</p><p>A)&nbsp; Andouille<br>B)&nbsp; Boudin<br>C)&nbsp; Crawfish<br>D)&nbsp; Empanada<br>E)&nbsp; Etouffee<br>F)&nbsp; Falafel<br>G)&nbsp; Gumbo<br>H)&nbsp; Gyro<br>I)&nbsp; Jambalaya<br>J)&nbsp; Muffuletta<br>K)&nbsp; Paella<br>L)&nbsp; Pierogi<br>M)&nbsp; Poutine<br>N)&nbsp; Praline</p>' }
+    ],
+    action: {
+      type: 'text', placeholder: 'A through N',
+      answers: def ? [def.receiveLetter, def.receive] : [],
+      correct: [{ name: 'pwd-correct', html: 'Correct! ' + (def ? def.receiveBlurb : '') }]
+    }
+  };
+
+  // ── STOP 5 · GALLIER HALL ─────────────────────────────────────────────────
+  const gallierHall = {
+    reveal: [
+      { name: 'gallier-1', html: 'Next, let\'s focus back on Gallier Hall. A president\'s funeral was held here — just not a United States president. Any Civil War buffs?' },
+      { name: 'gallier-2', cmd: true, html: 'WHAT WAS THE LAST NAME OF THE PRESIDENT THAT HAD HIS FUNERAL HERE? Yeah, you\'re just gonna have to ask ChatGPT for this one.' }
+    ],
+    action: {
+      type: 'text', placeholder: 'Last name…',
+      answers: ['jeffersondavis', 'jeffdavis', 'davis'],
+      correct: [
+        { name: 'gallier-correct', html: 'Correct!' },
+        { name: 'gallier-img',     html: '<p><img src="https://the-game-bureau.github.io/tour/resources/davis.jpg" alt="Jefferson Davis funeral"></p>' },
+        { name: 'gallier-3',       html: 'Jefferson Davis was President of the CONFEDERATE States of America... not the United States! 😮 Here\'s a picture from his funeral, right at Gallier Hall, over 135 years ago.' }
+      ]
+    }
+  };
+
+  // ── ROTATING STOPS ────────────────────────────────────────────────────────
+  // These four stops appear in a different order per team so teams spread out
+  // across the square and don't crowd each other.
+
+  const theLadies = {
+    reveal: [
+      { name: 'ladies-1',   html: '<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building (the one on Camp Street that we talked about) are four sets of bronze sculptures known as \'The Ladies\': Agriculture, History, Industry and Arts. They were sculpted by Daniel Chester French. You may have to back up a little to see them.</p>' },
+      { name: 'ladies-img', html: '<p><img src="https://the-game-bureau.github.io/tour/resources/theladies.jpg" alt="The Ladies sculptures"></p>' },
+      { name: 'ladies-2',   cmd: true, html: '📸 Take a team photo of your team looking up at The Ladies.' },
+      { name: 'ladies-3',   cmd: true,
+        html: '<p>Daniel Chester French also designed another famous U.S. memorial. Do you know which one?</p>'
+            + '<p>A)&nbsp; The Lincoln Memorial<br>B)&nbsp; The Statue of Liberty<br>C)&nbsp; The Washington Monument<br>D)&nbsp; Mount Rushmore</p>'
+      }
+    ],
+    action: {
+      type: 'text', placeholder: 'A, B, C or D',
+      answers: ['a', 'lincolnmemorial', 'thelincolnmemorial'],
+      correct: [{ name: 'ladies-correct', html: 'Oh yeah! 🎉' }]
+    }
+  };
+
+  const federalReserve = {
+    reveal: [
+      { name: 'fed-1', html: '<p>Next, take a look at the plain building to the right of Gallier Hall that Henry is gesturing to — that\'s the Federal Reserve Bank of Atlanta\'s New Orleans branch. Can you see it? Are there trees in the way? It doesn\'t matter.</p>' },
+      { name: 'fed-2', cmd: true, html: '<p>TELL ME HOW MANY DOLLARS A DAY they\'re talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.</p><p><a href="https://www.youtube.com/watch?v=mwCfK1oqRkI" target="_self">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>' },
+      { name: 'fed-3', cmd: true, html: '<p>A)&nbsp; $42.50<br>B)&nbsp; 1 MILLION DOLLARS<br>C)&nbsp; 6 MILLION DOLLARS<br>D)&nbsp; 1 TRILLION DOLLARS</p>' }
+    ],
+    action: { type: 'text', placeholder: 'A, B, C or D', answers: ['c', '6million', '6000000', 'sixmillion', '6milliondollars'] }
+  };
+
+  const bushTree = {
+    reveal: [
+      { name: 'bush-1', html: 'Let\'s wander around the square for a minute.' },
+      { name: 'bush-2', cmd: true, html: 'FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS.' },
+      { name: 'bush-3', cmd: true, html: '<p>A)&nbsp; Bald Cypress<br>B)&nbsp; Crepe Myrtle<br>C)&nbsp; Shumard Oak<br>D)&nbsp; Weeping Willow</p>' }
+    ],
+    action: {
+      type: 'text', placeholder: 'A, B, C or D',
+      answers: ['c', 'shumardoak', 'shumard'],
+      correct: [
+        { name: 'bush-img',     html: '<p><img src="https://the-game-bureau.github.io/tour/resources/Bush.jpg" alt="Bush tree photo"></p>' },
+        { name: 'bush-correct', html: 'The original monument got replaced because of a misspelled word and the original tree got replaced because it died, but hey, it\'s the thought that counts!' }
+      ]
+    }
+  };
+
+  const sculpture = {
+    reveal: [
+      { name: 'sculp-1', html: 'There\'s a sculpture across Camp Street — kinda looks like a pointing arrow.' },
+      { name: 'sculp-2', cmd: true, html: 'TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER AND TELL US HIS LAST NAME.' },
+      { name: 'sculp-3', html: '💡 HINT: Do NOT text Mission Control "Benjamin Franklin". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it. Is the answer hidden behind a tree? Is it to the left of a fire hydrant and up? Higher. Higher.' }
+    ],
+    action: {
+      type: 'text', placeholder: 'His last name…',
+      answers: ['johnjay', 'jay'],
+      correct: [{ name: 'sculp-correct', html: 'John Jay! First Chief Justice of the United States. 🎉' }]
+    }
+  };
+
+  // ── FIXED CLOSING STOPS ───────────────────────────────────────────────────
+  // These appear in the same order for every team.
+
+  const cuba = {
+    reveal: [
+      { name: 'cuba-1', cmd: true,
+        html: '<p>There\'s a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso López, who designed what would become his adopted country\'s flag, sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p>'
+            + '<p>Find the monument: <a href="https://what3words.com/remake.king.cloth" target="_self">https://what3words.com/remake.king.cloth</a></p>'
+            + '<p>Oh shoot, that map tells you the name of the country. We were going to ask you that. 😕 -tell you what, 📸 TAKE A TEAM PHOTO AT THE MONUMENT.</p>'
+            + '<p>REPLY <strong>CLICK</strong> to continue.</p>'
+      }
+    ],
+    action: { type: 'text', placeholder: 'REPLY CLICK to continue…', answers: ['click'] }
+  };
+
+  const haleBoggs = {
+    reveal: [
+      { name: 'boggs-img', html: '<p><img src="https://the-game-bureau.github.io/tour/resources/flyer.jpg" alt="Oswald flyer"></p>' },
+      { name: 'boggs-1',   html: '<p>What do the Daily Delta, Lee Harvey Oswald, the CIA, FBI, and Secret Service all have in common? They all had offices in this neighborhood at one time or another.</p>'
+                                + '<p>The building behind you replaced the old Newman Building, where Oswald (the presumptive assassin of JFK) printed his leaflets in 1963. Now it bears the name of a Louisiana congressman who served on the Warren Commission. He signed the report, but later hinted that Oswald may not have acted alone. Then the congressman boarded a plane in Alaska and vanished. But sure, it\'s not like powerful political figures ever meet suspicious ends anymore.</p>'
+      },
+      { name: 'boggs-2',   cmd: true, html: 'What\'s the last name of the congressman we\'re talking about?' }
+    ],
+    action: {
+      type: 'text', placeholder: 'Last name…',
+      answers: ['haleboggs', 'hale boggs', 'boggs'],
+      correct: [
+        { name: 'boggs-img2',    html: '<p><img src="https://the-game-bureau.github.io/tour/resources/newman.jpg" alt="Newman Building"></p>' },
+        { name: 'boggs-correct', html: 'That\'s 544 Camp Street, where Oswald supposedly made his flyers. It "ain\'t there no more" as they say in New Orleans. It\'s been replaced by the Hale Boggs Federal Building. That\'s irony folks. OK, we\'ll take off our tin foil hat now. Where were we...' }
+      ]
+    }
+  };
+
+  const lighthouse = {
+    reveal: [
+      { name: 'light-1', html: 'We have just one more challenge. Find the extinguished guiding light on Camp Street between Julia Street and Girod Street.' },
+      { name: 'light-2', cmd: true, html: '📸 TAKE A TEAM PICTURE IN FRONT OF THE BUILDING WITH THE EXTINGUISHED GUIDING LIGHT. TYPE CLICK WHEN DONE TO SEE HOW TO CROSS THE FINISH LINE!' }
+    ],
+    action: { type: 'text', placeholder: 'REPLY CLICK when done…', answers: ['click'] }
+  };
+
+  const win = {
+    reveal: [
+      { name: 'win-1', html: '🎉 You\'ve completed the game!' },
+      { name: 'win-2', cmd: true, html: 'But wait! Quick! 🏃 Text <strong>' + (t ? t.name.toUpperCase() : 'YOUR TEAM NAME') + '</strong> to <strong>504.581.5652</strong> right now (don\'t type it here). The first team to do so wins.... if they have all of their pics timestamped BEFORE the text! 🏆' },
+      { name: 'win-3', html: (() => {
+          // Show a different message depending on whether it's before or after 6pm CT
+          const h = parseInt(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago', hour: 'numeric', hour12: false }), 10);
+          return h < 18
+            ? 'Junebug is right here and you\'ve got some time. It\'s got a pretty interesting past as a recording studio (<a href="https://www.junebugnola.com" target="_self">https://www.junebugnola.com</a>). You can go have a drink at the bar or go back to the office for a few minutes.'
+            : 'Junebug is right here. It\'s got a pretty interesting past as a recording studio (<a href="https://www.junebugnola.com" target="_self">https://www.junebugnola.com</a>) but you don\'t care about that right now, you\'re hungry! Check in with the host and meet us at the table or the bar, wherever we may be.';
+        })()
+      }
+    ],
+    action: { type: 'win' }
+  };
+
+  // ── TEAM ROUTE ORDER ──────────────────────────────────────────────────────
+  // Each team gets the four rotating stops in a different order so they spread
+  // out across the square and don't crowd each other.
+  //                      [Ladies]      [Fed Reserve]   [Bush Tree]  [Sculpture]
+  const rotatingStops =
+    teamKey === 'tch'       ? [theLadies, federalReserve, bushTree,   sculpture  ] :
+    teamKey === 'beignet'   ? [federalReserve, theLadies,  sculpture, bushTree   ] :
+    teamKey === 'lagniappe' ? [bushTree,   sculpture,  federalReserve, theLadies ] :
+    teamKey === 'rougarou'  ? [sculpture,  bushTree,   theLadies, federalReserve ] :
+                              [theLadies, federalReserve, bushTree,   sculpture  ]; // fallback
+
+  // ── FULL STOP SEQUENCE ────────────────────────────────────────────────────
+  return [
+    intro, teamCipher, teamSelect, teamQuiz, navigate,
+    arrival, teamPhoto, passwordExchange, gallierHall,
+    ...rotatingStops,
+    cuba, haleBoggs, lighthouse, win
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ENGINE
+   State management, rendering, and navigation.
+   You shouldn't need to edit anything below this line.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ── Reset via ?reset in the URL ───────────────────────────────────────────────
+if (location.search.includes('reset')) {
+  try { localStorage.removeItem('nola360_team'); localStorage.removeItem('nola360_step'); } catch(e) {}
+  history.replaceState(null, '', location.pathname);
+}
+
+// ── Persistent state (survives page refresh) ──────────────────────────────────
+let state = { step: 0, team: null };
+try {
+  state.team = localStorage.getItem('nola360_team') || null;
+  const s = parseInt(localStorage.getItem('nola360_step') || '0', 10);
+  if (!isNaN(s) && s > 0) state.step = s;
+} catch(e) {}
+
+function saveState() {
+  try {
+    localStorage.setItem('nola360_step', state.step);
+    if (state.team) localStorage.setItem('nola360_team', state.team);
+  } catch(e) {}
+}
+
+// ── DOM refs ──────────────────────────────────────────────────────────────────
+const chatEl      = document.getElementById('chat');
+const inputAreaEl = document.getElementById('input-area');
+
+
+// ── Tap any bubble image to open it fullscreen ────────────────────────────────
+(function() {
+  const lb = document.createElement('div');
+  lb.className = 'lb';
+  const li = document.createElement('img');
+  lb.appendChild(li);
+  document.body.appendChild(lb);
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('click', e => {
+    const img = e.target.closest('.msg-bubble img');
+    if (!img) return;
+    li.src = img.src;
+    li.alt = img.alt;
+    lb.classList.add('open');
+  });
+})();
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+// norm: strips spaces/punctuation and lowercases — allows flexible answer matching
+function norm(s) { return s.toLowerCase().replace(/[$,.\s]/g, ''); }
+
+function scrollBottom(smooth) {
+  chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+}
+
+// ── Add a single chat bubble to the DOM ──────────────────────────────────────
+function addMsg(msg, animate) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (msg.cmd ? ' cmd' : '');
+  if (msg.name) wrap.dataset.bubble = msg.name;
+  if (!animate) wrap.style.animation = 'none';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  if (msg.html) bubble.innerHTML = msg.html;
+  else bubble.textContent = msg.text || '';
+  if (bubble.querySelector('img')) wrap.classList.add('has-img');
+  wrap.appendChild(bubble);
+
+  chatEl.appendChild(wrap);
+  return wrap;
+}
+
+// ── Animated "…" typing indicator ────────────────────────────────────────────
+function addTyping() {
+  const el = document.createElement('div');
+  el.className = 'typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  chatEl.appendChild(el);
+  scrollBottom(true);
+  return el;
+}
+
+// ── Reveal a sequence of game bubbles with a typing indicator before each ─────
+// THINK = how long the typing bubble is visible before the message lands
+// PAUSE = gap between a message landing and the next typing bubble appearing
+function revealBubbles(bubbles, onDone, { think = 600, pause = 150 } = {}) {
+  function next(i) {
+    if (i >= bubbles.length) { if (onDone) onDone(); return; }
+    const typing = addTyping();
+    setTimeout(() => {
+      typing.remove();
+      addMsg(bubbles[i], true);
+      scrollBottom(true);
+      if (i < bubbles.length - 1) setTimeout(() => next(i + 1), pause);
+      else if (onDone) onDone();
+    }, think);
+  }
+  next(0);
+}
+
+// ── Build and render the input area for the current stop ─────────────────────
+function renderInput() {
+  inputAreaEl.innerHTML = '';
+
+  const stops  = buildStops(state.team);
+  if (state.step >= stops.length) return;
+  const action = stops[state.step].action;
+
+  if (action.type === 'win') return; // game over — no input shown
+
+  // Button-type stops (e.g. "Photo sent ✓") render a tap button
+  if (action.type === 'button') {
+    const div = document.createElement('div');
+    div.className = 'btn-choices';
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn neutral';
+    btn.textContent = action.text;
+    btn.addEventListener('click', () => {
+      addMsg({ fromPlayer: true, text: action.playerText || action.text }, true);
+      doAdvance();
+    });
+    div.appendChild(btn);
+    inputAreaEl.appendChild(div);
+  }
+
+  const isTextStep = action.type === 'text';
+
+  const row   = document.createElement('div');
+  row.className = 'answer-row';
+
+  const input = document.createElement('input');
+  input.type  = 'text';
+  input.className   = 'answer-input';
+  input.placeholder = action.placeholder || '';
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('autocorrect',  'off');
+  input.setAttribute('spellcheck',   'false');
+  if (isTextStep) input.setAttribute('autocapitalize', 'characters');
+  if (!isTextStep) input.disabled = true;
+
+  const sendBtn = document.createElement('button');
+  sendBtn.className = 'submit-btn';
+  sendBtn.disabled  = !isTextStep;
+  sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+
+  const submit = () => {
+    const val = input.value.trim();
+    if (!val) return;
+
+    const correct = action.answers.some(a => norm(val) === norm(a));
+    if (correct) {
+      if (action.goTo) {
+        // Navigate to another page (e.g. teams.html); state is already saved
+        addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
+        state.step++;
+        saveState();
+        scrollBottom(true);
+        setTimeout(() => { location.href = action.goTo; }, 400);
+        return;
+      }
+      if (action.setsTeam) {
+        // Record the player's team, then advance
+        state.team = TEAM_LETTER_MAP[norm(val)] || TEAM_KEY_MAP[norm(val)] || norm(val);
+        saveState();
+        addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
+        scrollBottom(true);
+        doAdvance();
+        return;
+      }
+      addMsg({ fromPlayer: true, text: val.toUpperCase() }, true);
+      doAdvance();
+    } else {
+      // Wrong answer — shake the input and show a hint
+      addMsg({ fromPlayer: true, text: val }, true);
+      input.value = '';
+      input.classList.add('wrong');
+      setTimeout(() => input.classList.remove('wrong'), 400);
+      addMsg({ html: action.setsTeam
+        ? 'Hmm, check that spelling! If you\'re stuck, text <strong>504-581-5652</strong> for help from Mission Control.'
+        : 'Ooh, not quite! 🤔 Text <strong>504-581-5652</strong> and Mission Control will get you sorted.' }, true);
+      scrollBottom(true);
+    }
+  };
+
+  if (isTextStep) {
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
+    sendBtn.addEventListener('click', submit);
+  }
+
+  row.appendChild(input);
+  row.appendChild(sendBtn);
+  inputAreaEl.appendChild(row);
+  if (isTextStep) setTimeout(() => input.focus(), 150);
+}
+
+// ── Advance to the next stop ──────────────────────────────────────────────────
+function doAdvance() {
+  const stops          = buildStops(state.team);
+  const correctBubbles = stops[state.step].action.correct || [];
+
+  state.step++;
+  saveState();
+
+  // Disable the input while the next stop's bubbles animate in
+  inputAreaEl.querySelectorAll('input, button').forEach(el => el.disabled = true);
+  scrollBottom(true);
+
+  if (state.step >= stops.length) { renderInput(); return; }
+
+  const allBubbles = [...correctBubbles, ...(stops[state.step].reveal || [])];
+  if (!allBubbles.length) { renderInput(); return; }
+
+  revealBubbles(allBubbles, () => renderInput());
+}
+
+// ── Boot: restore saved progress or start fresh ───────────────────────────────
+const stops = buildStops(state.team);
+
+if (state.step > 0) {
+  // Replay all bubbles up to the current stop instantly (no animation on restore)
+  for (let i = 0; i <= state.step; i++) {
+    if (i >= stops.length) break;
+    stops[i].reveal.forEach(msg => addMsg(msg, false));
+    // Also replay any "correct answer" bubbles from completed stops
+    if (i < state.step && stops[i].action.correct) {
+      stops[i].action.correct.forEach(msg => addMsg(msg, false));
+    }
+  }
+  renderInput();
+  scrollBottom(false);
+} else {
+  // Animate the very first stop (short pause before first typing bubble)
+  setTimeout(() => revealBubbles(stops[0].reveal, () => renderInput()), 400);
+}
+</script>
+</body>
+</html>

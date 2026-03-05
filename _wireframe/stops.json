@@ -1,0 +1,138 @@
+{
+  "_comment": "File: stops.json | Purpose: Source-of-truth game stops data loaded by engine.js and edited via builder.html.",
+  "header": {
+    "title": "Scavenger Hunt",
+    "subtitle": "Mission Control",
+    "logoUrl": "logo.png",
+    "logoAlt": "DealerTire",
+    "pageTitle": "Scavenger Hunt"
+  },
+  "stops": [
+    {
+      "id": "intro-briefing",
+      "setup": [
+        {
+          "name": "intro-1",
+          "html": "Welcome to the scavenger hunt. Mission Control is online.",
+          "callToAction": false
+        },
+        {
+          "name": "intro-2",
+          "html": "Find the nearest street sign and reply with the word START.",
+          "callToAction": true
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "name": "intro-briefing-correct-1",
+            "html": "Got it!",
+            "callToAction": false
+          }
+        ],
+        "incorrect": [
+          {
+            "name": "intro-briefing-incorrect-1",
+            "html": "No loser.",
+            "callToAction": true
+          }
+        ],
+        "placeholder": "Type START",
+        "answers": [
+          "start"
+        ],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "photo-proof",
+      "setup": [
+        {
+          "name": "photo-1",
+          "html": "Take a photo of something round nearby (sign, clock, wheel) and send it to your facilitator. Then type SENT.",
+          "callToAction": true
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "Type SENT",
+        "answers": [
+          "sent"
+        ],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "team-pick",
+      "setup": [
+        {
+          "name": "team-1",
+          "html": "Choose your team letter: A, B, C, or D.",
+          "callToAction": false
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "name": "team-ok",
+            "html": "Team locked in. Next clue inbound.",
+            "callToAction": false
+          }
+        ],
+        "incorrect": [],
+        "placeholder": "A, B, C, or D",
+        "answers": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "setsTeam": true,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "riddle-stop",
+      "setup": [
+        {
+          "name": "riddle-1",
+          "html": "Riddle: I have keys but no locks, space but no room. What am I?",
+          "callToAction": false
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "name": "riddle-ok",
+            "html": "Correct. Final checkpoint unlocked.",
+            "callToAction": false
+          }
+        ],
+        "incorrect": [],
+        "placeholder": "Your answer",
+        "answers": [
+          "keyboard",
+          "a keyboard"
+        ],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "game-win",
+      "setup": [],
+      "playerReply": {
+        "type": "win",
+        "correct": [],
+        "incorrect": []
+      }
+    }
+  ]
+}
