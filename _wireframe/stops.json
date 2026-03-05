@@ -14,7 +14,8 @@
         {
           "name": "naym-setup-1",
           "html": "What's your name?",
-          "callToAction": false
+          "callToAction": false,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -23,7 +24,8 @@
           {
             "name": "naym-correct-1",
             "html": "Mice to neet you, {{playerName}}.",
-            "callToAction": false
+            "callToAction": false,
+            "forAnswer": ""
           }
         ],
         "incorrect": [],
@@ -37,7 +39,8 @@
         {
           "name": "team1",
           "html": "What's your team name?",
-          "callToAction": false
+          "callToAction": false,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -46,7 +49,8 @@
           {
             "name": "teamc-1",
             "html": "Go team {{teamName}}.",
-            "callToAction": false
+            "callToAction": false,
+            "forAnswer": ""
           }
         ],
         "incorrect": [],
@@ -55,17 +59,76 @@
       }
     },
     {
+      "id": "beignet-definition",
+      "setup": [
+        {
+          "name": "beignet-definition-setup-1",
+          "html": "Ok, you're TEAM BEIGNET, but what does Beignet mean?\nA)  A Native American tribe\nB)  A deep-fried French doughnut\nC)  A little something extra\nD)  A Cajun werewolf",
+          "callToAction": true,
+          "forAnswer": ""
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "name": "beignet-definition-correct-1",
+            "html": "Nope. That's Tchoupitoulas.",
+            "callToAction": false,
+            "forAnswer": "A"
+          },
+          {
+            "name": "beignet-definition-correct-2",
+            "html": "Correct! Yum!",
+            "callToAction": false,
+            "forAnswer": "B"
+          },
+          {
+            "name": "beignet-definition-correct-3",
+            "html": "No, that's Lagniappe",
+            "callToAction": false,
+            "forAnswer": "C"
+          },
+          {
+            "name": "beignet-definition-correct-4",
+            "html": "Nope. That's a Rougarou.",
+            "callToAction": false,
+            "forAnswer": "D"
+          }
+        ],
+        "incorrect": [
+          {
+            "name": "beignet-definition-incorrect-1",
+            "html": "Close, but not correct.",
+            "callToAction": true,
+            "forAnswer": ""
+          }
+        ],
+        "placeholder": "enter...",
+        "answers": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
       "id": "intro-briefing",
       "setup": [
         {
           "name": "intro-1",
           "html": "Welcome to the scavenger hunt. Mission Control is online.",
-          "callToAction": false
+          "callToAction": false,
+          "forAnswer": ""
         },
         {
           "name": "intro-2",
           "html": "Find the nearest street sign and reply with the word START.",
-          "callToAction": true
+          "callToAction": true,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -74,14 +137,16 @@
           {
             "name": "intro-briefing-correct-1",
             "html": "Got it!",
-            "callToAction": false
+            "callToAction": false,
+            "forAnswer": ""
           }
         ],
         "incorrect": [
           {
             "name": "intro-briefing-incorrect-1",
             "html": "No loser.",
-            "callToAction": true
+            "callToAction": true,
+            "forAnswer": ""
           }
         ],
         "placeholder": "Type START",
@@ -98,7 +163,8 @@
         {
           "name": "photo-1",
           "html": "Take a photo of something round nearby (sign, clock, wheel) and send it to your facilitator. Then type SENT.",
-          "callToAction": true
+          "callToAction": true,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -119,7 +185,8 @@
         {
           "name": "team-1",
           "html": "Choose your team letter: A, B, C, or D.",
-          "callToAction": false
+          "callToAction": false,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -128,7 +195,8 @@
           {
             "name": "team-ok",
             "html": "Team locked in. Next clue inbound.",
-            "callToAction": false
+            "callToAction": false,
+            "forAnswer": ""
           }
         ],
         "incorrect": [],
@@ -149,7 +217,8 @@
         {
           "name": "riddle-1",
           "html": "Riddle: I have keys but no locks, space but no room. What am I?",
-          "callToAction": true
+          "callToAction": true,
+          "forAnswer": ""
         }
       ],
       "playerReply": {
@@ -158,7 +227,8 @@
           {
             "name": "riddle-ok",
             "html": "Correct. Final checkpoint unlocked.",
-            "callToAction": false
+            "callToAction": false,
+            "forAnswer": ""
           }
         ],
         "incorrect": [],

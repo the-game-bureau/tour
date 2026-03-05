@@ -7,7 +7,7 @@
   <title>Game Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f4f4f4;
@@ -116,7 +116,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 320px minmax(460px, 1fr) minmax(340px, 0.9fr);
+      grid-template-columns: 320px minmax(460px, 1fr);
       gap: 16px;
       align-items: start;
     }
@@ -304,29 +304,6 @@
       margin-top: 8px;
     }
 
-    .preview-card {
-      min-height: 78vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      gap: 10px;
-    }
-
-    .preview-frame-wrap {
-      border: 1px solid var(--line);
-      background: #ffffff;
-      min-height: 0;
-      height: 100%;
-    }
-
-    #gamePreviewFrame {
-      width: 100%;
-      height: 100%;
-      min-height: 72vh;
-      border: 0;
-      display: block;
-      background: #fff;
-    }
-
     @media (max-width: 980px) {
       .layout { grid-template-columns: 1fr; }
     }
@@ -341,6 +318,8 @@
       <button id="loadBtn" type="button">Load</button>
       <button id="saveBtn" class="primary" type="button">Save</button>
       <button id="newBtn" class="danger" type="button">New Empty</button>
+      <a href="index.html" target="_blank"><button type="button">Play</button></a>
+      <a href="index.html?reveal" target="_blank"><button type="button">Reveal All</button></a>
     </div>
     <div id="status" class="status"></div>
     <div id="warnings" class="warnings"></div>
@@ -445,12 +424,6 @@
         </div>
       </div>
 
-      <div class="card preview-card">
-        <div class="section-title">Preview</div>
-        <div class="preview-frame-wrap">
-          <iframe id="gamePreviewFrame" title="Game preview"></iframe>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -520,10 +493,8 @@
       correctBubbles: document.getElementById('correctBubbles'),
       addCorrectBtn: document.getElementById('addCorrectBtn'),
       incorrectBubbles: document.getElementById('incorrectBubbles'),
-      addIncorrectBtn: document.getElementById('addIncorrectBtn')
-      ,
-      warnings: document.getElementById('warnings'),
-      gamePreviewFrame: document.getElementById('gamePreviewFrame')
+      addIncorrectBtn: document.getElementById('addIncorrectBtn'),
+      warnings: document.getElementById('warnings')
     };
 
     function setStatus(msg, type) {
@@ -679,11 +650,12 @@
     }
 
     function ensureBubble(b) {
-      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false };
+      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false, forAnswer: '' };
       return {
         name: String(b.name || ''),
         html: String(b.html || ''),
-        callToAction: !!(b.callToAction || b.red || b.cmd)
+        callToAction: !!(b.callToAction || b.red || b.cmd),
+        forAnswer: String(b.forAnswer || '')
       };
     }
 
@@ -691,15 +663,12 @@
       if (!r || typeof r !== 'object') {
         return { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
       }
-      const firstOrEmpty = (arr) => {
-        const list = Array.isArray(arr) ? arr.map(ensureBubble) : [];
-        return list.length ? [list[0]] : [];
-      };
+      const allBubbles = (arr) => Array.isArray(arr) ? arr.map(ensureBubble) : [];
       const type = r.type === 'any' ? r.type : 'text';
       const base = {
         type,
-        correct: firstOrEmpty(r.correct),
-        incorrect: firstOrEmpty(r.incorrect)
+        correct: allBubbles(r.correct),
+        incorrect: allBubbles(r.incorrect)
       };
       if (type === 'any') {
         base.placeholder = String(r.placeholder || '');
@@ -851,20 +820,25 @@
             : listKey === 'incorrect'
               ? '<label>INCORRECT BUBBLE</label>'
               : '';
+        const showForAnswer = listKey === 'correct' || listKey === 'incorrect';
         wrap.innerHTML = [
           nameLabel,
           '<div class="bubble-top">',
-          '  <input type="text" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
+          '  <input type="text" class="bubble-name-input" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
           showCallToActionToggle
             ? '  <label class="check"><input type="checkbox" ' + (bubble.callToAction ? 'checked' : '') + '>call-to-action</label>'
             : '',
           '  <button type="button" class="danger">Remove</button>',
           '</div>',
+          showForAnswer
+            ? '<div style="margin-bottom:8px;"><label>For Answer (blank = default)</label><input type="text" class="for-answer-input" placeholder="leave blank to show for any answer" value="' + String(bubble.forAnswer || '').replace(/"/g, '&quot;') + '"></div>'
+            : '',
           '<label>HTML</label>',
           '<textarea>' + String(bubble.html || '') + '</textarea>'
         ].join('');
 
-        const nameInput = wrap.querySelector('input[type="text"]');
+        const nameInput = wrap.querySelector('.bubble-name-input');
+        const forAnswerInput = wrap.querySelector('.for-answer-input');
         const redInput = wrap.querySelector('input[type="checkbox"]');
         const removeBtn = wrap.querySelector('button');
         const htmlInput = wrap.querySelector('textarea');
@@ -872,6 +846,11 @@
         nameInput.addEventListener('input', (e) => {
           bubbles[idx].name = e.target.value;
         });
+        if (forAnswerInput) {
+          forAnswerInput.addEventListener('input', (e) => {
+            bubbles[idx].forAnswer = e.target.value;
+          });
+        }
         if (redInput) {
           redInput.addEventListener('change', (e) => {
             bubbles[idx].callToAction = e.target.checked;
@@ -927,79 +906,6 @@
       });
     }
 
-    function escapeHtml(text) {
-      return String(text || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function previewBubbleHtml(bubble, fromPlayer) {
-      const classes = ['msg', fromPlayer ? 'from-player' : 'from-game'];
-      if (bubble && bubble.callToAction) classes.push('call-to-action');
-      const html = String((bubble && bubble.html) || '');
-      return '<div class="' + classes.join(' ') + '"><div class="msg-bubble">' + html + '</div></div>';
-    }
-
-    function previewReplyBubble(stop) {
-      const reply = stop && stop.playerReply ? stop.playerReply : {};
-      const answers = Array.isArray(reply.answers) ? reply.answers.filter(Boolean) : [];
-      const replyText = answers.length ? answers.join(' / ') : 'Player reply';
-      return '<div class="msg from-player"><div class="msg-bubble">' + escapeHtml(replyText) + '</div></div>';
-    }
-
-    function previewInputPlaceholder() {
-      const selected = getSelectedStop();
-      if (selected && selected.playerReply && selected.playerReply.type === 'text') {
-        return String(selected.playerReply.placeholder || '');
-      }
-      const firstTextStop = state.stops.find((s) => s && s.playerReply && s.playerReply.type === 'text');
-      return firstTextStop ? String(firstTextStop.playerReply.placeholder || '') : '';
-    }
-
-    function renderPreview() {
-      const h = state.header || {};
-      const title = String(h.title || '');
-      const subtitle = String(h.subtitle || '');
-      const status = String(h.status || 'online');
-      const logoUrl = String(h.logoUrl || '');
-      const logoAlt = String(h.logoAlt || '');
-
-      const stopsHtml = state.stops.map((stop) => {
-        const setup = Array.isArray(stop.setup) ? stop.setup : [];
-        const correct = stop.playerReply && Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
-        const incorrect = stop.playerReply && Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
-
-        const setupHtml = setup.map((b) => previewBubbleHtml(b, false)).join('');
-        const replyHtml = previewReplyBubble(stop);
-        const correctHtml = correct.map((b) => previewBubbleHtml(b, false)).join('');
-        const incorrectHtml = incorrect.map((b) => previewBubbleHtml(b, false)).join('');
-
-        return [
-          setupHtml,
-          replyHtml,
-          correctHtml,
-          incorrectHtml
-        ].join('');
-      }).join('');
-
-      const doc = [
-        '<!DOCTYPE html>',
-        '<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><base href="./">',
-        '<link rel="stylesheet" href="index.css">',
-        '<style>body{height:auto;overflow:auto;display:block}.chat{padding:1rem;gap:.5rem}.restart-btn{pointer-events:none}</style>',
-        '<title>Preview</title></head><body>',
-        '<div class="contact-header"><div class="avatar">' + (logoUrl ? '<img src="' + logoUrl + '" alt="' + escapeHtml(logoAlt) + '">' : '') + '</div><div class="contact-name">' + escapeHtml(title) + '</div><div class="contact-name">' + escapeHtml(subtitle) + '</div><div class="contact-status"><div class="online-dot"></div><span>' + escapeHtml(status) + '</span></div><button class="restart-btn" type="button">RESTART</button></div>',
-        '<main class="chat">' + stopsHtml + '</main>',
-        '<div class="input-area"><div class="answer-row"><input class="answer-input" type="text" placeholder="' + escapeHtml(previewInputPlaceholder()) + '" disabled><button class="submit-btn" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button></div></div>',
-        '</body></html>'
-      ].join('');
-
-      if (els.gamePreviewFrame) {
-        els.gamePreviewFrame.srcdoc = doc;
-      }
-    }
-
     function renderStopEditor() {
       const stop = getSelectedStop();
       if (selectedStopIndex === -1) {
@@ -1045,7 +951,6 @@
       renderHeader();
       renderStopList();
       renderStopEditor();
-      renderPreview();
       renderWarnings();
       renderInlineStopNameWarning();
     }
@@ -1130,7 +1035,8 @@
         const stop = getSelectedStop();
         if (!stop) return;
         if (!Array.isArray(stop.playerReply.correct)) stop.playerReply.correct = [];
-        stop.playerReply.correct = [{ name: stop.id + '-correct-1', html: '', callToAction: false }];
+        const n = stop.playerReply.correct.length + 1;
+        stop.playerReply.correct.push({ name: stop.id + '-correct-' + n, html: '', callToAction: false, forAnswer: '' });
         renderAll();
       });
 
@@ -1138,7 +1044,8 @@
         const stop = getSelectedStop();
         if (!stop) return;
         if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
-        stop.playerReply.incorrect = [{ name: stop.id + '-incorrect-1', html: '', callToAction: true }];
+        const n = stop.playerReply.incorrect.length + 1;
+        stop.playerReply.incorrect.push({ name: stop.id + '-incorrect-' + n, html: '', callToAction: true, forAnswer: '' });
         renderAll();
       });
     }
@@ -1271,4 +1178,3 @@
   </script>
 </body>
 </html>
-

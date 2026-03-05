@@ -88,15 +88,15 @@ function scrollBottom(smooth) {
 
 function addMsg(msg, animate) {
   const wrap = document.createElement('div');
-  const isCallToAction = !!(msg.callToAction || msg.red || msg.cmd);
-  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (isCallToAction ? ' cmd red call-to-action' : '');
+  const isCallToAction = !!msg.callToAction;
+  wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (isCallToAction ? ' call-to-action' : '');
   if (msg.name) wrap.dataset.bubble = msg.name;
   if (!animate) wrap.style.animation = 'none';
 
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
   if (msg.html) {
-    bubble.innerHTML = interpolate(msg.html);
+    bubble.innerHTML = interpolate(msg.html).replace(/\n/g, '<br>');
   } else {
     bubble.textContent = msg.text || '';
   }
@@ -142,40 +142,34 @@ function showBubbles(bubbles, onDone, opts) {
 
 function normalizeBubble(bubble) {
   if (!bubble || typeof bubble !== 'object') return null;
-  const callToAction = !!(bubble.callToAction || bubble.red || bubble.cmd);
-  const out = {
+  return {
     name: bubble.name || undefined,
     html: bubble.html || '',
-    callToAction,
-    cmd: callToAction,
-    red: callToAction
+    callToAction: !!(bubble.callToAction || bubble.red || bubble.cmd),
+    forAnswer: bubble.forAnswer || ''
   };
-  return out;
 }
 
 function normalizePlayerReply(playerReply) {
   if (!playerReply || typeof playerReply !== 'object') return { type: 'text', placeholder: '', answers: [], correct: [], incorrect: [] };
   const type = playerReply.type || 'text';
-  const firstOrEmpty = (arr) => {
-    const list = Array.isArray(arr) ? arr.map(normalizeBubble).filter(Boolean) : [];
-    return list.length ? [list[0]] : [];
-  };
+  const allBubbles = (arr) => Array.isArray(arr) ? arr.map(normalizeBubble).filter(Boolean) : [];
 
   if (type === 'button') {
     return {
       type: 'button',
       text: playerReply.text || 'Continue',
       playerText: playerReply.playerText || playerReply.text || 'Continue',
-      correct: firstOrEmpty(playerReply.correct),
-      incorrect: firstOrEmpty(playerReply.incorrect)
+      correct: allBubbles(playerReply.correct),
+      incorrect: allBubbles(playerReply.incorrect)
     };
   }
 
   if (type === 'win') {
     return {
       type: 'win',
-      correct: firstOrEmpty(playerReply.correct),
-      incorrect: firstOrEmpty(playerReply.incorrect)
+      correct: allBubbles(playerReply.correct),
+      incorrect: allBubbles(playerReply.incorrect)
     };
   }
 
@@ -184,8 +178,8 @@ function normalizePlayerReply(playerReply) {
       type: 'any',
       placeholder: playerReply.placeholder || '',
       storesAs: playerReply.storesAs || '',
-      correct: firstOrEmpty(playerReply.correct),
-      incorrect: firstOrEmpty(playerReply.incorrect)
+      correct: allBubbles(playerReply.correct),
+      incorrect: allBubbles(playerReply.incorrect)
     };
   }
 
@@ -195,8 +189,8 @@ function normalizePlayerReply(playerReply) {
     answers: Array.isArray(playerReply.answers) ? playerReply.answers.map((a) => String(a)) : [],
     setsTeam: !!playerReply.setsTeam,
     goTo: playerReply.goTo || undefined,
-    correct: firstOrEmpty(playerReply.correct),
-    incorrect: firstOrEmpty(playerReply.incorrect)
+    correct: allBubbles(playerReply.correct),
+    incorrect: allBubbles(playerReply.incorrect)
   };
 }
 
@@ -318,15 +312,21 @@ function renderInput() {
       input.value = '';
       input.classList.add('wrong');
       setTimeout(() => input.classList.remove('wrong'), 400);
-      if (Array.isArray(playerReply.incorrect) && playerReply.incorrect.length) {
-        playerReply.incorrect.forEach((msg) => addMsg(msg, true));
-      } else {
-        addMsg({
-          html: playerReply.setsTeam
-            ? 'Check that spelling. If needed, text <strong>504-581-5652</strong> for help from Mission Control.'
-            : 'Not quite. Text <strong>504-581-5652</strong> and Mission Control will help.'
-        }, true);
-      }
+
+      inputAreaEl.querySelectorAll('input, button').forEach((el) => { el.disabled = true; });
+
+      const pickedIncorrect = pickIncorrectBubble(playerReply.incorrect || [], val);
+      const incorrectBubbles = pickedIncorrect.length
+        ? pickedIncorrect
+        : [{ html: playerReply.setsTeam
+              ? 'Check that spelling. If needed, text <strong>504-581-5652</strong> for help from Mission Control.'
+              : 'Not quite. Text <strong>504-581-5652</strong> and Mission Control will help.' }];
+
+      const setup = stops[state.step].setup || [];
+      const lastSetup = setup.length ? setup[setup.length - 1] : null;
+      const toShow = lastSetup ? incorrectBubbles.concat([lastSetup]) : incorrectBubbles;
+
+      showBubbles(toShow, () => renderInput());
       scrollBottom(true);
       return;
     }
@@ -348,7 +348,7 @@ function renderInput() {
       saveState();
     }
 
-    doAdvance();
+    doAdvance(matchedAnswer || val);
   };
 
   input.addEventListener('keydown', (e) => {
@@ -362,9 +362,32 @@ function renderInput() {
   setTimeout(() => input.focus(), 150);
 }
 
-function doAdvance() {
+function pickCorrectBubble(correctBubbles, matchedAnswer) {
+  if (!correctBubbles.length) return [];
+  if (matchedAnswer) {
+    const specific = correctBubbles.find((b) => b.forAnswer && norm(b.forAnswer) === norm(matchedAnswer));
+    if (specific) return [specific];
+  }
+  const fallback = correctBubbles.find((b) => !b.forAnswer);
+  return [fallback || correctBubbles[0]];
+}
+
+function pickIncorrectBubble(incorrectBubbles, submittedVal) {
+  if (!incorrectBubbles.length) return [];
+  if (submittedVal) {
+    const specific = incorrectBubbles.find((b) => b.forAnswer && norm(b.forAnswer) === norm(submittedVal));
+    if (specific) return [specific];
+  }
+  const fallback = incorrectBubbles.find((b) => !b.forAnswer);
+  return [fallback || incorrectBubbles[0]];
+}
+
+function doAdvance(matchedAnswer) {
   const current = stops[state.step];
-  const correctBubbles = (current && current.playerReply && current.playerReply.correct) || [];
+  const correctBubbles = pickCorrectBubble(
+    (current && current.playerReply && current.playerReply.correct) || [],
+    matchedAnswer
+  );
 
   state.step += 1;
   saveState();
@@ -433,9 +456,7 @@ function replayProgress() {
       if (pr.type === 'any' && pr.storesAs && state.vars[pr.storesAs]) {
         addMsg({ fromPlayer: true, text: state.vars[pr.storesAs] }, false);
       }
-      if (Array.isArray(pr.correct)) {
-        pr.correct.forEach((msg) => addMsg(msg, false));
-      }
+      pickCorrectBubble(pr.correct || [], '').forEach((msg) => addMsg(msg, false));
     }
   }
   renderInput();
@@ -476,4 +497,3 @@ async function initGame() {
 }
 
 initGame();
-
