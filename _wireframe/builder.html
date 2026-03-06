@@ -271,6 +271,7 @@
       color: #475569;
       background: #f8fafc;
       border: 2px solid currentColor;
+      padding: 0;
       width: 28px;
       height: 28px;
       display: inline-flex;
@@ -297,8 +298,13 @@
       color: #ff4d57;
       background: #ffffff;
     }
-    .stop-action.disabled {
-      opacity: 0.45;
+    .bubble-btns {
+      display: flex;
+      gap: 4px;
+    }
+    .stop-action.disabled,
+    .stop-action:disabled {
+      opacity: 0.3;
       cursor: not-allowed;
     }
 
@@ -1312,11 +1318,19 @@
           nameLabel,
           '<div class="bubble-top">',
           '  <input type="text" class="bubble-name-input" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
+          '  <div class="bubble-btns">',
           showRemove
-            ? '  <button type="button" class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE">'
+            ? '    <button type="button" class="stop-action stop-delete bubble-remove" title="REMOVE" aria-label="REMOVE">'
               + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>'
               + '</button>'
             : '',
+          '    <button type="button" class="stop-action bubble-up" title="MOVE UP" aria-label="MOVE UP"' + (idx === 0 ? ' disabled' : '') + '>'
+            + '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>'
+            + '</button>',
+          '    <button type="button" class="stop-action bubble-down" title="MOVE DOWN" aria-label="MOVE DOWN"' + (idx === bubbles.length - 1 ? ' disabled' : '') + '>'
+            + '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>'
+            + '</button>',
+          '  </div>',
           '</div>',
           '<span class="bubble-tail" aria-hidden="true"></span>',
           showForAnswer
@@ -1333,7 +1347,9 @@
 
         const nameInput = wrap.querySelector('.bubble-name-input');
         const forAnswerInput = wrap.querySelector('.for-answer-input');
-        const removeBtn = wrap.querySelector('button');
+        const removeBtn = wrap.querySelector('.bubble-remove');
+        const upBtn = wrap.querySelector('.bubble-up');
+        const downBtn = wrap.querySelector('.bubble-down');
 
         nameInput.addEventListener('input', (e) => {
           bubbles[idx].name = e.target.value;
@@ -1406,6 +1422,36 @@
             if (removedWasCallToAction && stop && stop.playerReply) {
               stop.playerReply.correct = [];
               stop.playerReply.incorrect = [];
+            }
+            renderAll();
+          });
+        }
+        if (upBtn) {
+          upBtn.addEventListener('click', () => {
+            if (idx === 0) return;
+            if (listKey === 'setup') {
+              const stop = getSelectedStop();
+              if (!stop || !Array.isArray(stop.setup)) return;
+              const a = stop.setup.indexOf(bubbles[idx]);
+              const b = stop.setup.indexOf(bubbles[idx - 1]);
+              if (a >= 0 && b >= 0) [stop.setup[a], stop.setup[b]] = [stop.setup[b], stop.setup[a]];
+            } else {
+              [bubbles[idx], bubbles[idx - 1]] = [bubbles[idx - 1], bubbles[idx]];
+            }
+            renderAll();
+          });
+        }
+        if (downBtn) {
+          downBtn.addEventListener('click', () => {
+            if (idx === bubbles.length - 1) return;
+            if (listKey === 'setup') {
+              const stop = getSelectedStop();
+              if (!stop || !Array.isArray(stop.setup)) return;
+              const a = stop.setup.indexOf(bubbles[idx]);
+              const b = stop.setup.indexOf(bubbles[idx + 1]);
+              if (a >= 0 && b >= 0) [stop.setup[a], stop.setup[b]] = [stop.setup[b], stop.setup[a]];
+            } else {
+              [bubbles[idx], bubbles[idx + 1]] = [bubbles[idx + 1], bubbles[idx]];
             }
             renderAll();
           });
