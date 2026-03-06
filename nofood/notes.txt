@@ -1,0 +1,72 @@
+FILE: notes.txt
+PURPOSE: Human planning/reference notes for tour script, teams, and prompts used by the scavenger hunt.
+
+PRE-TOUR BANTER
+Hi. I'm Kevin Kolb.
+You get to kick back and relax now as I take you on a walking tour around the neighborhood. You're done thinking for the day.
+Now, after many years of being a computer trainer, I know I'm in a bad spot. I'm the only thing standing between you and food and drink.
+So — we don't have an open container law here. As long as you're not carrying glass, feel free to grab some snacks and drinks for our walk.
+We're on the cusp of the French Quarter, but this neighborhood is still pretty interesting. At least, I think it's pretty interesting. Those of you from other countries might not be too impressed.
+As Eddie Izzard says, "I grew up in Europe — that's where the history comes from." So Civil War-era stuff might not blow your minds.
+We'll see.
+Eddie Izzard is one of Kelley's favorites too. "Do you have a flag?"
+Go ahead and get your phones out — I'll have you scan a QR code so I can send you some historical photos along the way.
+
+
+Beignet
+Abigail Beadle, Sanil Parambil, Rahim Bhimani, Chris Bingham
+Exact Spot: https://w3w.co/tend.snipped.national shumard
+
+Lagniappe
+Matt Toms, Deji Oduntan, Aneesh Chakko, Arlene Radley
+Exact Spot: https://w3w.co/ideas.shorter.restore poydras
+
+Tchoupitoulas
+Rory Sewell, Chuck Foster, Kamran Kamal, Sharon Maxfield
+Exact Spot: https://w3w.co/captures.sailor.clues gallier
+
+Rougarou
+Tim Sewell, Jeremy Sharp, Mo Zaman, Jason Atkins
+Exact Spot: https://w3w.co/bearings.student.seats ben franklin
+
+Team	        	Calls out to		Gives	    Receives
+Beignet	        	LAGNIAPPE	    	JAMBALAYA	gumbo
+Lagniappe	    	BEIGNET	        	GUMBO	    jambalaya
+Tchoupitoulas		ROUGAROU	    	ETOUFFEE	muffuletta
+Rougarou	    	TCHOUPITOULAS		MUFFULETTA	etouffee
+
+Team Stop Order (Latin square — no two teams at same stop at same time, no Sculpture→Ladies adjacency)
+Tchoupitoulas		Ladies → Fed Reserve → Bush Tree → Sculpture
+Beignet	        	Fed Reserve → Ladies → Sculpture → Bush Tree
+Lagniappe	    	Bush Tree → Sculpture → Fed Reserve → Ladies
+Rougarou	    	Sculpture → Bush Tree → Ladies → Fed Reserve
+
+DEBRIEF WEDNESDAY
+
+Prizes after pic confirmation
+
+Too long? Too short?
+
+How did you feel when you had to rely on, or wait for other teams, to continue?
+
+Was there a moment where your team disagreed on an answer? How did you resolve it?
+
+Who naturally stepped up as a leader on your team — and did that surprise you?
+
+What's one thing another team did that impressed you?
+
+When you were stuck, what did it take to get unstuck — and does that feel familiar at work?
+
+Did you trust the process even when you didn't have all the information yet?
+
+What would you do differently if you ran the hunt again with a new group?
+
+Did you feel like you were speaking a foreign language, or like you had one hand tied behind your back?
+
+How did you feel having the teams chosen beforehand for you?
+
+How did you like screaming in public?
+
+Did your team ever gel? Does everyone on your team feel that way?
+
+Say keywords during intro that are throwbacks in the game.

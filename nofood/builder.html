@@ -1,15 +1,5 @@
 ﻿<!DOCTYPE html>
-<!--
-  File: builder.html
-  Purpose: Form-based editor for stops.json.
-
-  Maintainer/AI context:
-  - This file is the editor UI only. CSS and JS here control builder behavior/appearance only.
-  - Runtime/play view is index.html + engine.js + index.css.
-  - stops.json is the shared data contract between builder and runtime.
-  - If a change should affect the played game UI, update index.css/engine.js (not builder.html styles).
-  - If a change should affect authoring/editing experience, update this file.
--->
+<!-- File: builder.html | Purpose: Form-based editor for stops.json. Add/edit stops and save directly to the JSON file. -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -18,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <!-- Builder-only styles. Runtime styles live in index.css. -->
   <style>
     :root {
       --bg: #f4f4f4;
@@ -28,7 +17,6 @@
       --accent: #111111;
       --danger: #c1121f;
       --muted: #5a5a5a;
-      --bubble-gap: 12px;
       --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
       --mono: "JetBrains Mono", "Courier New", monospace;
     }
@@ -50,9 +38,6 @@
       max-width: 1360px;
       margin: 0 auto;
       padding: 22px 18px 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
     }
 
     .page-head {
@@ -61,68 +46,34 @@
       align-items: flex-start;
       gap: 12px;
     }
-    .page-title-block {
-      display: grid;
-      gap: 2px;
-    }
 
     h1 {
-      margin: 0;
+      margin: 0 0 2px;
       font-size: clamp(1.55rem, 2.4vw, 2.3rem);
       font-weight: 700;
       letter-spacing: 0.02em;
       text-transform: uppercase;
     }
     .sub {
-      margin: 0;
+      margin: 0 0 2px;
       color: var(--muted);
       font-size: 0.82rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-    .folder-note {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.8rem;
-      letter-spacing: 0.01em;
-    }
-    .folder-note strong { color: var(--ink); font-weight: 700; }
-    .tile-label {
-      margin: 0 0 8px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      color: var(--ink);
     }
 
     .page-actions {
       flex: 0 0 auto;
       display: flex;
       gap: 10px;
-      margin-top: 0;
+      margin-top: 2px;
     }
 
     .toolbar {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .compact-toolbar { margin-bottom: 10px; }
-    .toolbar-sep {
-      color: var(--muted);
-      align-self: center;
-      font-size: 0.9rem;
-      line-height: 1;
-      user-select: none;
-    }
-    .header-card { padding: 12px 14px; }
-    .header-card .page-head {
-      margin-bottom: 8px;
-    }
-    .header-card .toolbar {
-      margin-bottom: 0;
+      margin-bottom: 16px;
     }
 
     button {
@@ -139,23 +90,22 @@
     }
 
     button.primary {
-      background: #fff;
-      color: var(--ink);
-      border-color: var(--line);
-      font-weight: 400;
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 700;
     }
 
     button.danger {
-      background: #fff;
-      color: var(--ink);
-      border-color: var(--line);
+      border-color: #d9b7bf;
+      color: var(--danger);
     }
 
     .status {
       display: none;
       font-size: 0.8rem;
       min-height: 1.2rem;
-      margin: 0;
+      margin-bottom: 12px;
       color: var(--muted);
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -172,7 +122,7 @@
       border: 1px solid #f1d7a3;
       border-radius: 10px;
       padding: 8px 10px;
-      margin: 0;
+      margin-bottom: 10px;
       display: none;
       line-height: 1.45;
     }
@@ -182,17 +132,8 @@
     .layout {
       display: grid;
       grid-template-columns: 320px minmax(460px, 1fr);
-      gap: 12px;
+      gap: 16px;
       align-items: start;
-    }
-    .layout > * {
-      min-width: 0;
-    }
-    .left-column {
-      display: grid;
-      gap: 12px;
-      align-content: start;
-      min-width: 0;
     }
 
     .card {
@@ -201,7 +142,6 @@
       border-radius: 0;
       padding: 14px;
       box-shadow: none;
-      min-width: 0;
     }
 
     .card h2 {
@@ -213,22 +153,17 @@
     }
 
     .stack { display: flex; flex-direction: column; gap: 8px; }
-    .stop-add-row { margin: 0; }
 
     .stop-item {
       border: 1px solid var(--line);
       background: #fff;
       border-radius: 0;
-      padding: 9px 10px;
-      cursor: grab;
+      padding: 9px 108px 9px 10px;
+      cursor: pointer;
       text-align: left;
       position: relative;
-      width: 100%;
-      display: block;
     }
-    .game-details-item { cursor: pointer; }
-    .game-details-item.locked { background: #fff; }
-    .stop-item.dragging { opacity: 0.45; transform: rotate(1.5deg); cursor: grabbing; }
+    .stop-item.dragging { opacity: 0.45; }
     .stop-item.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
     .stop-item.drop-before::before,
     .stop-item.drop-after::after {
@@ -236,9 +171,8 @@
       position: absolute;
       left: 6px;
       right: 6px;
-      height: 3px;
+      height: 2px;
       background: var(--accent);
-      box-shadow: 0 0 0 1px #fff;
       pointer-events: none;
     }
     .stop-item.drop-before::before { top: -7px; }
@@ -247,14 +181,10 @@
       cursor: default;
       background: #f7f3ec;
     }
-    .stop-item.locked.game-details-item {
-      background: #fff;
-    }
 
     .stop-item.active {
       border-color: var(--accent);
       box-shadow: inset 0 0 0 1px var(--accent);
-      padding-right: 108px;
     }
 
     .stop-actions {
@@ -313,7 +243,7 @@
       display: grid;
       gap: 10px;
       grid-template-columns: 1fr 1fr;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .row.full { grid-template-columns: 1fr; }
@@ -366,42 +296,30 @@
       color: var(--muted);
       font-weight: 700;
     }
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .section-head .section-title { margin: 0; }
 
     .bubble {
       border: 1px solid var(--line);
       border-radius: 0;
       background: #fff;
       padding: 10px;
-      margin: 0;
-      cursor: default;
+      cursor: grab;
       position: relative;
     }
-    .bubble.photo-bubble {
-      border-color: #60a5fa;
-      box-shadow: inset 0 0 0 1px #93c5fd;
-    }
-    .bubble-tail {
-      display: none;
+    .bubble.dragging { opacity: 0.45; }
+    .bubble.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .bubble.drop-before::before,
+    .bubble.drop-after::after {
+      content: "";
       position: absolute;
-      left: 18px;
-      bottom: -8px;
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border-left: 1px solid #60a5fa;
-      border-bottom: 1px solid #60a5fa;
-      transform: rotate(-45deg);
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background: var(--accent);
       pointer-events: none;
     }
-    .bubble.photo-bubble .bubble-tail { display: block; }
+    .bubble.drop-before::before { top: -7px; }
+    .bubble.drop-after::after { bottom: -7px; }
+
     .bubble-type-row {
       display: flex;
       align-items: center;
@@ -442,34 +360,15 @@
       text-transform: none;
       font-size: 0.78rem;
     }
-    .is-hidden { display: none; }
-    .row.no-margin { margin-bottom: 0; }
-    .field-hint {
-      margin: 8px 0 0;
-      font-size: 0.8em;
-      color: #888;
-    }
-    .field-hint.tight { margin-top: 4px; }
 
     #headerEditor {
       display: grid;
-      gap: 12px;
+      gap: 18px;
     }
 
     #stopEditor {
       display: grid;
-      gap: var(--bubble-gap);
-    }
-    #addBubbleRow {
-      margin-bottom: 0;
-      border: 0;
-      background: transparent;
-      padding: 0;
-    }
-    #addBubbleRow .button-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 12px;
     }
 
     #setupBubblesTop,
@@ -478,13 +377,7 @@
     #incorrectBubbles {
       display: flex;
       flex-direction: column;
-      gap: var(--bubble-gap);
-      min-height: 0;
-    }
-    #correctSection,
-    #incorrectSection {
-      margin: 0;
-      padding: 0;
+      gap: 12px;
     }
 
     #stopEditor > .section-title,
@@ -507,46 +400,34 @@
 </head>
 <body>
   <div class="page">
-    <div id="tile-game-header" class="card header-card" data-tile-name="game-header">
-      <div class="page-head">
-        <div class="page-title-block">
-          <p class="sub">The Game Bureau</p>
-          <h1>Game Builder</h1>
-          <p id="folderNote" class="folder-note">You are in the <strong id="folderNameText"></strong> folder.</p>
-        </div>
+    <div class="page-head">
+      <div>
+        <p class="sub">The Game Bureau</p>
+        <h1>Game Builder</h1>
       </div>
+      <div class="page-actions">
+        <a id="playGameLink" href="index.html" target="_blank"><button type="button">PLAY GAME &#9654;</button></a>
+        <a id="revealGameLink" href="index.html?reveal" target="_blank"><button type="button">REVEAL GAME &#9654;</button></a>
+      </div>
+    </div>
 
-      <div class="toolbar">
-        <a id="playGameLink" href="index.html" target="_blank"><button type="button" title="PLAY CURRENT">PLAY</button></a>
-        <a id="revealGameLink" href="index.html?reveal" target="_blank"><button type="button" title="SHOW EVERYTHING EXPANDED">REVEAL</button></a>
-      </div>
+    <div class="toolbar">
+      <button id="loadBtn" type="button">Load</button>
+      <button id="newBtn" type="button">New Empty</button>
+      <button id="saveBtn" class="primary" type="button">Save</button>
     </div>
     <div id="status" class="status"></div>
     <div id="warnings" class="warnings"></div>
 
     <div class="layout">
-      <div class="left-column">
-        <div id="tile-game-details" class="card" data-tile-name="game-details">
-          <h2 class="tile-label">Game</h2>
-          <div class="toolbar compact-toolbar">
-            <button id="newBtn" type="button" title="A NEW BLANK">New</button>
-            <button id="loadBtn" type="button" title="LOAD FROM CURRENT FOLDER">Load</button>
-            <button id="saveBtn" class="primary" type="button" title="SAVE">Save</button>
-          </div>
-          <div id="gameDetailsSlot" class="stack"></div>
+      <div class="card">
+        <div class="toolbar">
+          <button id="addStopBtn" class="primary" type="button">Add Stop</button>
         </div>
-
-        <div id="tile-stop-list" class="card" data-tile-name="stop-list">
-        <h2 class="tile-label">Stops</h2>
         <div id="stopList" class="stack"></div>
-        <div id="addStopDock" class="toolbar is-hidden">
-          <button id="addStopBtn" class="primary" type="button">New</button>
-        </div>
-      </div>
       </div>
 
-      <div id="tile-bubbles" class="card" data-tile-name="bubbles">
-        <h2 id="detailsTileLabel" class="tile-label">Game Details</h2>
+      <div class="card">
         <div id="headerEditor">
           <div class="row">
             <div>
@@ -554,7 +435,7 @@
               <input id="headerTitle" type="text">
             </div>
             <div>
-              <label for="headerSubtitle">Subtitle (Guide Name)</label>
+              <label for="headerSubtitle">Subtitle</label>
               <input id="headerSubtitle" type="text">
             </div>
           </div>
@@ -568,14 +449,14 @@
               <input id="headerLogoAlt" type="text">
             </div>
           </div>
-          <p id="gameAssetsHint" class="field-hint">Place <strong>logo.png</strong> (avatar image) and <strong>index.ico</strong> (browser tab icon) in the game folder.</p>
+          <p style="margin:8px 0 0; font-size:0.8em; color:#888;">Place <strong>logo.png</strong> (avatar image) and <strong>index.ico</strong> (browser tab icon) in the game folder.</p>
         </div>
 
-        <div id="stopEditor" class="is-hidden">
+        <div id="stopEditor" style="display:none;">
           <div class="mini-tile">
-            <div class="row full no-margin">
+            <div class="row full" style="margin-bottom:0;">
               <div>
-                <label for="stopId">STOP NAME <span id="stopNameInlineWarning" class="inline-warning is-hidden">DUPLICATE STOP NAME</span></label>
+                <label for="stopId">STOP NAME <span id="stopNameInlineWarning" class="inline-warning" style="display:none;">DUPLICATE STOP NAME</span></label>
                 <input id="stopId" type="text">
               </div>
             </div>
@@ -584,12 +465,7 @@
           <div id="setupBubblesTop"></div>
 
           <div id="playerReplySection" class="mini-tile">
-            <div class="section-head">
-              <div class="section-title">Player Reply</div>
-              <button id="removeReplyBtn" type="button" class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>
-              </button>
-            </div>
+            <div class="section-title">Player Reply</div>
             <div class="row full">
               <div>
                 <label for="replyName">Name</label>
@@ -621,7 +497,7 @@
               </div>
             </div>
 
-            <div id="anyReplyFields" class="is-hidden">
+            <div id="anyReplyFields" style="display:none;">
               <div class="row">
                 <div>
                   <label for="replyAnyPlaceholder">Placeholder</label>
@@ -630,7 +506,7 @@
                 <div>
                   <label for="replyStoresAs">Store answer as variable</label>
                   <input id="replyStoresAs" type="text" placeholder="playerName">
-                  <p class="field-hint tight">Use <code>{{playerName}}</code> in any bubble HTML.</p>
+                  <p style="margin:4px 0 0;font-size:0.8em;color:#888;">Use <code>{{playerName}}</code> in any bubble HTML.</p>
                 </div>
               </div>
             </div>
@@ -647,8 +523,8 @@
 
           <div id="setupBubblesBottom"></div>
 
-          <div id="addBubbleRow" class="row">
-            <div class="button-row">
+          <div id="addBubbleRow" class="row" style="margin-bottom:0;">
+            <div>
               <button id="addBubbleBtn" type="button">Add Message to Player</button>
               <button id="addCtaBtn" type="button">Add Call to Action</button>
             </div>
@@ -698,25 +574,16 @@
       'Try again before moving on.'
     ];
 
-    // Centralized drag payload types used across stop and bubble reordering.
-    const DND_MIME = {
-      STOP_INDEX: 'text/x-stop-index'
-    };
-
     let state = JSON.parse(JSON.stringify(DEFAULT_DOC));
     let selectedStopIndex = -1;
     let stopNameBlurValidated = false;
     let loadedStopsSnapshot = null;
 
-    // Cached DOM references used across render + event phases.
     const els = {
       status: document.getElementById('status'),
-      gameDetailsSlot: document.getElementById('gameDetailsSlot'),
       stopList: document.getElementById('stopList'),
       headerEditor: document.getElementById('headerEditor'),
       stopEditor: document.getElementById('stopEditor'),
-      detailsTileLabel: document.getElementById('detailsTileLabel'),
-      gameAssetsHint: document.getElementById('gameAssetsHint'),
       headerTitle: document.getElementById('headerTitle'),
       headerSubtitle: document.getElementById('headerSubtitle'),
       headerLogoUrl: document.getElementById('headerLogoUrl'),
@@ -727,7 +594,6 @@
       setupBubblesBottom: document.getElementById('setupBubblesBottom'),
       addBubbleBtn: document.getElementById('addBubbleBtn'),
       playerReplySection: document.getElementById('playerReplySection'),
-      removeReplyBtn: document.getElementById('removeReplyBtn'),
       replyName: document.getElementById('replyName'),
       replyType: document.getElementById('replyType'),
       textReplyFields: document.getElementById('textReplyFields'),
@@ -741,30 +607,8 @@
       incorrectSection: document.getElementById('incorrectSection'),
       incorrectBubbles: document.getElementById('incorrectBubbles'),
       addBubbleRow: document.getElementById('addBubbleRow'),
-      warnings: document.getElementById('warnings'),
-      folderNote: document.getElementById('folderNote'),
-      folderNameText: document.getElementById('folderNameText')
+      warnings: document.getElementById('warnings')
     };
-
-    function getCurrentFolderName() {
-      const pathname = window.location.pathname || '';
-      const parts = pathname.split('/').filter(Boolean);
-      if (!parts.length) return '';
-      const last = parts[parts.length - 1];
-      const looksLikeFile = /\.[^./]+$/.test(last);
-      const folder = looksLikeFile ? (parts[parts.length - 2] || '') : last;
-      try {
-        return decodeURIComponent(folder);
-      } catch (_) {
-        return folder;
-      }
-    }
-
-    function renderFolderNote() {
-      const folderName = getCurrentFolderName() || 'CURRENT';
-      if (!els.folderNote || !els.folderNameText) return;
-      els.folderNameText.textContent = folderName;
-    }
 
     function setStatus(msg, type) {
       els.status.className = 'status' + (type ? ' ' + type : '');
@@ -811,6 +655,14 @@
       return prefix + nextNum;
     }
 
+    function moveItem(arr, fromIndex, toIndex) {
+      if (!Array.isArray(arr)) return;
+      if (fromIndex === toIndex) return;
+      if (fromIndex < 0 || toIndex < 0 || fromIndex >= arr.length || toIndex >= arr.length) return;
+      const [moved] = arr.splice(fromIndex, 1);
+      arr.splice(toIndex, 0, moved);
+    }
+
     function moveStopToInsertionIndex(arr, fromIndex, insertionIndex) {
       if (!Array.isArray(arr)) return fromIndex;
       if (fromIndex < 0 || fromIndex >= arr.length) return fromIndex;
@@ -823,44 +675,21 @@
       return toIndex;
     }
 
-    // Keep stop selection stable after any stop reorder operation.
-    function reconcileSelectedStopIndexAfterMove(fromIndex, newIndex) {
-      if (selectedStopIndex === fromIndex) {
-        selectedStopIndex = newIndex;
-        return;
-      }
-      if (fromIndex < selectedStopIndex) selectedStopIndex -= 1;
-      if (newIndex <= selectedStopIndex) selectedStopIndex += 1;
-    }
-
     function clearStopDropIndicators() {
       els.stopList.querySelectorAll('.stop-item').forEach((el) => {
         el.classList.remove('drag-over', 'drop-before', 'drop-after');
       });
     }
 
-    function getInsertionIndexFromY(elements, clientY) {
-      for (let i = 0; i < elements.length; i += 1) {
-        const rect = elements[i].getBoundingClientRect();
-        if (clientY < rect.top + rect.height / 2) return i;
-      }
-      return elements.length;
-    }
-
-    function applyInsertionIndicator(elements, insertionIndex) {
-      elements.forEach((el) => {
+    function clearBubbleDropIndicators(container) {
+      container.querySelectorAll('.bubble').forEach((el) => {
         el.classList.remove('drag-over', 'drop-before', 'drop-after');
       });
-      if (!elements.length) return;
-      if (insertionIndex <= 0) {
-        elements[0].classList.add('drag-over', 'drop-before');
-        return;
-      }
-      if (insertionIndex >= elements.length) {
-        elements[elements.length - 1].classList.add('drag-over', 'drop-after');
-        return;
-      }
-      elements[insertionIndex].classList.add('drag-over', 'drop-before');
+    }
+
+    function hasCallToActionBubble(stop) {
+      const setup = Array.isArray(stop && stop.setup) ? stop.setup : [];
+      return setup.some((b) => !!(b && b.callToAction));
     }
 
     function ensureReplyScaffoldForCallToAction(stop) {
@@ -886,16 +715,6 @@
           forAnswer: ''
         });
       }
-    }
-
-    function hasCallToActionBubble(stop) {
-      return !!(stop && Array.isArray(stop.setup) && stop.setup.some((b) => b && b.callToAction));
-    }
-
-    function removePlayerReplyFlow(stop) {
-      if (!stop) return;
-      stop.setup = (Array.isArray(stop.setup) ? stop.setup : []).filter((b) => !(b && b.callToAction));
-      stop.playerReply = ensurePlayerReply(null);
     }
 
     function collectBubbleIds(stop) {
@@ -1058,7 +877,9 @@
       const id = 'new-stop-' + (state.stops.length + 1);
       return {
         id,
-        setup: [],
+        setup: [
+          { name: id + '-message-1', msgType: 'text', html: '', callToAction: false, bottomAdded: false }
+        ],
         playerReply: {
           type: 'text',
           placeholder: '',
@@ -1072,30 +893,19 @@
     }
 
 
-    // Left-column rendering for GAME card + STOPS list.
     function renderStopList() {
-      const addStopBtn = document.getElementById('addStopBtn');
       els.stopList.innerHTML = '';
-      if (els.gameDetailsSlot) els.gameDetailsSlot.innerHTML = '';
 
       const headerBtn = document.createElement('button');
       headerBtn.type = 'button';
-      headerBtn.className = 'stop-item locked game-details-item' + (selectedStopIndex === -1 ? ' active' : '');
-      const gameTitle = String((state.header && state.header.title) || '').trim() || 'UNTITLED';
-      headerBtn.innerHTML = '<div>' + gameTitle + '</div><div class="stop-meta">STOPS: ' + state.stops.length + '</div>';
+      headerBtn.className = 'stop-item locked' + (selectedStopIndex === -1 ? ' active' : '');
+      headerBtn.innerHTML = '<div>GAME DETAILS</div>';
       headerBtn.addEventListener('click', () => {
         selectedStopIndex = -1;
         stopNameBlurValidated = false;
         renderAll();
       });
-      if (els.gameDetailsSlot) els.gameDetailsSlot.appendChild(headerBtn);
-
-      if (addStopBtn) {
-        const addStopRow = document.createElement('div');
-        addStopRow.className = 'stop-add-row';
-        addStopRow.appendChild(addStopBtn);
-        els.stopList.appendChild(addStopRow);
-      }
+      els.stopList.appendChild(headerBtn);
 
       if (!state.stops.length) return;
 
@@ -1111,9 +921,9 @@
         btn.innerHTML = '<div>' + stop.id + '</div><div class="stop-meta">Bubbles: ' + totalBubbles + '</div>'
           + (i === selectedStopIndex
             ? '<span class="stop-actions">'
-              + '<span class="stop-action stop-copy" title="COPY" aria-label="COPY"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg></span>'
-              + '<span class="stop-action stop-paste' + (copiedStop ? '' : ' disabled') + '" title="PASTE" aria-label="PASTE"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg></span>'
-              + '<span class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg></span>'
+              + '<span class="stop-action stop-copy" title="Copy stop" aria-label="Copy stop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg></span>'
+              + '<span class="stop-action stop-paste' + (copiedStop ? '' : ' disabled') + '" title="Paste stop" aria-label="Paste stop"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg></span>'
+              + '<span class="stop-action stop-delete" title="Remove stop" aria-label="Remove stop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg></span>'
               + '</span>'
             : '');
         btn.addEventListener('click', () => {
@@ -1173,7 +983,7 @@
           });
         }
         btn.addEventListener('dragstart', (e) => {
-          e.dataTransfer.setData(DND_MIME.STOP_INDEX, String(i));
+          e.dataTransfer.setData('text/x-stop-index', String(i));
           e.dataTransfer.effectAllowed = 'move';
           btn.classList.add('dragging');
         });
@@ -1197,41 +1007,21 @@
           const rect = btn.getBoundingClientRect();
           const before = e.clientY < rect.top + rect.height / 2;
           clearStopDropIndicators();
-          const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
+          const fromIndex = parseInt(e.dataTransfer.getData('text/x-stop-index') || '-1', 10);
           if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
           const insertionIndex = i + (before ? 0 : 1);
           const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
-          reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
+
+          if (selectedStopIndex === fromIndex) {
+            selectedStopIndex = newIndex;
+          } else {
+            if (fromIndex < selectedStopIndex) selectedStopIndex -= 1;
+            if (newIndex <= selectedStopIndex) selectedStopIndex += 1;
+          }
           renderAll();
         });
         els.stopList.appendChild(btn);
       });
-
-      // Fallback drop target so drag-and-drop still works when releasing in list whitespace (common while auto-scrolling).
-      els.stopList.ondragover = (e) => {
-        if (!e.dataTransfer) return;
-        if (e.target && e.target.closest('.stop-item[data-stop-index]')) return;
-        const items = Array.from(els.stopList.querySelectorAll('.stop-item[data-stop-index]'));
-        if (!items.length) return;
-        e.preventDefault();
-        const insertionIndex = getInsertionIndexFromY(items, e.clientY);
-        applyInsertionIndicator(items, insertionIndex);
-      };
-      els.stopList.ondrop = (e) => {
-        if (!e.dataTransfer) return;
-        if (!Array.from(e.dataTransfer.types || []).includes(DND_MIME.STOP_INDEX)) return;
-        if (e.target && e.target.closest('.stop-item[data-stop-index]')) return;
-        const items = Array.from(els.stopList.querySelectorAll('.stop-item[data-stop-index]'));
-        if (!items.length) return;
-        e.preventDefault();
-        const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
-        if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
-        const insertionIndex = getInsertionIndexFromY(items, e.clientY);
-        clearStopDropIndicators();
-        const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
-        reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
-        renderAll();
-      };
     }
 
     function generateBubbleHtml(bubble) {
@@ -1253,11 +1043,12 @@
       return bubble.html || '';
     }
 
-    // Renders bubble editors in the details tile (no drag/drop here).
-    function renderBubbles(container, bubbles, listKey) {
+    function renderBubbles(container, bubbles, listKey, options) {
+      const opts = options || {};
+      const sourceIndexes = Array.isArray(opts.sourceIndexes) ? opts.sourceIndexes : null;
+      const setupGroup = String(opts.setupGroup || '');
       container.innerHTML = '';
-      container.ondragover = null;
-      container.ondrop = null;
+      if (!bubbles.length) return;
 
       bubbles.forEach((bubble, idx) => {
         if (!String(bubble.html || '').trim()) {
@@ -1273,6 +1064,8 @@
         const wrap = document.createElement('div');
         wrap.className = 'bubble';
         const isMessageToPlayer = listKey === 'setup' && !(bubble && bubble.callToAction);
+        const canDrag = isMessageToPlayer;
+        if (canDrag) wrap.draggable = true;
         const showBubbleTypeLabel = listKey === 'setup';
         const nameLabel = listKey === 'setup'
           ? '<label>' + (bubble.callToAction ? 'CALL PLAYER TO ACTION' : 'MESSAGE TO PLAYER') + '</label>'
@@ -1312,24 +1105,13 @@
           nameLabel,
           '<div class="bubble-top">',
           '  <input type="text" class="bubble-name-input" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
-          showRemove
-            ? '  <button type="button" class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE">'
-              + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>'
-              + '</button>'
-            : '',
+          showRemove ? '  <button type="button" class="danger">Remove</button>' : '',
           '</div>',
-          '<span class="bubble-tail" aria-hidden="true"></span>',
           showForAnswer
             ? '<div style="margin-bottom:8px;"><label>For Answer (BLANK = ANY)</label><input type="text" class="for-answer-input" placeholder="leave blank to show for any answer" value="' + String(bubble.forAnswer || '').replace(/"/g, '&quot;') + '"></div>'
             : '',
           isMessageToPlayer ? typeSelector + msgContent : msgContent
         ].join('');
-
-        const applyBubbleVisualType = () => {
-          const isPhotoBubble = isMessageToPlayer && (bubble.msgType || 'text') === 'image';
-          wrap.classList.toggle('photo-bubble', isPhotoBubble);
-        };
-        applyBubbleVisualType();
 
         const nameInput = wrap.querySelector('.bubble-name-input');
         const forAnswerInput = wrap.querySelector('.for-answer-input');
@@ -1357,7 +1139,6 @@
                 s.style.display = s.dataset.type === e.target.value ? '' : 'none';
               });
               bubble.html = generateBubbleHtml(bubble);
-              applyBubbleVisualType();
             });
           }
           if (htmlInput) {
@@ -1410,34 +1191,88 @@
             renderAll();
           });
         }
+        if (canDrag) {
+          wrap.addEventListener('dragstart', (e) => {
+            if (e.target.closest('input, textarea, select, button')) { e.preventDefault(); return; }
+            const payload = listKey === 'setup'
+              ? {
+                  listKey: 'setup',
+                  sourceIndex: sourceIndexes && typeof sourceIndexes[idx] === 'number' ? sourceIndexes[idx] : idx,
+                  setupGroup
+                }
+              : { listKey, index: idx };
+            e.dataTransfer.setData('application/x-bubble', JSON.stringify(payload));
+            e.dataTransfer.effectAllowed = 'move';
+            wrap.classList.add('dragging');
+          });
+          wrap.addEventListener('dragend', () => {
+            clearBubbleDropIndicators(container);
+            wrap.classList.remove('dragging');
+          });
+          wrap.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const rect = wrap.getBoundingClientRect();
+            const before = e.clientY < rect.top + rect.height / 2;
+            clearBubbleDropIndicators(container);
+            wrap.classList.add('drag-over');
+            wrap.classList.add(before ? 'drop-before' : 'drop-after');
+          });
+          wrap.addEventListener('dragleave', () => {
+            wrap.classList.remove('drag-over', 'drop-before', 'drop-after');
+          });
+          wrap.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const rect = wrap.getBoundingClientRect();
+            const before = e.clientY < rect.top + rect.height / 2;
+            clearBubbleDropIndicators(container);
+            let payload = null;
+            try {
+              payload = JSON.parse(e.dataTransfer.getData('application/x-bubble') || 'null');
+            } catch (_) {
+              return;
+            }
+            if (!payload || payload.listKey !== listKey) return;
+            if (listKey === 'setup') {
+              if (payload.setupGroup !== setupGroup) return;
+              const stop = getSelectedStop();
+              if (!stop || !Array.isArray(stop.setup)) return;
+              const fromSourceIndex = parseInt(payload.sourceIndex, 10);
+              const toSourceIndex = sourceIndexes && typeof sourceIndexes[idx] === 'number' ? sourceIndexes[idx] : -1;
+              if (isNaN(fromSourceIndex) || fromSourceIndex < 0 || fromSourceIndex >= stop.setup.length) return;
+              if (toSourceIndex < 0 || toSourceIndex >= stop.setup.length) return;
+              const insertionIndex = toSourceIndex + (before ? 0 : 1);
+              moveStopToInsertionIndex(stop.setup, fromSourceIndex, insertionIndex);
+              renderAll();
+              return;
+            }
+            const fromIndex = parseInt(payload.index, 10);
+            if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= bubbles.length) return;
+            const insertionIndex = idx + (before ? 0 : 1);
+            moveStopToInsertionIndex(bubbles, fromIndex, insertionIndex);
+            renderAll();
+          });
+        }
 
         container.appendChild(wrap);
       });
     }
 
-    // Switches right-side details panel between game-level and stop-level edit modes.
     function renderStopEditor() {
       const stop = getSelectedStop();
       if (selectedStopIndex === -1) {
-        els.detailsTileLabel.textContent = 'Game Details';
         els.headerEditor.style.display = 'grid';
         els.stopEditor.style.display = 'none';
-        if (els.gameAssetsHint) els.gameAssetsHint.style.display = '';
         return;
       }
 
       if (!stop) {
-        els.detailsTileLabel.textContent = 'Stop Details';
         els.headerEditor.style.display = 'none';
         els.stopEditor.style.display = 'none';
-        if (els.gameAssetsHint) els.gameAssetsHint.style.display = 'none';
         return;
       }
 
-      els.detailsTileLabel.textContent = 'Stop Details';
       els.headerEditor.style.display = 'none';
       els.stopEditor.style.display = 'grid';
-      if (els.gameAssetsHint) els.gameAssetsHint.style.display = 'none';
 
       els.stopId.value = stop.id;
       els.replyType.value = stop.playerReply.type;
@@ -1453,28 +1288,40 @@
 
       const showReplyFlow = hasCallToActionBubble(stop);
       els.playerReplySection.style.display = showReplyFlow ? 'block' : 'none';
+      els.correctSection.style.display = showReplyFlow ? 'block' : 'none';
+      els.incorrectSection.style.display = showReplyFlow ? 'block' : 'none';
 
       // Two setup zones:
       // top = initial scaffold bubbles, bottom = newly added Message-to-Player bubbles.
-      els.stopEditor.insertBefore(els.addBubbleRow, els.stopEditor.firstElementChild);
       els.stopEditor.appendChild(els.setupBubblesTop);
       els.stopEditor.appendChild(els.playerReplySection);
       els.stopEditor.appendChild(els.correctSection);
       els.stopEditor.appendChild(els.incorrectSection);
       els.stopEditor.appendChild(els.setupBubblesBottom);
+      els.stopEditor.appendChild(els.addBubbleRow);
 
-      const topSetupBubbles = stop.setup.filter((b) => !b.bottomAdded);
-      const bottomSetupBubbles = stop.setup.filter((b) => !!b.bottomAdded);
-      const correctBubbles = stop.playerReply.correct || [];
-      const incorrectBubbles = stop.playerReply.incorrect || [];
-      renderBubbles(els.setupBubblesTop, topSetupBubbles, 'setup');
-      renderBubbles(els.setupBubblesBottom, bottomSetupBubbles, 'setup');
-      els.setupBubblesTop.style.display = topSetupBubbles.length ? '' : 'none';
-      els.setupBubblesBottom.style.display = bottomSetupBubbles.length ? '' : 'none';
-      renderBubbles(els.correctBubbles, correctBubbles, 'correct');
-      renderBubbles(els.incorrectBubbles, incorrectBubbles, 'incorrect');
-      els.correctSection.style.display = showReplyFlow && correctBubbles.length ? 'block' : 'none';
-      els.incorrectSection.style.display = showReplyFlow && incorrectBubbles.length ? 'block' : 'none';
+      const topSetupWithIndex = stop.setup
+        .map((b, i) => ({ bubble: b, sourceIndex: i }))
+        .filter((x) => !x.bubble.bottomAdded);
+      const bottomSetupWithIndex = stop.setup
+        .map((b, i) => ({ bubble: b, sourceIndex: i }))
+        .filter((x) => !!x.bubble.bottomAdded);
+      renderBubbles(
+        els.setupBubblesTop,
+        topSetupWithIndex.map((x) => x.bubble),
+        'setup',
+        { sourceIndexes: topSetupWithIndex.map((x) => x.sourceIndex), setupGroup: 'top' }
+      );
+      renderBubbles(
+        els.setupBubblesBottom,
+        bottomSetupWithIndex.map((x) => x.bubble),
+        'setup',
+        { sourceIndexes: bottomSetupWithIndex.map((x) => x.sourceIndex), setupGroup: 'bottom' }
+      );
+      els.setupBubblesTop.style.display = topSetupWithIndex.length ? '' : 'none';
+      els.setupBubblesBottom.style.display = bottomSetupWithIndex.length ? '' : 'none';
+      renderBubbles(els.correctBubbles, stop.playerReply.correct || [], 'correct');
+      renderBubbles(els.incorrectBubbles, stop.playerReply.incorrect || [], 'incorrect');
     }
 
     function renderHeader() {
@@ -1503,7 +1350,6 @@
       els.headerLogoAlt.addEventListener('input', (e) => { state.header.logoAlt = e.target.value; });
     }
 
-    // One-time event bindings for stop + reply inputs.
     function attachStopEvents() {
       els.stopId.addEventListener('input', (e) => {
         const stop = getSelectedStop();
@@ -1564,13 +1410,6 @@
         const stop = getSelectedStop();
         if (!stop || stop.playerReply.type !== 'any') return;
         stop.playerReply.storesAs = e.target.value;
-      });
-
-      els.removeReplyBtn.addEventListener('click', () => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        removePlayerReplyFlow(stop);
-        renderAll();
       });
 
 
@@ -1704,33 +1543,10 @@
     });
 
     let copiedStop = null;
-    renderFolderNote();
     attachHeaderEvents();
     attachStopEvents();
     renderAll();
-    loadedStopsSnapshot = null;
-    setStatus('New blank game ready.', 'ok');
-
-    // Auto-scroll while dragging near viewport edges
-    let dragScrollFrame = null;
-    document.addEventListener('dragover', (e) => {
-      const zone = 80;
-      const speed = 12;
-      const y = e.clientY;
-      const h = window.innerHeight;
-      cancelAnimationFrame(dragScrollFrame);
-      if (y < zone) {
-        const force = (zone - y) / zone;
-        const scroll = () => { window.scrollBy(0, -speed * force); dragScrollFrame = requestAnimationFrame(scroll); };
-        dragScrollFrame = requestAnimationFrame(scroll);
-      } else if (y > h - zone) {
-        const force = (y - (h - zone)) / zone;
-        const scroll = () => { window.scrollBy(0, speed * force); dragScrollFrame = requestAnimationFrame(scroll); };
-        dragScrollFrame = requestAnimationFrame(scroll);
-      }
-    });
-    document.addEventListener('dragend', () => cancelAnimationFrame(dragScrollFrame));
-    document.addEventListener('drop', () => cancelAnimationFrame(dragScrollFrame));
+    loadStopsFile({ skipConfirm: true });
   </script>
 </body>
 </html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<!-- File: teams.html | Purpose: Team assignment and password exchange mini-game used by the main scavenger hunt flow. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Team Cipher</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23222' stroke='%23555' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='28' fill='%23444' stroke='%23666' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23888'/%3E%3Cline x1='50' y1='22' x2='50' y2='40' stroke='%23888' stroke-width='4'/%3E%3Cline x1='50' y1='60' x2='50' y2='78' stroke='%23888' stroke-width='4'/%3E%3Cline x1='22' y1='50' x2='40' y2='50' stroke='%23888' stroke-width='4'/%3E%3Cline x1='60' y1='50' x2='78' y2='50' stroke='%23888' stroke-width='4'/%3E%3Cline x1='30' y1='30' x2='43' y2='43' stroke='%23888' stroke-width='4'/%3E%3Cline x1='57' y1='57' x2='70' y2='70' stroke='%23888' stroke-width='4'/%3E%3Cline x1='70' y1='30' x2='57' y2='43' stroke='%23888' stroke-width='4'/%3E%3Cline x1='43' y1='57' x2='30' y2='70' stroke='%23888' stroke-width='4'/%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      /* iOS dark mode system colors */
+      --bg:      #000000;
+      --s1:      #1C1C1E;   /* grouped background */
+      --s2:      #2C2C2E;   /* secondary fill */
+      --s3:      #3A3A3C;   /* tertiary fill */
+      --div:     rgba(255,255,255,0.10);
+      --text:    #FFFFFF;
+      --text2:   rgba(235,235,245,0.75);
+      --text3:   #8E8E93;
+      --blue:    #0A84FF;
+      /* Team colors */
+      --lag:     #f5a623;
+      --tch:     #4ecf98;
+      --rou:     #e85568;
+      --bei:     #6aaef7;
+    }
+
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      height: 100vh; height: 100dvh;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    /* ── iOS Navigation Bar ──────────────────────────────────────── */
+    .nav-bar {
+      background: rgba(28,28,30,0.94);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid var(--div);
+      padding-top: env(safe-area-inset-top, 0);
+      flex-shrink: 0; position: relative; z-index: 10;
+    }
+    .nav-inner {
+      height: 44px; display: flex; align-items: center;
+      padding: 0 8px; position: relative;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 3px;
+      color: var(--blue); font-size: 17px; font-weight: 400;
+      background: none; border: none; cursor: pointer;
+      padding: 0 10px; height: 44px;
+      font-family: inherit; text-decoration: none;
+    }
+    .nav-back:active { opacity: 0.5; transition: opacity 0.05s; }
+    .nav-back svg { width: 10px; height: 18px; margin-right: 1px; }
+    .nav-title {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+      white-space: nowrap;
+    }
+
+    /* ── Scroll area ─────────────────────────────────────────────── */
+    .scroll-area {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 28px 16px calc(env(safe-area-inset-bottom,0px) + 32px);
+    }
+
+    /* ── Game Header ─────────────────────────────────────────────── */
+    .game-header { text-align: center; margin-bottom: 6px; }
+    .game-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.8rem, 18vw, 6rem);
+      letter-spacing: 0.12em; line-height: 1; color: var(--text);
+    }
+    .game-subtitle {
+      font-size: 13px; color: var(--text3);
+      letter-spacing: 0.02em; margin-top: 5px;
+    }
+
+    /* ── Progress Track ──────────────────────────────────────────── */
+    .progress-track {
+      display: flex; gap: 6px; justify-content: center;
+      align-items: center; margin: 18px 0 20px;
+    }
+    .prog-pip {
+      height: 5px; border-radius: 3px;
+      background: var(--s3); flex: 1; max-width: 60px;
+      transition: background 0.5s cubic-bezier(0.34,1.56,0.64,1),
+                  transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .prog-pip.filled { transform: scaleY(1.4); }
+    .prog-pip.lag { background: var(--lag); }
+    .prog-pip.tch { background: var(--tch); }
+    .prog-pip.rou { background: var(--rou); }
+    .prog-pip.bei { background: var(--bei); }
+
+    /* ── Solved Rows ─────────────────────────────────────────────── */
+    .solved-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .solved-row {
+      border-radius: 16px; padding: 13px 18px;
+      animation: popIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.84) translateY(-10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .solved-team-name {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(0,0,0,0.65); margin-bottom: 4px;
+    }
+    .solved-members {
+      font-size: 14px; font-weight: 500; color: rgba(0,0,0,0.72);
+      line-height: 1.5;
+    }
+    .lag-bg { background: var(--lag); }
+    .tch-bg { background: var(--tch); }
+    .rou-bg { background: var(--rou); }
+    .bei-bg { background: var(--bei); }
+
+    /* ── Name Grid ───────────────────────────────────────────────── */
+    .name-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px; margin-bottom: 14px;
+    }
+    @media (min-width: 480px) { .name-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .card {
+      background: var(--s2); border-radius: 16px;
+      padding: 16px 10px; text-align: center;
+      cursor: pointer; touch-action: manipulation;
+      user-select: none; -webkit-user-select: none;
+      min-height: 76px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 3px;
+      border: 1.5px solid transparent;
+      transition: background 0.12s, border-color 0.12s,
+                  transform 0.12s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.12s;
+    }
+    .card:active { transform: scale(0.93) !important; }
+
+    /* Selected (not yet all same team) */
+    .card.selected {
+      background: var(--s3); border-color: rgba(255,255,255,0.55);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    }
+
+    /* All 4 match — light up with team color */
+    .card.team-lit { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.6); }
+    .card.team-lit .card-first { color: rgba(0,0,0,0.5); }
+    .card.team-lit .card-last  { color: rgba(0,0,0,0.85); }
+    .card.lag-lit { background: var(--lag); border-color: var(--lag); }
+    .card.tch-lit { background: var(--tch); border-color: var(--tch); }
+    .card.rou-lit { background: var(--rou); border-color: var(--rou); }
+    .card.bei-lit { background: var(--bei); border-color: var(--bei); }
+
+    .card-first { font-size: 11px; font-weight: 500; color: var(--text3); line-height: 1; }
+    .card-last  { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.25; }
+
+    .card.shake { animation: shake 0.38s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-7px); }
+      60%      { transform: translateX(7px); }
+    }
+
+    /* ── Selection Count ─────────────────────────────────────────── */
+    .sel-count {
+      text-align: center; min-height: 18px; margin-bottom: 14px;
+      font-size: 13px; color: var(--text3); font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Feedback Toast ──────────────────────────────────────────── */
+    .tc-msg {
+      text-align: center; font-size: 14px; font-weight: 600;
+      color: var(--text); max-height: 0; overflow: hidden;
+      transition: max-height 0.2s, opacity 0.2s, padding 0.2s;
+      opacity: 0;
+    }
+    .tc-msg.show { max-height: 3em; opacity: 1; padding: 4px 0 10px; }
+
+    /* ── Action Buttons ──────────────────────────────────────────── */
+    .btn-row { display: flex; gap: 10px; margin-bottom: 2px; }
+    .btn {
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      padding: 15px 0; border-radius: 14px; cursor: pointer;
+      border: none; touch-action: manipulation;
+      transition: transform 0.1s, opacity 0.1s;
+      flex: 1;
+    }
+    .btn:active { transform: scale(0.95); opacity: 0.8; }
+    .btn:disabled { opacity: 0.3; pointer-events: none; }
+    .btn-secondary { background: var(--s2); color: var(--text); }
+    .btn-submit {
+      background: var(--text); color: #000;
+      flex: 2;
+      box-shadow: 0 2px 12px rgba(255,255,255,0.12);
+    }
+    .btn-submit:disabled { box-shadow: none; }
+
+    /* ── Clues ───────────────────────────────────────────────────── */
+    .clues-section { margin-bottom: 20px; background: var(--s1); border-radius: 14px; }
+
+    .clues-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px;
+    }
+    .clues-header-left { font-size: 15px; font-weight: 600; color: var(--text); }
+    .clues-count { font-size: 13px; color: var(--text3); }
+
+    .clue-divider { height: 0.5px; background: var(--div); margin: 0 16px; }
+
+    .clue-row { padding: 14px 16px; }
+    .clue-team-name {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 5px;
+    }
+    .clue-text { font-size: 17px; color: var(--text2); line-height: 1.6; }
+    .clue-text strong { font-weight: 600; color: var(--text); }
+    .clue-row.solved .clue-team-name { opacity: 0.45; }
+    .clue-row.solved .clue-text { color: var(--text3); }
+    .clue-row.solved .clue-text strong { color: var(--text3); }
+  </style>
+</head>
+<body>
+
+<!-- iOS-style navigation bar -->
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-back" href="index.html">
+      <svg viewBox="0 0 10 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9,1 1,9 9,17"/>
+      </svg>
+      Back
+    </a>
+    <span class="nav-title">Team Cipher</span>
+  </div>
+</div>
+
+<!-- Scrollable game content -->
+<div class="scroll-area">
+
+  <div class="game-header">
+    <div class="game-title">CIPHER</div>
+    <div class="game-subtitle">Find the 4 groups of 4</div>
+  </div>
+
+  <!-- Progress pips — one per team, fill on solve -->
+  <div class="progress-track" id="tc-progress">
+    <div class="prog-pip" id="pip-0"></div>
+    <div class="prog-pip" id="pip-1"></div>
+    <div class="prog-pip" id="pip-2"></div>
+    <div class="prog-pip" id="pip-3"></div>
+  </div>
+
+  <!-- Clues section — always expanded -->
+  <div class="clues-section">
+    <div class="clues-header">
+      <span class="clues-header-left">🎭 Clues</span>
+      <span class="clues-count" id="clues-count">0 / 4 solved</span>
+    </div>
+    <div class="clue-divider"></div>
+    <div id="tc-clue-list"></div>
+  </div>
+
+  <!-- Solved team banners appear here -->
+  <div class="solved-rows" id="tc-solved-rows"></div>
+
+  <!-- Tappable name cards -->
+  <div class="name-grid" id="tc-name-grid"></div>
+
+  <div class="sel-count" id="tc-sel-count"></div>
+  <div class="tc-msg" id="tc-msg"></div>
+
+  <!-- Action buttons -->
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="TC.deselectAll()">Clear</button>
+    <button class="btn btn-secondary" onclick="TC.shuffleGrid()">Shuffle</button>
+    <button class="btn btn-submit" id="tc-submit-btn" onclick="TC.submitGuess()" disabled>Submit</button>
+  </div>
+
+
+</div>
+
+<script>
+
+/* ── Team Cipher game ────────────────────────────────────────── */
+const TC = (() => {
+
+  /* ── TEAM DATA ─ edit names, clues, members here ───────────── */
+  const TEAMS = {
+    beignet: {
+      name: 'Beignet',
+      members: ['Abigail Beadle', 'Sanil Parambil', 'Rahim Bhimani', 'Chris Bingham'],
+      bg: 'bei-bg', pipClass: 'bei',
+      clue: 'All 4 members share at least one consonant in common with the word <strong>"BEIGNET"</strong>.'
+    },
+    lagniappe: {
+      name: 'Lagniappe',
+      members: ['Matt Toms', 'Deji Oduntan', 'Aneesh Chakko', 'Arlene Radley'],
+      bg: 'lag-bg', pipClass: 'lag',
+      clue: 'Three members each have a first name and last name with <strong>equal letter counts</strong>, but those counts are <strong>not necessarily the same</strong> as each other. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+    },
+    tchoupitoulas: {
+      name: 'Tchoupitoulas',
+      members: ['Rory Sewell', 'Chuck Foster', 'Kamran Kamal', 'Sharon Maxfield'],
+      bg: 'tch-bg', pipClass: 'tch',
+      clue: 'Contains one of two people who <strong>share a last name</strong>. Also includes the only person whose <strong>first and last name start with the same letter</strong>, and the person whose <strong>combined name is the longest</strong> in the group. The fourth member is <strong>Deji</strong> or <strong>Chuck</strong>.'
+    },
+    rougarou: {
+      name: 'Rougarou',
+      members: ['Tim Sewell', 'Jeremy Sharp', 'Mo Zaman', 'Jason Atkins'],
+      bg: 'rou-bg', pipClass: 'rou',
+      clue: 'Contains the <strong>first person alphabetically by last name</strong> and the <strong>last person alphabetically by last name</strong>. Also contains <strong>one of two people who share a last name</strong>. One member\'s last name is one of only <strong>two last names that doubles as an adjective</strong>.'
+    }
+  };
+
+  /* ── Engine ─ no edits needed below ────────────────────────── */
+  const teamKeys = Object.keys(TEAMS);
+  const memberTeam = {};
+  for (const [key, t] of Object.entries(TEAMS))
+    for (const m of t.members) memberTeam[m] = key;
+
+  let displayOrder = Object.values(TEAMS).flatMap(t => t.members);
+  let selected    = new Set();
+  let solvedTeams = new Set();
+  let solvedCount = 0;
+  let msgTimer;
+
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  shuffle(displayOrder);
+
+  const isSolved = name => solvedTeams.has(memberTeam[name]);
+
+  const teamLitMap = {
+    lagniappe: 'lag-lit', tchoupitoulas: 'tch-lit',
+    rougarou: 'rou-lit',  beignet: 'bei-lit'
+  };
+
+  function allSameTeam() {
+    if (selected.size !== 4) return null;
+    const keys = [...selected].map(n => memberTeam[n]);
+    return keys.every(k => k === keys[0]) ? keys[0] : null;
+  }
+
+  function renderClues() {
+    document.getElementById('tc-clue-list').innerHTML =
+      teamKeys.map((key, i) => {
+        const t = TEAMS[key];
+        const solved = solvedTeams.has(key);
+        const style  = `color:var(--${t.pipClass})`;
+        return (i > 0 ? '<div class="clue-divider"></div>' : '') +
+          `<div class="clue-row ${solved ? 'solved' : ''}">
+            <div class="clue-team-name" style="${style}">${t.name}</div>
+            <div class="clue-text">${t.clue}</div>
+          </div>`;
+      }).join('');
+
+    // Update clues count badge
+    document.getElementById('clues-count').textContent =
+      `${solvedTeams.size} / 4 solved`;
+  }
+
+  function renderGrid() {
+    const remaining = displayOrder.filter(n => !isSolved(n));
+    const litTeam   = allSameTeam();
+    const litClass  = litTeam ? teamLitMap[litTeam] : '';
+
+    document.getElementById('tc-name-grid').innerHTML = remaining.map(name => {
+      const [first, ...rest] = name.split(' ');
+      const last    = rest.join(' ');
+      const isSel   = selected.has(name);
+      const cardCls = isSel ? (litTeam ? `team-lit ${litClass}` : 'selected') : '';
+      return `<div class="card ${cardCls}"
+          id="tc-c-${name.replace(/ /g,'_')}" data-name="${name}">
+          <div class="card-first">${first}</div>
+          <div class="card-last">${last}</div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('tc-sel-count').textContent =
+      selected.size ? `${selected.size} of 4 selected` : '';
+    document.getElementById('tc-submit-btn').disabled = selected.size !== 4;
+  }
+
+  function toggle(name) {
+    if (selected.has(name)) {
+      selected.delete(name);
+    } else {
+      if (selected.size >= 4) { showMsg('Deselect someone first'); return; }
+      selected.add(name);
+    }
+    renderGrid();
+  }
+
+  function deselectAll() { selected.clear(); renderGrid(); }
+
+  function shuffleGrid() {
+    const rem = shuffle(displayOrder.filter(n => !isSolved(n)));
+    displayOrder = [...displayOrder.filter(isSolved), ...rem];
+    renderGrid();
+  }
+
+  function submitGuess() {
+    if (selected.size !== 4) return;
+    const names = [...selected];
+    const keys  = names.map(n => memberTeam[n]);
+
+    if (keys.every(k => k === keys[0])) {
+      const key = keys[0];
+      solvedTeams.add(key);
+      selected.clear();
+      addSolvedRow(key);
+      fillNextPip(key);
+      renderGrid();
+      renderClues();
+
+      if (solvedTeams.size === teamKeys.length) {
+        showMsg('🎉 All solved! <a href="index.html" style="color:var(--text);text-decoration:underline">← Back to enter your team</a>', true, true);
+      } else {
+        showMsg('Correct! 🎉');
+      }
+    } else {
+      // Shake wrong cards
+      names.forEach(name => {
+        const el = document.getElementById('tc-c-' + name.replace(/ /g, '_'));
+        if (el) { el.classList.add('shake'); setTimeout(() => el.classList.remove('shake'), 400); }
+      });
+      const counts = {};
+      keys.forEach(k => counts[k] = (counts[k] || 0) + 1);
+      showMsg(Object.values(counts).some(c => c === 3) ? '😬 One away…' : 'Not quite — try again');
+    }
+  }
+
+  function addSolvedRow(key) {
+    const t  = TEAMS[key];
+    const el = document.createElement('div');
+    el.className = `solved-row ${t.bg}`;
+    el.innerHTML = `<div class="solved-team-name">${t.name} Team</div>
+      <div class="solved-members">${t.members.join(' · ')}</div>`;
+    document.getElementById('tc-solved-rows').appendChild(el);
+  }
+
+  function fillNextPip(key) {
+    const pip = document.getElementById('pip-' + solvedCount);
+    if (pip) {
+      pip.classList.add('filled', TEAMS[key].pipClass);
+    }
+    solvedCount++;
+  }
+
+  function showMsg(msg, persist, isHtml) {
+    const el = document.getElementById('tc-msg');
+    if (isHtml) el.innerHTML = msg; else el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(msgTimer);
+    if (!persist) msgTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // Tap handler
+  document.getElementById('tc-name-grid').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (card && card.dataset.name) toggle(card.dataset.name);
+  });
+
+  renderClues();
+  renderGrid();
+
+  return { deselectAll, shuffleGrid, submitGuess };
+})();
+</script>
+</body>
+</html>

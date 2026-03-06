@@ -12,18 +12,18 @@
       "id": "muff",
       "setup": [
         {
-          "name": "muff-action-1",
-          "html": "Which of the following is NOT part of a Muffuletta (sandwich)\nA) French Bread\nB) Olive Salad\nC) Mortadella\nD) Provolone\n",
-          "callToAction": true,
-          "forAnswer": "",
-          "bottomAdded": false
-        },
-        {
           "name": "muff-message-1",
-          "html": "",
+          "html": "Which of the following is NOT part of a Muffuletta (sandwich)?\nA) French Bread\nB) Olive Salad\nC) Mortadella\nD) Provolone",
           "callToAction": false,
           "forAnswer": "",
           "bottomAdded": true
+        },
+        {
+          "name": "muff-action-1",
+          "html": "",
+          "callToAction": true,
+          "forAnswer": "",
+          "bottomAdded": false
         }
       ],
       "playerReply": {
@@ -32,7 +32,7 @@
         "correct": [
           {
             "name": "muff-correct-1",
-            "html": "Yup, Muffelettas use round Sicilian sesame bread. French bread is for Poor boys.",
+            "html": "Great answer. Moving on.",
             "callToAction": false,
             "forAnswer": "",
             "bottomAdded": false
@@ -41,28 +41,25 @@
         "incorrect": [
           {
             "name": "muff-incorrect-1",
-            "html": "Nope.",
+            "html": "Not yet. Check your spelling.",
             "callToAction": true,
             "forAnswer": "",
             "bottomAdded": false
           }
         ],
         "placeholder": "",
-        "answers": [
-          "A",
-          "French Bread"
-        ],
+        "answers": [],
         "setsTeam": false,
         "goTo": ""
       }
     },
     {
-      "id": "new-send-to-lafayette",
+      "id": "new-stop-21",
       "setup": [
         {
-          "name": "new-send-to-lafayette-call-to-action",
-          "html": "Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE.",
-          "callToAction": true,
+          "name": "new-stop-21-message-1",
+          "html": "<img src=\"lafayette.png\" alt=\"\" style=\"max-width:100%;\">",
+          "callToAction": false,
           "forAnswer": "",
           "bottomAdded": false
         }
@@ -70,28 +67,10 @@
       "playerReply": {
         "name": "",
         "type": "text",
-        "correct": [
-          {
-            "name": "new-stop-19-correct-1",
-            "html": "Lafayette! That's right.",
-            "callToAction": false,
-            "forAnswer": "",
-            "bottomAdded": false
-          }
-        ],
-        "incorrect": [
-          {
-            "name": "new-stop-19-incorrect-1",
-            "html": "Almost. Re-read the clue.",
-            "callToAction": true,
-            "forAnswer": "",
-            "bottomAdded": false
-          }
-        ],
-        "placeholder": "Name that Frenchman...",
-        "answers": [
-          "Lafayette"
-        ],
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
         "setsTeam": false,
         "goTo": ""
       }
@@ -142,12 +121,12 @@
       }
     },
     {
-      "id": "new-stop-21",
+      "id": "new-send-to-lafayette",
       "setup": [
         {
-          "name": "new-stop-21-message-1",
-          "html": "<img src=\"lafayette.png\" alt=\"\" style=\"max-width:100%;\">",
-          "callToAction": false,
+          "name": "new-send-to-lafayette-call-to-action",
+          "html": "Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE.",
+          "callToAction": true,
           "forAnswer": "",
           "bottomAdded": false
         }
@@ -155,40 +134,28 @@
       "playerReply": {
         "name": "",
         "type": "text",
-        "correct": [],
-        "incorrect": [],
-        "placeholder": "",
-        "answers": [],
-        "setsTeam": false,
-        "goTo": ""
-      }
-    },
-    {
-      "id": "s2-definition",
-      "setup": [
-        {
-          "name": "def-ask",
-          "html": "<p>Ok, you're TEAM <strong>{{TEAM_NAME}}</strong>, but what does {{teamName}} mean?</p><p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>",
-          "callToAction": false,
-          "forAnswer": "",
-          "bottomAdded": false
-        }
-      ],
-      "playerReply": {
-        "name": "",
-        "type": "text",
-        "correct": [],
-        "incorrect": [
+        "correct": [
           {
-            "name": "def-wrong",
-            "html": "Ooh, not quite! 🤔 Text <strong>504-581-5652</strong> and Mission Control will get you sorted.",
+            "name": "new-stop-19-correct-1",
+            "html": "Lafayette! That's right.",
             "callToAction": false,
             "forAnswer": "",
             "bottomAdded": false
           }
         ],
-        "placeholder": "A, B, C or D",
-        "answers": [],
+        "incorrect": [
+          {
+            "name": "new-stop-19-incorrect-1",
+            "html": "Almost. Re-read the clue.",
+            "callToAction": true,
+            "forAnswer": "",
+            "bottomAdded": false
+          }
+        ],
+        "placeholder": "Name that Frenchman...",
+        "answers": [
+          "Lafayette"
+        ],
         "setsTeam": false,
         "goTo": ""
       }
@@ -272,18 +239,48 @@
       }
     },
     {
+      "id": "s2-definition",
+      "setup": [
+        {
+          "name": "def-ask",
+          "html": "<p>Ok, you're TEAM <strong>{{TEAM_NAME}}</strong>, but what does {{teamName}} mean?</p><p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>",
+          "callToAction": false,
+          "forAnswer": "",
+          "bottomAdded": false
+        }
+      ],
+      "playerReply": {
+        "name": "",
+        "type": "text",
+        "correct": [],
+        "incorrect": [
+          {
+            "name": "def-wrong",
+            "html": "Ooh, not quite! 🤔 Text <strong>504-581-5652</strong> and Mission Control will get you sorted.",
+            "callToAction": false,
+            "forAnswer": "",
+            "bottomAdded": false
+          }
+        ],
+        "placeholder": "A, B, C or D",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
       "id": "sendtolafayettesquare",
       "setup": [
         {
-          "name": "nav-go-to-lafayette",
-          "html": "Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE.",
+          "name": "def-correct",
+          "html": "{{correctMsg}}",
           "callToAction": false,
           "forAnswer": "",
           "bottomAdded": false
         },
         {
-          "name": "def-correct",
-          "html": "{{correctMsg}}",
+          "name": "nav-go-to-lafayette",
+          "html": "Are there any Hamilton fans on your team? The musical — not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry — watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE.",
           "callToAction": false,
           "forAnswer": "",
           "bottomAdded": false

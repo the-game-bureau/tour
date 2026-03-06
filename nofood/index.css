@@ -150,39 +150,8 @@ body {
   position: relative;
 }
 
-/* Image bubbles: no padding so photo fills the bubble */
-.msg.has-img .msg-bubble { padding: 0; }
-
-/* Photo bubbles from game: blue bubble fill with padding + same left-tail treatment as text bubbles */
-.msg.from-game.has-img .msg-bubble {
-  background: #1a73e8;
-  border: 0;
-  padding: 0.35rem;
-  border-bottom-left-radius: 5px;
-  overflow: visible;
-}
-.msg.from-game.has-img .msg-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -8px;
-  width: 20px;
-  height: 20px;
-  background: #1a73e8;
-  border-bottom-right-radius: 16px;
-  z-index: -1;
-}
-.msg.from-game.has-img .msg-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -12px;
-  width: 12px;
-  height: 20px;
-  background: #ffffff;
-  border-bottom-right-radius: 10px;
-  z-index: 0;
-}
+/* Image bubbles: no padding so photo fills the bubble, clipped to border-radius */
+.msg.has-img .msg-bubble { overflow: hidden; padding: 0; }
 
 /* Blue game bubble styling */
 .msg.from-game .msg-bubble {
@@ -282,9 +251,6 @@ body {
   display: block;
   cursor: zoom-in;
 }
-.msg.from-game.has-img .msg-bubble img {
-  border-radius: 14px;
-}
 
 /* Fullscreen image lightbox overlay */
 .lb {
@@ -308,11 +274,12 @@ body {
   object-fit: contain;
 }
 
-/* Typing indicator as a cartoon thought cloud */
+/* Typing indicator bubble */
 .typing {
   align-self: flex-start;
   background: #e5e7eb;
-  border-radius: 999px;
+  border-radius: 20px;
+  border-bottom-left-radius: 5px;
   padding: 0.55rem 0.9rem;
   display: flex;
   gap: 6px;
@@ -320,26 +287,28 @@ body {
   position: relative;
 }
 
-/* Thought-cloud trailing circles (instead of a speech tail) */
+/* iMessage left tail on typing bubble */
 .typing::before {
   content: '';
   position: absolute;
-  left: 10px;
-  bottom: -8px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  bottom: 0;
+  left: -8px;
+  width: 20px;
+  height: 20px;
   background: #e5e7eb;
+  border-bottom-right-radius: 16px;
+  z-index: -1;
 }
 .typing::after {
   content: '';
   position: absolute;
-  left: 2px;
-  bottom: -15px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #e5e7eb;
+  bottom: 0;
+  left: -12px;
+  width: 12px;
+  height: 20px;
+  background: #ffffff;
+  border-bottom-right-radius: 10px;
+  z-index: 0;
 }
 
 /* Typing indicator dots */
