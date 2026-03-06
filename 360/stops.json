@@ -1,0 +1,439 @@
+{
+  "_comment": "File: stops.json | Purpose: Source-of-truth game data for the New Orleans walking tour. Loaded by engine.js, edited via builder.html.",
+
+  "header": {
+    "title": "WALKING TOUR",
+    "subtitle": "Mission Control",
+    "logoUrl": "https://the-game-bureau.github.io/tour/resources/360.png",
+    "logoAlt": "360",
+    "pageTitle": "WALKING TOUR"
+  },
+
+  "_templateVars": "Setup HTML and correct/incorrect HTML may contain: {{teamName}} (e.g. Beignet), {{TEAM_NAME}} (uppercase), {{teamW3W}} (w3w URL), {{partnerName}} (e.g. Lagniappe), {{PARTNER_NAME}} (uppercase), {{give}} (password to shout), {{correctMsg}} (team definition correct message), {{receiveBlurb}} (food description for received password), {{teamColor}} (hex color).",
+
+  "teamLetterMap": {
+    "a": "beignet",
+    "b": "lagniappe",
+    "c": "rougarou",
+    "d": "tch"
+  },
+
+  "teamKeyMap": {
+    "beignet": "beignet",
+    "lagniappe": "lagniappe",
+    "tchoupitoulas": "tch",
+    "rougarou": "rougarou"
+  },
+
+  "teams": {
+    "beignet":   { "name": "Beignet",       "color": "#6aaef7", "cls": "team-beignet",   "w3w": "https://w3w.co/tend.snipped.national"  },
+    "lagniappe": { "name": "Lagniappe",     "color": "#f5a623", "cls": "team-lagniappe", "w3w": "https://w3w.co/ideas.shorter.restore"  },
+    "rougarou":  { "name": "Rougarou",      "color": "#e85568", "cls": "team-rougarou",  "w3w": "https://w3w.co/bearings.student.seats" },
+    "tch":       { "name": "Tchoupitoulas", "color": "#4ecf98", "cls": "team-tch",       "w3w": "https://w3w.co/captures.sailor.clues"  }
+  },
+
+  "teamDefs": {
+    "beignet": {
+      "definitionLetter": "b",
+      "correctMsg": "Correct! A beignet is a deep-fried French doughnut. \ud83c\udf69 We know, too much standing around. Let's get moving!",
+      "partner": "Lagniappe",
+      "give": "JAMBALAYA",
+      "receive": "gumbo",
+      "receiveLetter": "b",
+      "receiveBlurb": "Gumbo is the unofficial dish of Louisiana \u2014 a thick, dark-roux stew that takes all day and sparks arguments all week."
+    },
+    "lagniappe": {
+      "definitionLetter": "c",
+      "correctMsg": "Correct! Lagniappe means a little something extra. \ud83c\udf81 We know, too much standing around. Let's get moving!",
+      "partner": "Beignet",
+      "give": "GUMBO",
+      "receive": "jambalaya",
+      "receiveLetter": "c",
+      "receiveBlurb": "Jambalaya is Louisiana's answer to paella \u2014 rice, meat, and vegetables all cooked in one pot."
+    },
+    "tch": {
+      "definitionLetter": "a",
+      "correctMsg": "Correct! The Tchoupitoulas were a Native American tribe. \ud83eudeb6 We know, we know, this is too much standing around! Let's get moving!",
+      "partner": "Rougarou",
+      "give": "ETOUFFEE",
+      "receive": "muffuletta",
+      "receiveLetter": "d",
+      "receiveBlurb": "The muffuletta was invented at Central Grocery, right here in New Orleans \u2014 a round Sicilian loaf piled with olive salad and Italian meats."
+    },
+    "rougarou": {
+      "definitionLetter": "d",
+      "correctMsg": "Correct! The Rougarou is a Cajun werewolf. \ud83d\udc3a We know, too much standing around. Let's get moving!",
+      "partner": "Tchoupitoulas",
+      "give": "MUFFULETTA",
+      "receive": "etouffee",
+      "receiveLetter": "a",
+      "receiveBlurb": "\u00c9touff\u00e9e means 'smothered' in French \u2014 crawfish buried in a rich buttery sauce, served over rice."
+    }
+  },
+
+  "_routesComment": "After stop s5-gallier, the engine follows the team's route array (ordered list of tail stop IDs).",
+  "routes": {
+    "beignet":   ["henry-clay", "the-ladies", "federal-reserve", "bush-tree", "sculpture", "cuba", "cuba-photo", "hale-boggs", "lighthouse", "win"],
+    "lagniappe": ["sculpture", "henry-clay", "the-ladies", "federal-reserve", "bush-tree", "cuba", "cuba-photo", "hale-boggs", "lighthouse", "win"],
+    "tch":       ["the-ladies", "federal-reserve", "bush-tree", "sculpture", "cuba", "cuba-photo", "hale-boggs", "lighthouse", "win"],
+    "rougarou":  ["bush-tree", "sculpture", "henry-clay", "the-ladies", "federal-reserve", "cuba", "cuba-photo", "hale-boggs", "lighthouse", "win"]
+  },
+
+  "teamCipher": {
+    "beignet": {
+      "name": "Beignet",
+      "color": "#6aaef7",
+      "bgCls": "bei-bg",
+      "members": ["Abigail Beadle", "Sanil Parambil", "Rahim Bhimani", "Chris Bingham"],
+      "clue": "All 4 members share at least one consonant in common with the word <strong>\"BEIGNET\"</strong>."
+    },
+    "lagniappe": {
+      "name": "Lagniappe",
+      "color": "#f5a623",
+      "bgCls": "lag-bg",
+      "members": ["Matt Toms", "Deji Oduntan", "Aneesh Chakko", "Arlene Radley"],
+      "clue": "Three members of this team each have a first name and last name with <strong>equal letter counts</strong> \u2014 but those counts are <strong>not necessarily the same</strong> as other team members. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>."
+    },
+    "tchoupitoulas": {
+      "name": "Tchoupitoulas",
+      "color": "#4ecf98",
+      "bgCls": "tch-bg",
+      "members": ["Rory Sewell", "Chuck Foster", "Kamran Kamal", "Sharon Maxfield"],
+      "clue": "Contains one of two people who <strong>share a last name</strong>. Also includes the only person whose <strong>first and last name start with the same letter</strong>, and the person whose <strong>combined first and last name is the longest</strong> in the group. The fourth team member is <strong>Deji</strong> or <strong>Chuck</strong>."
+    },
+    "rougarou": {
+      "name": "Rougarou",
+      "color": "#e85568",
+      "bgCls": "rou-bg",
+      "members": ["Tim Sewell", "Jeremy Sharp", "Mo Zaman", "Jason Atkins"],
+      "clue": "This team contains the <strong>first person alphabetically by last name</strong> and the <strong>last person alphabetically by last name</strong>. It also contains <strong>one of two people who share a last name</strong>. One member's last name is one of only <strong>two last names in the entire group that doubles as an adjective</strong>."
+    }
+  },
+
+  "stops": [
+
+    {
+      "id": "s0-intro",
+      "setup": [
+        { "name": "intro-we-lied",   "html": "We lied." },
+        { "name": "intro-type-play", "html": "This IS a team building exercise, but it's NOT a walking tour. Think Escape Room meets Scavenger Hunt. Type PLAY to find out what team you're on." }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "",
+        "answers": ["play"],
+        "correct": [],
+        "incorrect": [
+          { "name": "intro-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "s1-cipher",
+      "setup": [
+        { "name": "cipher-btn", "html": "Figure out which team you're on using the Team Cipher puzzle.<button class=\"open-cipher-btn\" onclick=\"openTeamOverlay()\">Open Team Cipher \u2192</button>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "answers": ["a", "b", "c", "d", "beignet", "lagniappe", "rougarou", "tchoupitoulas"],
+        "setsTeam": true,
+        "correct": [],
+        "incorrect": [
+          { "name": "cipher-wrong", "html": "Hmm, check that spelling! If you're stuck, text <strong>504-581-5652</strong> for help from Mission Control." }
+        ]
+      }
+    },
+
+    {
+      "id": "s2-definition",
+      "setup": [
+        {
+          "name": "def-ask",
+          "html": "<p>Ok, you're TEAM <strong>{{TEAM_NAME}}</strong>, but what does {{teamName}} mean?</p><p>A)&nbsp; A Native American tribe<br>B)&nbsp; A deep-fried French doughnut<br>C)&nbsp; A little something extra<br>D)&nbsp; A Cajun werewolf</p>"
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "teamAnswers": {
+          "beignet":   ["b"],
+          "lagniappe": ["c"],
+          "tch":       ["a"],
+          "rougarou":  ["d"]
+        },
+        "correct": [],
+        "incorrect": [
+          { "name": "def-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "s3-nav",
+      "setup": [
+        {
+          "name": "def-correct",
+          "html": "{{correctMsg}}"
+        },
+        {
+          "name": "nav-go-to-lafayette",
+          "html": "Are there any Hamilton fans on your team? The musical \u2014 not the Tiger-Cats. HEAD TO THE SQUARE NAMED FOR AMERICA'S FAVORITE FIGHTING FRENCHMAN. Google it if you must. Hurry \u2014 watch for cars and streetcars. TELL ME THE FRENCHMAN'S NAME ONCE YOU ARRIVE."
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "The Frenchman's name\u2026",
+        "answers": ["lafayette"],
+        "correct": [],
+        "incorrect": [
+          { "name": "nav-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "s4-arrival",
+      "setup": [
+        { "name": "arrival-photo",   "html": "<p><img src=\"https://the-game-bureau.github.io/tour/resources/lafayette.png\" alt=\"Lafayette Square\"></p>" },
+        { "name": "arrival-welcome", "html": "Welcome to Lafayette Square, Team <strong>{{teamName}}</strong>! I'm so glad you didn't go all the way to Jackson Square. <a href=\"{{teamW3W}}\" target=\"_blank\"><strong>FIND THIS EXACT SPOT</strong></a> and then we'll take a look around. Reply with <strong>HERE!</strong> when you get to the <strong>exact spot</strong>." }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Type HERE! when you arrive\u2026",
+        "answers": ["here", "here!"],
+        "correct": [],
+        "incorrect": [
+          { "name": "arrival-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "s4-photo",
+      "setup": [
+        { "name": "photo-prompt", "html": "\ud83d\udcf8 Designate a team photographer. Take a team photo here. To win this game you not only need to be the first to finish, you also need to show all of your pics! Type <strong>CLICK</strong> to continue." }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Type CLICK to continue\u2026",
+        "answers": ["click"],
+        "correct": [],
+        "incorrect": []
+      }
+    },
+
+    {
+      "id": "s4b-tour",
+      "setup": [
+        { "name": "tour-politics",   "html": "You're standing in the former epicenter of New Orleans politics." },
+        { "name": "tour-clay",       "html": "Henry Clay is here in the middle of Lafayette Square for no apparent reason. He founded the Whig Party that, upon its collapse, made way for the Republican party." },
+        { "name": "tour-gallier",    "html": "Straight across the street, on St. Charles Avenue (where the streetcar runs) is Gallier Hall, that used to be our City Hall." },
+        { "name": "tour-federal",    "html": "To the right of Gallier Hall is a boring looking building that Henry Clay is kind of gesturing towards, and it may secretly be the most fascinating of all." },
+        { "name": "tour-courthouse", "html": "Opposite St. Charles Avenue, on Camp Street, there's a huge building to your right on the other side of the square that serves as the U.S. Court of Appeals building, but it started as a good ol' post office. Can you see the statues on top?" },
+        { "name": "pwd-unlock",      "html": "Enough sightseeing. I was stalling. Hopefully Team <strong>{{partnerName}}</strong> has arrived. We need their help." },
+        { "name": "pwd-callout",     "html": "Stay where you are. Call out <strong>HEY TEAM {{PARTNER_NAME}}. YOUR PASSWORD IS {{give}}. WHAT IS OUR PASSWORD?</strong>" },
+        { "name": "pwd-prompt",      "html": "<p>What password did Team {{PARTNER_NAME}} give you?</p><p>A)&nbsp; Etouffee<br>B)&nbsp; Gumbo<br>C)&nbsp; Jambalaya<br>D)&nbsp; Muffuletta</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "teamAnswers": {
+          "beignet":   ["b", "gumbo"],
+          "lagniappe": ["c", "jambalaya"],
+          "tch":       ["d", "muffuletta"],
+          "rougarou":  ["a", "etouffee"]
+        },
+        "correct": [],
+        "incorrect": [
+          { "name": "pwd-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "s5-gallier",
+      "setup": [
+        { "name": "gallier-correct",  "html": "Correct! {{receiveBlurb}}" },
+        { "name": "gallier-question", "html": "Next, let's focus back on Gallier Hall. A president's funeral was held here \u2014 just not a United States president. The Confederate States of America had a president too. What was his last name?" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Last name\u2026",
+        "answers": ["jeffersondavis", "jeffdavis", "davis"],
+        "correct": [],
+        "incorrect": [
+          { "name": "gallier-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ],
+        "goTo": "{{teamRoute[0]}}"
+      }
+    },
+
+    {
+      "_comment": "TAIL STOPS — order determined per team by the routes table above.",
+
+      "id": "henry-clay",
+      "setup": [
+        { "name": "henry-clay-photo", "html": "<p>Jefferson Davis was President of the CONFEDERATE States of America \u2014 not the United States! \ud83d\ude2e Here's a picture from his funeral, right at Gallier Hall, 135 years ago: <a href=\"https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18\" target=\"_blank\">https://cdm16880.contentdm.oclc.org/digital/collection/p16880coll18</a></p><p>Now send me a photo of you or your team with Henry Clay in the background. Why he's hanging out in Lafayette Square, I'll never know.</p>" }
+      ],
+      "playerReply": {
+        "type": "button",
+        "text": "Photo sent \u2713",
+        "playerText": "[photo]",
+        "correct": [],
+        "incorrect": []
+      }
+    },
+
+    {
+      "id": "the-ladies",
+      "setup": [
+        { "name": "ladies-correct",      "html": "Correct!" },
+        { "name": "ladies-info",         "html": "<p>Now. Look up! Atop the roof of the John Minor Wisdom U.S. Court of Appeals Building \u2014 the one across from you on Camp Street \u2014 are four sets of bronze sculptures known as 'The Ladies': Agriculture, History, Industry and Arts. Actually there are 16 ladies because there are 4 identical statues on the roof. One on each corner. They were sculpted by <strong>Daniel Chester French</strong>.</p>" },
+        { "name": "ladies-photo",        "html": "<p><img src=\"https://the-game-bureau.github.io/tour/resources/theladies.jpg\" alt=\"The Ladies sculptures\"></p>" },
+        { "name": "ladies-photo-prompt", "html": "\ud83d\udcf8 Take a team photo of your team looking up at The Ladies." },
+        { "name": "ladies-question",     "html": "<p>Daniel Chester French also designed another famous U.S. memorial. Do you know which one?</p><p>A)&nbsp; The Lincoln Memorial<br>B)&nbsp; The Statue of Liberty<br>C)&nbsp; The Washington Monument<br>D)&nbsp; Mount Rushmore</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "answers": ["a", "lincolnmemorial", "thelincolnmemorial"],
+        "correct": [],
+        "incorrect": [
+          { "name": "ladies-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "federal-reserve",
+      "setup": [
+        { "name": "fed-correct",   "html": "Oh yeah! \ud83c\udf89" },
+        { "name": "fed-info",      "html": "<p>Next, take a look at the plain building to the right of Gallier Hall \u2014 that's the Federal Reserve Bank of Atlanta's New Orleans branch.</p><p>TELL ME HOW MANY DOLLARS A DAY they're talking about in the video below. Watch at least the first minute now to get the answer and you can watch the whole video later.</p><p><a href=\"https://www.youtube.com/watch?v=mwCfK1oqRkI\" target=\"_blank\">https://www.youtube.com/watch?v=mwCfK1oqRkI</a></p>" },
+        { "name": "fed-question",  "html": "<p>A)&nbsp; $42.50<br>B)&nbsp; 1 MILLION DOLLARS<br>C)&nbsp; 6 MILLION DOLLARS<br>D)&nbsp; 1 TRILLION DOLLARS</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "answers": ["c", "6million", "6000000", "sixmillion", "6milliondollars"],
+        "correct": [],
+        "incorrect": [
+          { "name": "fed-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "bush-tree",
+      "setup": [
+        { "name": "bush-correct",  "html": "Bingo!" },
+        { "name": "bush-task",     "html": "Let's wander around the square for a minute. FIND A TREE PLANTED BY A BUSH AND TELL ME WHAT TYPE OF TREE IT IS." },
+        { "name": "bush-question", "html": "<p>A)&nbsp; Bald Cypress<br>B)&nbsp; Crepe Myrtle<br>C)&nbsp; Shumard Oak<br>D)&nbsp; Weeping Willow</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "A, B, C or D",
+        "answers": ["c", "shumardoak", "shumard"],
+        "correct": [],
+        "incorrect": [
+          { "name": "bush-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "sculpture",
+      "setup": [
+        { "name": "sculp-photo",   "html": "<p><img src=\"https://the-game-bureau.github.io/tour/resources/Bush.jpg\" alt=\"Bush tree photo\"></p>" },
+        { "name": "sculp-context", "html": "The original monument got replaced because of a misspelled word and the original tree got replaced because it died, but hey, it's the thought that counts!" },
+        { "name": "sculp-task",    "html": "There's a sculpture across Camp Street \u2014 kinda looks like a pointing arrow. TAKE A SHORT VIDEO OF YOUR TEAM ROTATING THE SCULPTURE AND HAVE IT POINT TO THE NAME OF A FOUNDING FATHER. TELL ME HIS LAST NAME." },
+        { "name": "sculp-hint",    "html": "\ud83d\udca1 HINT: Do NOT text me \"Benjamin Franklin\". You may have to strain your neck a bit to find his name written in stone. He was the first Chief Justice of the United States, appointed by George Washington himself. Try not to Google it." }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "His last name\u2026",
+        "answers": ["johnjay", "jay"],
+        "correct": [],
+        "incorrect": [
+          { "name": "sculp-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "cuba",
+      "setup": [
+        { "name": "cuba-task", "html": "<p>There's a small monument on Poydras Street with a big story. In 1850, Venezuelan-born general Narciso L\u00f3pez \u2014 who had designed what would become his adopted country's flag \u2014 sailed from New Orleans with hundreds of soldiers, carrying that flag there for the very first time in history.</p><p>Find the monument: <a href=\"https://what3words.com/remake.king.cloth\" target=\"_blank\">https://what3words.com/remake.king.cloth</a></p><p>Oh shoot, that map tells you the name of the country. I tell you what...</p><p>Type <strong>CLICK</strong> to continue.</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Type CLICK to continue\u2026",
+        "answers": ["click"],
+        "correct": [],
+        "incorrect": []
+      }
+    },
+
+    {
+      "id": "cuba-photo",
+      "setup": [
+        { "name": "cuba-photo-prompt", "html": "<p>\ud83d\udcf8 Take a team photo at the monument. Save it for later.</p><p>Type <strong>CLICK</strong> to continue.</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Type CLICK to continue\u2026",
+        "answers": ["click"],
+        "correct": [],
+        "incorrect": []
+      }
+    },
+
+    {
+      "id": "hale-boggs",
+      "setup": [
+        { "name": "boggs-question", "html": "<p>What do Lee Harvey Oswald, the CIA, FBI and Secret Service all have in common? They all had offices in this neighborhood at one time or another.</p><p>\ud83d\udcf8 Take a team photo in front of the building. Save it for later.</p><p>He investigated a murder. He questioned the answer. He boarded a plane and vanished. The building next to you bears his name. Who was he?</p>" }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Who was he?",
+        "answers": ["haleboggs", "haleboggs", "boggs"],
+        "correct": [],
+        "incorrect": [
+          { "name": "boggs-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "lighthouse",
+      "setup": [
+        { "name": "light-task", "html": "TAKE A PIC OF THE BEACON OF LIGHT STANDING BETWEEN JULIA AND HER BROTHER GIROD. Send me the name of the restaurant we're going to." }
+      ],
+      "playerReply": {
+        "type": "text",
+        "placeholder": "Restaurant name?",
+        "answers": ["junebug"],
+        "correct": [],
+        "incorrect": [
+          { "name": "light-wrong", "html": "Ooh, not quite! \ud83e\udd14 Text <strong>504-581-5652</strong> and Mission Control will get you sorted." }
+        ]
+      }
+    },
+
+    {
+      "id": "win",
+      "setup": [
+        { "name": "win-end", "html": "\ud83c\udf89 You've completed the game! But wait! Quick! \ud83c\udfc3 Text <strong>{{TEAM_NAME}}</strong> to <strong>504.581.5652</strong> right now (don't type it here). The first team to do so wins a prize! \ud83c\udfc6" }
+      ],
+      "playerReply": {
+        "type": "win",
+        "placeholder": "",
+        "answers": [],
+        "correct": [],
+        "incorrect": []
+      }
+    }
+
+  ]
+}
