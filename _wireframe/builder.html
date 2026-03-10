@@ -15,6 +15,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Builder</title>
+  <link rel="icon" href="builder.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -55,16 +56,6 @@
       gap: 12px;
     }
 
-    .page-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-    }
-    .page-title-block {
-      display: grid;
-      gap: 2px;
-    }
 
     h1 {
       margin: 0;
@@ -96,12 +87,6 @@
       color: var(--ink);
     }
 
-    .page-actions {
-      flex: 0 0 auto;
-      display: flex;
-      gap: 10px;
-      margin-top: 0;
-    }
 
     .toolbar {
       display: flex;
@@ -111,19 +96,18 @@
     }
     .compact-toolbar { margin-bottom: 10px; }
     .toolbar-sep {
-      color: var(--muted);
+      width: 1px;
+      height: 18px;
+      background: var(--line);
       align-self: center;
-      font-size: 0.9rem;
-      line-height: 1;
-      user-select: none;
+      flex-shrink: 0;
     }
-    .header-card { padding: 12px 14px; }
-    .header-card .page-head {
-      margin-bottom: 8px;
-    }
-    .header-card .toolbar {
-      margin-bottom: 0;
-    }
+    .header-card { padding: 14px 16px; }
+    .header-card .sub { margin-bottom: 2px; }
+    .header-card h1 { margin-bottom: 4px; }
+    .header-card .folder-note { margin: 0; }
+    #tile-game-footer { padding: 10px 16px; }
+    #tile-game-footer .toolbar { margin-bottom: 0; }
 
     button {
       border: 1px solid var(--line);
@@ -414,8 +398,9 @@
       gap: 8px;
       margin-bottom: 8px;
     }
-    .bubble-type-row label { margin: 0; white-space: nowrap; }
-    .bubble-type-row select { width: auto; }
+    .bubble-type-row label { margin: 0; white-space: nowrap; cursor: pointer; }
+    .bubble-type-row input[type="radio"] { accent-color: #0f766e; cursor: pointer; margin: 0; }
+    .bubble-type-row span.type-pair { display: flex; align-items: center; gap: 4px; }
 
     .bubble-top {
       display: grid;
@@ -472,14 +457,8 @@
       background: transparent;
       padding: 0;
     }
-    #addBubbleRow .button-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
 
-    #setupBubblesTop,
-    #setupBubblesBottom,
+    #msgBubbles,
     #correctBubbles,
     #incorrectBubbles {
       display: flex;
@@ -487,6 +466,83 @@
       gap: var(--bubble-gap);
       min-height: 0;
     }
+
+    /* Direction toggle on bubble cards */
+    .bubble-direction {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .bubble-direction .dir-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.15s;
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+    }
+    .bubble-direction .dir-label.active { color: var(--ink); }
+    .dir-switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .dir-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .dir-track {
+      position: absolute;
+      inset: 0;
+      background: var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .dir-track::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .dir-switch input:checked + .dir-track { background: var(--ink); }
+    .dir-switch input:checked + .dir-track::after { transform: translateX(16px); }
+
+    /* Call to Action checkbox row */
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .cta-row input[type="checkbox"] {
+      width: auto;
+      accent-color: #cc0000;
+    }
+    .cta-row label {
+      margin: 0;
+      color: #cc0000;
+      cursor: pointer;
+    }
+    .bubble.cta-bubble { border-color: #cc0000; }
+    .bubble-flash {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0f766e;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .bubble-flash.visible { opacity: 1; }
     #correctSection,
     #incorrectSection {
       margin: 0;
@@ -514,18 +570,9 @@
 <body>
   <div class="page">
     <div id="tile-game-header" class="card header-card" data-tile-name="game-header">
-      <div class="page-head">
-        <div class="page-title-block">
-          <p class="sub">The Game Bureau</p>
-          <h1>Game Builder</h1>
-          <p id="folderNote" class="folder-note">You are in the <strong id="folderNameText"></strong> folder.</p>
-        </div>
-      </div>
-
-      <div class="toolbar">
-        <a id="playGameLink" href="index.html" target="_blank"><button type="button" title="PLAY CURRENT">PLAY</button></a>
-        <a id="revealGameLink" href="index.html?reveal" target="_blank"><button type="button" title="SHOW EVERYTHING EXPANDED">REVEAL</button></a>
-      </div>
+      <p class="sub">The Game Bureau</p>
+      <h1>Game Builder</h1>
+      <p id="folderNote" class="folder-note">You are in the <strong id="folderNameText"></strong> folder.</p>
     </div>
     <div id="status" class="status"></div>
     <div id="warnings" class="warnings"></div>
@@ -537,6 +584,7 @@
           <div class="toolbar compact-toolbar">
             <button id="newBtn" type="button" title="A NEW BLANK">New</button>
             <button id="loadBtn" type="button" title="LOAD FROM CURRENT FOLDER">Load</button>
+            <span class="toolbar-sep" aria-hidden="true"></span>
             <button id="saveBtn" class="primary" type="button" title="SAVE">Save</button>
           </div>
           <div id="gameDetailsSlot" class="stack"></div>
@@ -587,7 +635,7 @@
             </div>
           </div>
 
-          <div id="setupBubblesTop"></div>
+          <div id="msgBubbles"></div>
 
           <div id="playerReplySection" class="mini-tile">
             <div class="section-head">
@@ -641,6 +689,7 @@
               </div>
             </div>
 
+
           </div>
 
           <div id="correctSection">
@@ -651,17 +700,38 @@
             <div id="incorrectBubbles"></div>
           </div>
 
-          <div id="setupBubblesBottom"></div>
-
           <div id="addBubbleRow" class="row">
-            <div class="button-row">
-              <button id="addBubbleBtn" type="button">Add Message to Player</button>
-              <button id="addCtaBtn" type="button">Add Call to Action</button>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button id="addBubbleBtn" type="button">Add Bubble</button>
+              <span id="addBubbleFlash" class="bubble-flash"></span>
             </div>
           </div>
         </div>
       </div>
 
+    </div>
+
+    <div id="tile-game-footer" class="card header-card" data-tile-name="game-footer">
+      <div class="toolbar">
+        <a id="playGameLinkFooter" href="index.html" target="_blank"><button type="button" title="PLAY CURRENT">PLAY</button></a>
+        <a id="revealGameLinkFooter" href="index.html?reveal" target="_blank"><button type="button" title="SHOW EVERYTHING EXPANDED">REVEAL</button></a>
+      </div>
+    </div>
+
+    <div id="tile-builder-options" class="card header-card" data-tile-name="builder-options">
+      <h2 class="tile-label">Builder Options</h2>
+      <div class="row">
+        <div>
+          <label for="builderCorrectReplies">Default Correct Replies</label>
+          <textarea id="builderCorrectReplies"></textarea>
+          <p class="field-hint tight">Comma or newline separated. Used when creating a new CORRECT REPLY bubble.</p>
+        </div>
+        <div>
+          <label for="builderIncorrectReplies">Default Incorrect Replies</label>
+          <textarea id="builderIncorrectReplies"></textarea>
+          <p class="field-hint tight">Comma or newline separated. Used when creating a new INCORRECT REPLY bubble.</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -704,12 +774,29 @@
       'Try again before moving on.'
     ];
 
+    DEFAULT_DOC.header.builderOptions = {
+      correctReplies: CORRECT_BUBBLE_SUGGESTIONS.slice(),
+      incorrectReplies: INCORRECT_BUBBLE_SUGGESTIONS.slice()
+    };
+
     // Centralized drag payload types used across stop and bubble reordering.
     const DND_MIME = {
       STOP_INDEX: 'text/x-stop-index'
     };
 
-    let state = JSON.parse(JSON.stringify(DEFAULT_DOC));
+    function defaultState() {
+      const s = deepClone(DEFAULT_DOC);
+      const firstStopId = 'stop-1';
+      const firstBubbleName = buildBubbleName((s.header && s.header.title) || '', firstStopId, 'bubble', 1);
+      s.stops = [{
+        id: firstStopId,
+        messages: [{ name: firstBubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }],
+        playerReply: { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] }
+      }];
+      return s;
+    }
+
+    let state = defaultState();
     let selectedStopIndex = -1;
     let stopNameBlurValidated = false;
     let loadedStopsSnapshot = null;
@@ -729,8 +816,7 @@
       headerLogoAlt: document.getElementById('headerLogoAlt'),
       stopId: document.getElementById('stopId'),
       stopNameInlineWarning: document.getElementById('stopNameInlineWarning'),
-      setupBubblesTop: document.getElementById('setupBubblesTop'),
-      setupBubblesBottom: document.getElementById('setupBubblesBottom'),
+      msgBubbles: document.getElementById('msgBubbles'),
       addBubbleBtn: document.getElementById('addBubbleBtn'),
       playerReplySection: document.getElementById('playerReplySection'),
       removeReplyBtn: document.getElementById('removeReplyBtn'),
@@ -749,7 +835,9 @@
       addBubbleRow: document.getElementById('addBubbleRow'),
       warnings: document.getElementById('warnings'),
       folderNote: document.getElementById('folderNote'),
-      folderNameText: document.getElementById('folderNameText')
+      folderNameText: document.getElementById('folderNameText'),
+      builderCorrectReplies: document.getElementById('builderCorrectReplies'),
+      builderIncorrectReplies: document.getElementById('builderIncorrectReplies')
     };
 
     function getCurrentFolderName() {
@@ -777,6 +865,13 @@
       els.status.textContent = msg || '';
     }
 
+    let _flashTimer = null;
+    function flashStatus(msg, type, ms) {
+      if (_flashTimer) clearTimeout(_flashTimer);
+      setStatus(msg, type || 'ok');
+      _flashTimer = setTimeout(() => { setStatus(''); _flashTimer = null; }, ms || 2000);
+    }
+
     function deepClone(v) {
       return JSON.parse(JSON.stringify(v));
     }
@@ -788,13 +883,104 @@
         .filter(Boolean);
     }
 
+    function ensureBuilderOptionsHeader(headerObj) {
+      if (!headerObj || typeof headerObj !== 'object') return DEFAULT_DOC.header.builderOptions;
+      if (!headerObj.builderOptions || typeof headerObj.builderOptions !== 'object') {
+        headerObj.builderOptions = {};
+      }
+      if (!Array.isArray(headerObj.builderOptions.correctReplies)) {
+        headerObj.builderOptions.correctReplies = CORRECT_BUBBLE_SUGGESTIONS.slice();
+      }
+      if (!Array.isArray(headerObj.builderOptions.incorrectReplies)) {
+        headerObj.builderOptions.incorrectReplies = INCORRECT_BUBBLE_SUGGESTIONS.slice();
+      }
+      return headerObj.builderOptions;
+    }
+
+    function getCorrectReplySuggestions() {
+      const opts = ensureBuilderOptionsHeader(state.header);
+      const list = (opts.correctReplies || []).map((x) => String(x).trim()).filter(Boolean);
+      return list.length ? list : CORRECT_BUBBLE_SUGGESTIONS;
+    }
+
+    function getIncorrectReplySuggestions() {
+      const opts = ensureBuilderOptionsHeader(state.header);
+      const list = (opts.incorrectReplies || []).map((x) => String(x).trim()).filter(Boolean);
+      return list.length ? list : INCORRECT_BUBBLE_SUGGESTIONS;
+    }
+
+    function toVarKey(text, fallback) {
+      const cleaned = String(text || '')
+        .replace(/[^\w]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+      return cleaned || String(fallback || 'playerAnswer');
+    }
+
+    function slugNamePart(text, fallback) {
+      const slug = String(text || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      return slug || String(fallback || 'x');
+    }
+
+    function getGameNameForBubbleNames() {
+      const currentTitle = String((state && state.header && state.header.title) || '').trim();
+      if (currentTitle) return currentTitle;
+      const defaultTitle = String((DEFAULT_DOC && DEFAULT_DOC.header && DEFAULT_DOC.header.title) || '').trim();
+      if (defaultTitle) return defaultTitle;
+      return getCurrentFolderName() || 'game';
+    }
+
+    function buildBubbleNameBase(gameName, stopId, bubbleType) {
+      const gamePart = slugNamePart(gameName, 'game');
+      const stopPart = slugNamePart(stopId, 'stop');
+      const typePart = slugNamePart(bubbleType, 'bubble');
+      return gamePart + '-' + stopPart + '-' + typePart;
+    }
+
+    function buildBubbleName(gameName, stopId, bubbleType, index) {
+      const idx = Number.isFinite(index) && index > 0 ? Math.floor(index) : 1;
+      return buildBubbleNameBase(gameName, stopId, bubbleType) + '-' + idx;
+    }
+
+    function getCurrentVariableNames() {
+      const names = [];
+      (state.stops || []).forEach((stop) => {
+        const key = String((stop && stop.playerReply && stop.playerReply.storesAs) || '').trim();
+        if (key) names.push(key);
+      });
+      return Array.from(new Set(names));
+    }
+
+    function getHtmlVariableHintText() {
+      const names = getCurrentVariableNames();
+      if (names.length) {
+        return 'Use {{variableName}} syntax. Current variables: ' + names.join(', ') + '.';
+      }
+      return 'Use {{variableName}} syntax. Current variables: none yet.';
+    }
+
+    function updateHtmlVariableHints() {
+      document.querySelectorAll('.html-variable-hint').forEach((el) => {
+        el.textContent = getHtmlVariableHintText();
+      });
+    }
+
+    function createHtmlVariableHint() {
+      const hint = document.createElement('p');
+      hint.className = 'field-hint tight html-variable-hint';
+      hint.textContent = getHtmlVariableHintText();
+      return hint;
+    }
+
     function pickRandomSuggestion(list) {
       if (!Array.isArray(list) || !list.length) return '';
       return list[Math.floor(Math.random() * list.length)];
     }
 
     function nextBubbleName(stop, prefix) {
-      const base = stop.id + '-' + prefix + '-';
+      const base = buildBubbleNameBase(getGameNameForBubbleNames(), (stop && stop.id) || '', prefix) + '-';
       const allNames = collectBubbleIds(stop);
       let max = 0;
       allNames.forEach((n) => {
@@ -808,7 +994,7 @@
 
     function nextNameFromPrevious(previousName, fallbackBase) {
       const prev = String(previousName || '').trim();
-      const base = String(fallbackBase || 'setup').trim() || 'setup';
+      const base = String(fallbackBase || 'msg').trim() || 'msg';
       if (!prev) return base + '-1';
       const match = prev.match(/^(.*?)(\d+)$/);
       if (!match) return prev + '-1';
@@ -869,25 +1055,27 @@
       elements[insertionIndex].classList.add('drag-over', 'drop-before');
     }
 
-    function ensureReplyScaffoldForCallToAction(stop) {
+    function ensureReplyScaffoldForCallToAction(stop, options) {
+      const opts = options || {};
+      const includeIncorrect = opts.includeIncorrect !== false;
       if (!stop || !stop.playerReply || typeof stop.playerReply !== 'object') {
         stop.playerReply = { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
       }
-      if (!stop.playerReply.name) stop.playerReply.name = stop.id + '-reply-1';
+      if (!stop.playerReply.name) stop.playerReply.name = nextBubbleName(stop, 'reply');
       if (!Array.isArray(stop.playerReply.correct)) stop.playerReply.correct = [];
       if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
       if (!stop.playerReply.correct.length) {
         stop.playerReply.correct.push({
           name: nextBubbleName(stop, 'correct'),
-          html: pickRandomSuggestion(CORRECT_BUBBLE_SUGGESTIONS),
+          html: pickRandomSuggestion(getCorrectReplySuggestions()),
           callToAction: false,
           forAnswer: ''
         });
       }
-      if (!stop.playerReply.incorrect.length) {
+      if (includeIncorrect && !stop.playerReply.incorrect.length) {
         stop.playerReply.incorrect.push({
           name: nextBubbleName(stop, 'incorrect'),
-          html: pickRandomSuggestion(INCORRECT_BUBBLE_SUGGESTIONS),
+          html: pickRandomSuggestion(getIncorrectReplySuggestions()),
           callToAction: true,
           forAnswer: ''
         });
@@ -895,21 +1083,43 @@
     }
 
     function hasCallToActionBubble(stop) {
-      return !!(stop && Array.isArray(stop.setup) && stop.setup.some((b) => b && b.callToAction));
+      return !!(stop && Array.isArray(stop.messages) && stop.messages.some((b) => b && b.callToAction));
+    }
+
+    function hasFromPlayerBubble(stop) {
+      return !!(stop && Array.isArray(stop.messages) && stop.messages.some((b) => b && b.direction === 'fromPlayer'));
+    }
+
+    function setPlayerReplyType(stop, nextType) {
+      if (!stop) return;
+      if (!stop.playerReply || typeof stop.playerReply !== 'object') {
+        stop.playerReply = ensurePlayerReply(null);
+      }
+      stop.playerReply.type = nextType === 'any' ? 'any' : 'text';
+      if (!Array.isArray(stop.playerReply.answers)) stop.playerReply.answers = [];
+      if (!Array.isArray(stop.playerReply.correct)) stop.playerReply.correct = [];
+      if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
+      if (typeof stop.playerReply.storesAs !== 'string') stop.playerReply.storesAs = '';
+      if (typeof stop.playerReply.placeholder !== 'string') stop.playerReply.placeholder = '';
+      if (typeof stop.playerReply.name !== 'string') stop.playerReply.name = '';
+      if (stop.playerReply.type === 'any' && !String(stop.playerReply.storesAs || '').trim()) {
+        stop.playerReply.storesAs = toVarKey(stop.playerReply.name || (stop.id + '_incoming'), 'playerAnswer');
+      }
+      ensureReplyScaffoldForCallToAction(stop, { includeIncorrect: stop.playerReply.type !== 'any' });
     }
 
     function removePlayerReplyFlow(stop) {
       if (!stop) return;
-      stop.setup = (Array.isArray(stop.setup) ? stop.setup : []).filter((b) => !(b && b.callToAction));
+      stop.messages = (Array.isArray(stop.messages) ? stop.messages : []).filter((b) => !(b && b.callToAction));
       stop.playerReply = ensurePlayerReply(null);
     }
 
     function collectBubbleIds(stop) {
       const ids = [];
-      const setup = Array.isArray(stop.setup) ? stop.setup : [];
+      const msgs = Array.isArray(stop.messages) ? stop.messages : [];
       const correct = stop.playerReply && Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
       const incorrect = stop.playerReply && Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
-      setup.forEach((b) => ids.push(String((b && b.name) || '').trim()));
+      msgs.forEach((b) => ids.push(String((b && b.name) || '').trim()));
       correct.forEach((b) => ids.push(String((b && b.name) || '').trim()));
       incorrect.forEach((b) => ids.push(String((b && b.name) || '').trim()));
       return ids.filter(Boolean);
@@ -948,9 +1158,16 @@
       });
 
       state.stops.forEach((stop) => {
-        const ctaCount = Array.isArray(stop.setup) ? stop.setup.filter((b) => b && b.callToAction).length : 0;
+        const ctaCount = Array.isArray(stop.messages) ? stop.messages.filter((b) => b && b.callToAction).length : 0;
         if (ctaCount > 1) {
           warnings.push('Stop \u201c' + stop.id + '\u201d has ' + ctaCount + ' call-to-action bubbles \u2014 only one is allowed per stop.');
+        }
+      });
+
+      state.stops.forEach((stop) => {
+        const incomingCount = Array.isArray(stop.messages) ? stop.messages.filter((b) => b && b.direction === 'fromPlayer').length : 0;
+        if (incomingCount > 1) {
+          warnings.push('Stop \u201c' + stop.id + '\u201d has ' + incomingCount + ' FROM PLAYER bubbles - only one is supported per stop.');
         }
       });
 
@@ -993,13 +1210,20 @@
     }
 
     function ensureBubble(b) {
-      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false, forAnswer: '', bottomAdded: false };
+      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, direction: 'toPlayer' };
       return {
         name: String(b.name || ''),
         html: String(b.html || ''),
         callToAction: !!(b.callToAction || b.red || b.cmd),
         forAnswer: String(b.forAnswer || ''),
-        bottomAdded: !!b.bottomAdded
+        placeholder: String(b.placeholder || ''),
+        bottomAdded: !!b.bottomAdded,
+        direction: b.direction === 'fromPlayer' ? 'fromPlayer' : 'toPlayer',
+        msgType: String(b.msgType || 'text'),
+        src: String(b.src || ''),
+        alt: String(b.alt || ''),
+        label: String(b.label || ''),
+        href: String(b.href || '')
       };
     }
 
@@ -1008,7 +1232,7 @@
         return { name: '', type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
       }
       const allBubbles = (arr) => Array.isArray(arr) ? arr.map(ensureBubble) : [];
-      const type = r.type === 'any' ? r.type : 'text';
+      const type = r.type === 'any' ? 'any' : 'text';
       const base = {
         name: String(r.name || ''),
         type,
@@ -1030,8 +1254,8 @@
     function ensureStop(s, i) {
       return {
         id: String((s && s.id) || ('stop-' + (i + 1))),
-        setup: Array.isArray(s && s.setup)
-          ? s.setup.map(ensureBubble)
+        messages: Array.isArray(s && s.messages)
+          ? s.messages.map(ensureBubble)
           : Array.isArray(s && s.reveal)
             ? s.reveal.map(ensureBubble)
             : [],
@@ -1062,9 +1286,12 @@
 
     function createEmptyStop() {
       const id = 'new-stop-' + (state.stops.length + 1);
+      const bubbleName = buildBubbleName(getGameNameForBubbleNames(), id, 'bubble', 1);
       return {
         id,
-        setup: [],
+        messages: [
+          { name: bubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }
+        ],
         playerReply: {
           type: 'text',
           placeholder: '',
@@ -1096,14 +1323,15 @@
       });
       if (els.gameDetailsSlot) els.gameDetailsSlot.appendChild(headerBtn);
 
-      if (addStopBtn) {
-        const addStopRow = document.createElement('div');
-        addStopRow.className = 'stop-add-row';
-        addStopRow.appendChild(addStopBtn);
-        els.stopList.appendChild(addStopRow);
+      if (!state.stops.length) {
+        if (addStopBtn) {
+          const addStopRow = document.createElement('div');
+          addStopRow.className = 'stop-add-row';
+          addStopRow.appendChild(addStopBtn);
+          els.stopList.appendChild(addStopRow);
+        }
+        return;
       }
-
-      if (!state.stops.length) return;
 
       state.stops.forEach((stop, i) => {
         const btn = document.createElement('button');
@@ -1111,7 +1339,7 @@
         btn.className = 'stop-item' + (i === selectedStopIndex ? ' active' : '');
         btn.dataset.stopIndex = String(i);
         btn.draggable = true;
-        const totalBubbles = (Array.isArray(stop.setup) ? stop.setup.length : 0)
+        const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
           + (Array.isArray(stop.playerReply && stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
           + (Array.isArray(stop.playerReply && stop.playerReply.incorrect) ? stop.playerReply.incorrect.length : 0);
         btn.innerHTML = '<div>' + stop.id + '</div><div class="stop-meta">Bubbles: ' + totalBubbles + '</div>'
@@ -1154,7 +1382,7 @@
               }
               return b;
             };
-            if (Array.isArray(clone.setup)) clone.setup = clone.setup.map(renameBubble);
+            if (Array.isArray(clone.messages)) clone.messages = clone.messages.map(renameBubble);
             if (clone.playerReply) {
               if (Array.isArray(clone.playerReply.correct)) clone.playerReply.correct = clone.playerReply.correct.map(renameBubble);
               if (Array.isArray(clone.playerReply.incorrect)) clone.playerReply.incorrect = clone.playerReply.incorrect.map(renameBubble);
@@ -1213,6 +1441,13 @@
         els.stopList.appendChild(btn);
       });
 
+      if (addStopBtn) {
+        const addStopRow = document.createElement('div');
+        addStopRow.className = 'stop-add-row';
+        addStopRow.appendChild(addStopBtn);
+        els.stopList.appendChild(addStopRow);
+      }
+
       // Fallback drop target so drag-and-drop still works when releasing in list whitespace (common while auto-scrolling).
       els.stopList.ondragover = (e) => {
         if (!e.dataTransfer) return;
@@ -1256,206 +1491,470 @@
         const href = (bubble.href || '#').replace(/"/g, '&quot;');
         return '<a href="' + href + '" class="action-btn">' + label + '</a>';
       }
+      if (t === 'pay') {
+        const label = bubble.label || 'CLICK HERE TO BUY';
+        const href = (bubble.href || '#').replace(/"/g, '&quot;');
+        return '<a href="' + href + '" class="action-btn pay-btn">' + label + '</a>';
+      }
       return bubble.html || '';
     }
 
     // Renders bubble editors in the details tile (no drag/drop here).
     function renderBubbles(container, bubbles, listKey) {
       container.innerHTML = '';
-      container.ondragover = null;
-      container.ondrop = null;
 
       bubbles.forEach((bubble, idx) => {
         if (!String(bubble.html || '').trim()) {
           const suggestions = listKey === 'correct'
-            ? CORRECT_BUBBLE_SUGGESTIONS
+            ? getCorrectReplySuggestions()
             : listKey === 'incorrect'
-              ? INCORRECT_BUBBLE_SUGGESTIONS
+              ? getIncorrectReplySuggestions()
               : null;
           if (suggestions && suggestions.length) {
             bubble.html = pickRandomSuggestion(suggestions);
           }
         }
+
         const wrap = document.createElement('div');
-        wrap.className = 'bubble';
-        const isMessageToPlayer = listKey === 'setup' && !(bubble && bubble.callToAction);
-        const showBubbleTypeLabel = listKey === 'setup';
-        const nameLabel = listKey === 'setup'
-          ? '<label>' + (bubble.callToAction ? 'CALL PLAYER TO ACTION' : 'MESSAGE TO PLAYER') + '</label>'
-          : listKey === 'correct'
-            ? '<label>CORRECT BUBBLE</label>'
-            : listKey === 'incorrect'
-              ? '<label>INCORRECT BUBBLE</label>'
-              : '';
-        const showForAnswer = listKey === 'correct' || listKey === 'incorrect';
-        const showRemove = listKey === 'setup' && !(bubble && bubble.callToAction);
-        const msgType = isMessageToPlayer ? (bubble.msgType || 'text') : null;
-        const typeSelector = isMessageToPlayer
-          ? '<div class="bubble-type-row"><label>Type</label><select class="msg-type-select">' +
-            ['text', 'image', 'video', 'button'].map(t =>
-              '<option value="' + t + '"' + (t === msgType ? ' selected' : '') + '>' + t + '</option>'
-            ).join('') +
-            '</select></div>'
-          : '';
-        const msgContent = isMessageToPlayer
-          ? '<div class="msg-type-section" data-type="text"' + (msgType !== 'text' ? ' style="display:none"' : '') + '>' +
-              '<label>HTML</label><textarea class="bubble-html-input">' + String(bubble.html || '') + '</textarea>' +
-            '</div>' +
-            '<div class="msg-type-section" data-type="image"' + (msgType !== 'image' ? ' style="display:none"' : '') + '>' +
-              '<label>Image URL</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">' +
-              '<label style="margin-top:6px;">Alt text</label><input type="text" class="bubble-alt-input" placeholder="description" value="' + String(bubble.alt || '').replace(/"/g, '&quot;') + '">' +
-            '</div>' +
-            '<div class="msg-type-section" data-type="video"' + (msgType !== 'video' ? ' style="display:none"' : '') + '>' +
-              '<label>Video URL (.mp4 or YouTube embed)</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">' +
-            '</div>' +
-            '<div class="msg-type-section" data-type="button"' + (msgType !== 'button' ? ' style="display:none"' : '') + '>' +
-              '<label>Button label</label><input type="text" class="bubble-label-input" placeholder="Click here" value="' + String(bubble.label || '').replace(/"/g, '&quot;') + '">' +
-              '<label style="margin-top:6px;">Link (href)</label><input type="text" class="bubble-href-input" placeholder="#" value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">' +
-            '</div>'
-          : '<label>HTML</label><textarea>' + String(bubble.html || '') + '</textarea>';
+        const isMessages = listKey === 'messages';
+        const isToPlayer = !isMessages || !bubble.direction || bubble.direction === 'toPlayer';
+        const msgType = (isMessages && isToPlayer) ? (bubble.msgType || 'text') : null;
 
-        wrap.innerHTML = [
-          nameLabel,
-          '<div class="bubble-top">',
-          '  <input type="text" class="bubble-name-input" placeholder="bubble-name" value="' + String(bubble.name || '').replace(/"/g, '&quot;') + '">',
-          '  <div class="bubble-btns">',
-          showRemove
-            ? '    <button type="button" class="stop-action stop-delete bubble-remove" title="REMOVE" aria-label="REMOVE">'
-              + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>'
-              + '</button>'
-            : '',
-          '    <button type="button" class="stop-action bubble-up" title="MOVE UP" aria-label="MOVE UP"' + (idx === 0 ? ' disabled' : '') + '>'
-            + '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>'
-            + '</button>',
-          '    <button type="button" class="stop-action bubble-down" title="MOVE DOWN" aria-label="MOVE DOWN"' + (idx === bubbles.length - 1 ? ' disabled' : '') + '>'
-            + '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>'
-            + '</button>',
-          '  </div>',
-          '</div>',
-          '<span class="bubble-tail" aria-hidden="true"></span>',
-          showForAnswer
-            ? '<div style="margin-bottom:8px;"><label>For Answer (BLANK = ANY)</label><input type="text" class="for-answer-input" placeholder="leave blank to show for any answer" value="' + String(bubble.forAnswer || '').replace(/"/g, '&quot;') + '"></div>'
-            : '',
-          isMessageToPlayer ? typeSelector + msgContent : msgContent
-        ].join('');
+        wrap.className = 'bubble' + (isMessages && bubble.callToAction ? ' cta-bubble' : '');
 
-        const applyBubbleVisualType = () => {
-          const isPhotoBubble = isMessageToPlayer && (bubble.msgType || 'text') === 'image';
-          wrap.classList.toggle('photo-bubble', isPhotoBubble);
-        };
-        applyBubbleVisualType();
+        if (isMessages) {
+          const isFrom = bubble.direction === 'fromPlayer';
+          const dirId = 'dir-' + listKey + '-' + idx;
+          const dirRow = document.createElement('div');
+          dirRow.className = 'bubble-direction';
 
-        const nameInput = wrap.querySelector('.bubble-name-input');
-        const forAnswerInput = wrap.querySelector('.for-answer-input');
-        const removeBtn = wrap.querySelector('.bubble-remove');
-        const upBtn = wrap.querySelector('.bubble-up');
-        const downBtn = wrap.querySelector('.bubble-down');
+          const toLabel = document.createElement('span');
+          toLabel.className = 'dir-label' + (!isFrom ? ' active' : '');
+          toLabel.textContent = 'TO PLAYER';
 
-        nameInput.addEventListener('input', (e) => {
-          bubbles[idx].name = e.target.value;
-        });
-        if (forAnswerInput) {
-          forAnswerInput.addEventListener('input', (e) => {
-            bubbles[idx].forAnswer = e.target.value;
+          const switchWrap = document.createElement('label');
+          switchWrap.className = 'dir-switch';
+          const switchInput = document.createElement('input');
+          switchInput.type = 'checkbox';
+          switchInput.id = dirId;
+          switchInput.checked = isFrom;
+          const track = document.createElement('span');
+          track.className = 'dir-track';
+          switchWrap.appendChild(switchInput);
+          switchWrap.appendChild(track);
+
+          const fromLabel = document.createElement('span');
+          fromLabel.className = 'dir-label' + (isFrom ? ' active' : '');
+          fromLabel.textContent = 'FROM PLAYER';
+
+          switchInput.addEventListener('change', () => {
+            bubble.direction = switchInput.checked ? 'fromPlayer' : 'toPlayer';
+            renderAll();
           });
+          toLabel.addEventListener('click', () => { if (switchInput.checked) { switchInput.checked = false; switchInput.dispatchEvent(new Event('change')); } });
+          fromLabel.addEventListener('click', () => { if (!switchInput.checked) { switchInput.checked = true; switchInput.dispatchEvent(new Event('change')); } });
+
+          dirRow.appendChild(toLabel);
+          dirRow.appendChild(switchWrap);
+          dirRow.appendChild(fromLabel);
+          wrap.appendChild(dirRow);
         }
-        if (isMessageToPlayer) {
-          const typeSelect = wrap.querySelector('.msg-type-select');
-          const htmlInput = wrap.querySelector('.bubble-html-input');
-          const srcInput = wrap.querySelector('.bubble-src-input');
-          const altInput = wrap.querySelector('.bubble-alt-input');
-          const labelInput = wrap.querySelector('.bubble-label-input');
-          const hrefInput = wrap.querySelector('.bubble-href-input');
-          if (typeSelect) {
-            typeSelect.addEventListener('change', (e) => {
+
+        // Header row: BUBBLE NAME input + move/remove buttons
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = isMessages ? 'Bubble Name' : (listKey === 'correct' ? 'Correct Bubble' : 'Incorrect Bubble');
+        wrap.appendChild(nameLabel);
+
+        const topRow = document.createElement('div');
+        topRow.className = 'bubble-top';
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'bubble-name-input';
+        nameInput.placeholder = 'bubble-name';
+        nameInput.value = String(bubble.name || '').replace(/"/g, '&quot;');
+        topRow.appendChild(nameInput);
+
+        const btnGroup = document.createElement('div');
+        btnGroup.className = 'bubble-btns';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'stop-action stop-delete bubble-remove';
+        removeBtn.title = 'REMOVE';
+        removeBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
+        btnGroup.appendChild(removeBtn);
+
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.className = 'stop-action bubble-up';
+        upBtn.title = 'MOVE UP';
+        upBtn.disabled = idx === 0;
+        upBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>';
+        btnGroup.appendChild(upBtn);
+
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.className = 'stop-action bubble-down';
+        downBtn.title = 'MOVE DOWN';
+        downBtn.disabled = idx === bubbles.length - 1;
+        downBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+        btnGroup.appendChild(downBtn);
+
+        topRow.appendChild(btnGroup);
+        wrap.appendChild(topRow);
+
+        const appendTypingPlaceholderField = (target) => {
+          const placeholderLabel = document.createElement('label');
+          placeholderLabel.textContent = 'Typing Placeholder';
+          target.appendChild(placeholderLabel);
+
+          const placeholderInput = document.createElement('input');
+          placeholderInput.type = 'text';
+          placeholderInput.className = 'bubble-placeholder-input';
+          placeholderInput.placeholder = 'Shown in the typing field';
+          const placeholderStop = isMessages && !isToPlayer ? getSelectedStop() : null;
+          placeholderInput.value = placeholderStop && placeholderStop.playerReply
+            ? String(placeholderStop.playerReply.placeholder || bubble.placeholder || '')
+            : String(bubble.placeholder || '');
+          placeholderInput.style.marginBottom = '8px';
+          target.appendChild(placeholderInput);
+
+          placeholderInput.addEventListener('input', (e) => {
+            bubbles[idx].placeholder = e.target.value;
+            if (isMessages && !isToPlayer) {
+              const stop = getSelectedStop();
+              if (stop && stop.playerReply && typeof stop.playerReply === 'object') {
+                stop.playerReply.placeholder = e.target.value;
+              }
+            }
+          });
+        };
+
+        // TO PLAYER content: type radios + CTA checkbox + content sections
+        if (isMessages && isToPlayer) {
+          // Type radio buttons row
+          const typeRow = document.createElement('div');
+          typeRow.className = 'bubble-type-row';
+          const radioName = 'msgtype-' + listKey + '-' + idx;
+          ['text', 'image', 'video', 'button', 'pay'].forEach(t => {
+            const rid = radioName + '-' + t;
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = radioName;
+            radio.value = t;
+            radio.id = rid;
+            radio.checked = t === msgType;
+            const rlabel = document.createElement('label');
+            rlabel.htmlFor = rid;
+            rlabel.textContent = t;
+            const pair = document.createElement('span');
+            pair.className = 'type-pair';
+            pair.appendChild(radio);
+            pair.appendChild(rlabel);
+            typeRow.appendChild(pair);
+          });
+          wrap.appendChild(typeRow);
+
+          // Call to Action checkbox
+          const ctaRow = document.createElement('div');
+          ctaRow.className = 'cta-row';
+          const ctaCheck = document.createElement('input');
+          ctaCheck.type = 'checkbox';
+          ctaCheck.id = 'cta-' + idx + '-' + listKey;
+          ctaCheck.checked = !!bubble.callToAction;
+          const ctaLabel = document.createElement('label');
+          ctaLabel.htmlFor = ctaCheck.id;
+          ctaLabel.textContent = 'CALL TO ACTION';
+          ctaRow.appendChild(ctaCheck);
+          ctaRow.appendChild(ctaLabel);
+          wrap.appendChild(ctaRow);
+
+          // Content sections
+          const sections = {
+            text: (() => {
+              const d = document.createElement('div');
+              d.className = 'msg-type-section';
+              d.dataset.type = 'text';
+              if (msgType !== 'text') d.style.display = 'none';
+              const lbl = document.createElement('label');
+              lbl.textContent = 'HTML';
+              const ta = document.createElement('textarea');
+              ta.className = 'bubble-html-input';
+              ta.value = String(bubble.html || '');
+              d.appendChild(lbl);
+              d.appendChild(ta);
+              d.appendChild(createHtmlVariableHint());
+              return d;
+            })(),
+            image: (() => {
+              const d = document.createElement('div');
+              d.className = 'msg-type-section';
+              d.dataset.type = 'image';
+              if (msgType !== 'image') d.style.display = 'none';
+              d.innerHTML = '<label>Image URL</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">'
+                + '<label style="margin-top:6px;">Alt text</label><input type="text" class="bubble-alt-input" placeholder="description" value="' + String(bubble.alt || '').replace(/"/g, '&quot;') + '">';
+              return d;
+            })(),
+            video: (() => {
+              const d = document.createElement('div');
+              d.className = 'msg-type-section';
+              d.dataset.type = 'video';
+              if (msgType !== 'video') d.style.display = 'none';
+              d.innerHTML = '<label>Video URL (.mp4 or YouTube embed)</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">';
+              return d;
+            })(),
+            button: (() => {
+              const d = document.createElement('div');
+              d.className = 'msg-type-section';
+              d.dataset.type = 'button';
+              if (msgType !== 'button') d.style.display = 'none';
+              d.innerHTML = '<label>Button label</label><input type="text" class="bubble-label-input" placeholder="Click here" value="' + String(bubble.label || '').replace(/"/g, '&quot;') + '">'
+                + '<label style="margin-top:6px;">Link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
+              return d;
+            })(),
+            pay: (() => {
+              const d = document.createElement('div');
+              d.className = 'msg-type-section';
+              d.dataset.type = 'pay';
+              if (msgType !== 'pay') d.style.display = 'none';
+              d.innerHTML = '<label>Pay button label</label><input type="text" class="bubble-label-input" placeholder="CLICK HERE TO BUY" value="' + String(bubble.label || '').replace(/"/g, '&quot;') + '">'
+                + '<label style="margin-top:6px;">Product link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
+              return d;
+            })()
+          };
+          Object.values(sections).forEach(s => wrap.appendChild(s));
+          appendTypingPlaceholderField(wrap);
+
+          const applyBubbleVisualType = () => {
+            wrap.classList.toggle('photo-bubble', (bubble.msgType || 'text') === 'image');
+            wrap.classList.toggle('cta-bubble', !!bubble.callToAction);
+          };
+          applyBubbleVisualType();
+
+          ctaCheck.addEventListener('change', (e) => {
+            bubble.callToAction = e.target.checked;
+            applyBubbleVisualType();
+          });
+
+          typeRow.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
               bubble.msgType = e.target.value;
+              if (e.target.value === 'pay') {
+                if (!bubble.callToAction) {
+                  bubble.callToAction = true;
+                  ctaCheck.checked = true;
+                }
+              } else if (bubble.callToAction) {
+                bubble.callToAction = false;
+                ctaCheck.checked = false;
+              }
               wrap.querySelectorAll('.msg-type-section').forEach(s => {
                 s.style.display = s.dataset.type === e.target.value ? '' : 'none';
               });
               bubble.html = generateBubbleHtml(bubble);
               applyBubbleVisualType();
             });
-          }
-          if (htmlInput) {
-            htmlInput.addEventListener('input', (e) => { bubble.html = e.target.value; });
-          }
-          if (srcInput) {
-            srcInput.addEventListener('input', (e) => {
-              bubble.src = e.target.value;
-              bubble.html = generateBubbleHtml(bubble);
+          });
+
+          const htmlInput = wrap.querySelector('.bubble-html-input');
+          if (htmlInput) htmlInput.addEventListener('input', (e) => { bubble.html = e.target.value; });
+
+          const srcInput = wrap.querySelector('.bubble-src-input');
+          if (srcInput) srcInput.addEventListener('input', (e) => { bubble.src = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+
+          const altInput = wrap.querySelector('.bubble-alt-input');
+          if (altInput) altInput.addEventListener('input', (e) => { bubble.alt = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+
+          const labelInput = wrap.querySelector('.bubble-label-input');
+          if (labelInput) labelInput.addEventListener('input', (e) => { bubble.label = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+
+          const hrefInput = wrap.querySelector('.bubble-href-input');
+          if (hrefInput) hrefInput.addEventListener('input', (e) => { bubble.href = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+
+        } else if (isMessages && !isToPlayer) {
+          const stop = getSelectedStop();
+          if (!stop) {
+            const hint = document.createElement('p');
+            hint.className = 'field-hint';
+            hint.style.marginTop = '4px';
+            hint.textContent = 'Select a stop to configure this incoming reply bubble.';
+            wrap.appendChild(hint);
+          } else {
+            if (!stop.playerReply || typeof stop.playerReply !== 'object') {
+              stop.playerReply = ensurePlayerReply(null);
+            }
+            if (!stop.playerReply.name && bubble.name) stop.playerReply.name = String(bubble.name || '');
+            setPlayerReplyType(stop, stop.playerReply.type);
+            if (!bubble.name && stop.playerReply.name) bubble.name = stop.playerReply.name;
+
+            const incomingMode = stop.playerReply.type === 'any' ? 'any' : 'text';
+            const modeRow = document.createElement('div');
+            modeRow.className = 'bubble-type-row';
+            const modeRadioName = 'incoming-mode-' + idx;
+            [
+              { value: 'text', label: 'WORD' },
+              { value: 'any', label: 'ANY' }
+            ].forEach((entry) => {
+              const rid = modeRadioName + '-' + entry.value;
+              const radio = document.createElement('input');
+              radio.type = 'radio';
+              radio.name = modeRadioName;
+              radio.value = entry.value;
+              radio.id = rid;
+              radio.checked = incomingMode === entry.value;
+              const rlabel = document.createElement('label');
+              rlabel.htmlFor = rid;
+              rlabel.textContent = entry.label;
+              const pair = document.createElement('span');
+              pair.className = 'type-pair';
+              pair.appendChild(radio);
+              pair.appendChild(rlabel);
+              modeRow.appendChild(pair);
+            });
+            wrap.appendChild(modeRow);
+
+            const wordFields = document.createElement('div');
+            const answersLabel = document.createElement('label');
+            answersLabel.textContent = 'ANSWER(S)';
+            const answersInput = document.createElement('textarea');
+            answersInput.value = answersToText(stop.playerReply.answers || []);
+            const answersHint = document.createElement('p');
+            answersHint.className = 'field-hint tight';
+            answersHint.textContent = 'Comma separated or one answer per line.';
+            wordFields.appendChild(answersLabel);
+            wordFields.appendChild(answersInput);
+            wordFields.appendChild(answersHint);
+            wrap.appendChild(wordFields);
+
+            const anyFields = document.createElement('div');
+            const storesLabel = document.createElement('label');
+            storesLabel.textContent = 'STORE ANSWER AS';
+            const storesInput = document.createElement('input');
+            storesInput.type = 'text';
+            storesInput.placeholder = 'playerAnswer';
+            storesInput.value = stop.playerReply.storesAs || '';
+            const storesHint = document.createElement('p');
+            storesHint.className = 'field-hint tight';
+            anyFields.appendChild(storesLabel);
+            anyFields.appendChild(storesInput);
+            anyFields.appendChild(storesHint);
+            wrap.appendChild(anyFields);
+
+            const flowHint = document.createElement('p');
+            flowHint.className = 'field-hint';
+            wrap.appendChild(flowHint);
+            appendTypingPlaceholderField(wrap);
+
+            const applyIncomingModeUi = () => {
+              const isAny = stop.playerReply.type === 'any';
+              wordFields.style.display = isAny ? 'none' : '';
+              anyFields.style.display = isAny ? '' : 'none';
+              if (isAny) {
+                const key = String(stop.playerReply.storesAs || '').trim();
+                storesHint.textContent = 'Any answer is accepted and saved as {{' + (key || 'playerAnswer') + '}}.';
+                flowHint.textContent = 'Any answer triggers CORRECT REPLY. INCORRECT REPLY is hidden in ANY mode.';
+              } else {
+                storesHint.textContent = '';
+                flowHint.textContent = 'A matching answer triggers CORRECT REPLY. Non-matching answers trigger INCORRECT REPLY.';
+              }
+            };
+            applyIncomingModeUi();
+
+            modeRow.querySelectorAll('input[type="radio"]').forEach((radio) => {
+              radio.addEventListener('change', (e) => {
+                setPlayerReplyType(stop, e.target.value);
+                renderAll();
+              });
+            });
+
+            answersInput.addEventListener('input', (e) => {
+              if (stop.playerReply.type !== 'text') return;
+              stop.playerReply.answers = parseAnswers(e.target.value);
+            });
+
+            storesInput.addEventListener('input', (e) => {
+              if (stop.playerReply.type !== 'any') return;
+              stop.playerReply.storesAs = e.target.value;
+              applyIncomingModeUi();
+              updateHtmlVariableHints();
+            });
+
+            storesInput.addEventListener('blur', () => {
+              if (stop.playerReply.type !== 'any') return;
+              if (!String(stop.playerReply.storesAs || '').trim()) {
+                stop.playerReply.storesAs = toVarKey(stop.playerReply.name || bubble.name || (stop.id + '_incoming'), 'playerAnswer');
+                renderAll();
+              }
             });
           }
-          if (altInput) {
-            altInput.addEventListener('input', (e) => {
-              bubble.alt = e.target.value;
-              bubble.html = generateBubbleHtml(bubble);
-            });
-          }
-          if (labelInput) {
-            labelInput.addEventListener('input', (e) => {
-              bubble.label = e.target.value;
-              bubble.html = generateBubbleHtml(bubble);
-            });
-          }
-          if (hrefInput) {
-            hrefInput.addEventListener('input', (e) => {
-              bubble.href = e.target.value;
-              bubble.html = generateBubbleHtml(bubble);
-            });
-          }
+
         } else {
-          const htmlInput = wrap.querySelector('textarea');
-          if (htmlInput) {
-            htmlInput.addEventListener('input', (e) => { bubbles[idx].html = e.target.value; });
-          }
+          // Correct / incorrect bubbles — plain HTML textarea
+          const lbl = document.createElement('label');
+          lbl.textContent = 'HTML';
+          const ta = document.createElement('textarea');
+          ta.value = String(bubble.html || '');
+          ta.addEventListener('input', (e) => { bubbles[idx].html = e.target.value; });
+          wrap.appendChild(lbl);
+          wrap.appendChild(ta);
+          appendTypingPlaceholderField(wrap);
+          wrap.appendChild(createHtmlVariableHint());
         }
-        if (removeBtn) {
-          removeBtn.addEventListener('click', () => {
+
+        // Wire name input
+        nameInput.addEventListener('input', (e) => {
+          bubbles[idx].name = e.target.value;
+          if (isMessages && !isToPlayer) {
             const stop = getSelectedStop();
-            const removedWasCallToAction = listKey === 'setup' && !!(bubbles[idx] && bubbles[idx].callToAction);
-            if (listKey === 'setup' && stop && Array.isArray(stop.setup)) {
-              const sourceIndex = stop.setup.indexOf(bubbles[idx]);
-              if (sourceIndex >= 0) stop.setup.splice(sourceIndex, 1);
+            if (stop && stop.playerReply && typeof stop.playerReply === 'object') {
+              stop.playerReply.name = e.target.value;
+              if (stop.playerReply.type === 'any' && !String(stop.playerReply.storesAs || '').trim()) {
+                stop.playerReply.storesAs = toVarKey(e.target.value, 'playerAnswer');
+              }
+            }
+          }
+        });
+
+        // Remove
+        removeBtn.addEventListener('click', () => {
+            const stop = getSelectedStop();
+            if (listKey === 'messages' && stop && Array.isArray(stop.messages)) {
+              const sourceIndex = stop.messages.indexOf(bubbles[idx]);
+              if (sourceIndex >= 0) stop.messages.splice(sourceIndex, 1);
             } else {
               bubbles.splice(idx, 1);
             }
-            if (removedWasCallToAction && stop && stop.playerReply) {
-              stop.playerReply.correct = [];
-              stop.playerReply.incorrect = [];
-            }
             renderAll();
-          });
-        }
-        if (upBtn) {
-          upBtn.addEventListener('click', () => {
-            if (idx === 0) return;
-            if (listKey === 'setup') {
-              const stop = getSelectedStop();
-              if (!stop || !Array.isArray(stop.setup)) return;
-              const a = stop.setup.indexOf(bubbles[idx]);
-              const b = stop.setup.indexOf(bubbles[idx - 1]);
-              if (a >= 0 && b >= 0) [stop.setup[a], stop.setup[b]] = [stop.setup[b], stop.setup[a]];
-            } else {
-              [bubbles[idx], bubbles[idx - 1]] = [bubbles[idx - 1], bubbles[idx]];
-            }
-            renderAll();
-          });
-        }
-        if (downBtn) {
-          downBtn.addEventListener('click', () => {
-            if (idx === bubbles.length - 1) return;
-            if (listKey === 'setup') {
-              const stop = getSelectedStop();
-              if (!stop || !Array.isArray(stop.setup)) return;
-              const a = stop.setup.indexOf(bubbles[idx]);
-              const b = stop.setup.indexOf(bubbles[idx + 1]);
-              if (a >= 0 && b >= 0) [stop.setup[a], stop.setup[b]] = [stop.setup[b], stop.setup[a]];
-            } else {
-              [bubbles[idx], bubbles[idx + 1]] = [bubbles[idx + 1], bubbles[idx]];
-            }
-            renderAll();
-          });
-        }
+        });
+
+        upBtn.addEventListener('click', () => {
+          if (idx === 0) return;
+          if (listKey === 'messages') {
+            const stop = getSelectedStop();
+            if (!stop || !Array.isArray(stop.messages)) return;
+            const a = stop.messages.indexOf(bubbles[idx]);
+            const b = stop.messages.indexOf(bubbles[idx - 1]);
+            if (a >= 0 && b >= 0) [stop.messages[a], stop.messages[b]] = [stop.messages[b], stop.messages[a]];
+          } else {
+            [bubbles[idx], bubbles[idx - 1]] = [bubbles[idx - 1], bubbles[idx]];
+          }
+          renderAll();
+        });
+
+        downBtn.addEventListener('click', () => {
+          if (idx === bubbles.length - 1) return;
+          if (listKey === 'messages') {
+            const stop = getSelectedStop();
+            if (!stop || !Array.isArray(stop.messages)) return;
+            const a = stop.messages.indexOf(bubbles[idx]);
+            const b = stop.messages.indexOf(bubbles[idx + 1]);
+            if (a >= 0 && b >= 0) [stop.messages[a], stop.messages[b]] = [stop.messages[b], stop.messages[a]];
+          } else {
+            [bubbles[idx], bubbles[idx + 1]] = [bubbles[idx + 1], bubbles[idx]];
+          }
+          renderAll();
+        });
 
         container.appendChild(wrap);
       });
@@ -1497,30 +1996,26 @@
       els.replyAnyPlaceholder.value = stop.playerReply.placeholder || '';
       els.replyStoresAs.value = stop.playerReply.storesAs || '';
 
-      const showReplyFlow = hasCallToActionBubble(stop);
-      els.playerReplySection.style.display = showReplyFlow ? 'block' : 'none';
+      const hasIncomingBubble = hasFromPlayerBubble(stop);
+      const showReplyFlow = hasCallToActionBubble(stop) || hasIncomingBubble;
+      if (showReplyFlow) setPlayerReplyType(stop, stop.playerReply.type);
+      els.playerReplySection.style.display = showReplyFlow && !hasIncomingBubble ? 'block' : 'none';
 
-      // Two setup zones:
-      // top = initial scaffold bubbles, bottom = newly added Message-to-Player bubbles.
-      els.stopEditor.insertBefore(els.addBubbleRow, els.stopEditor.firstElementChild);
-      els.stopEditor.appendChild(els.setupBubblesTop);
+      const stopNameTile = els.stopEditor.firstElementChild;
+      els.stopEditor.insertBefore(els.addBubbleRow, stopNameTile ? stopNameTile.nextSibling : null);
+      els.stopEditor.appendChild(els.msgBubbles);
       els.stopEditor.appendChild(els.playerReplySection);
       els.stopEditor.appendChild(els.correctSection);
       els.stopEditor.appendChild(els.incorrectSection);
-      els.stopEditor.appendChild(els.setupBubblesBottom);
 
-      const topSetupBubbles = stop.setup.filter((b) => !b.bottomAdded);
-      const bottomSetupBubbles = stop.setup.filter((b) => !!b.bottomAdded);
       const correctBubbles = stop.playerReply.correct || [];
       const incorrectBubbles = stop.playerReply.incorrect || [];
-      renderBubbles(els.setupBubblesTop, topSetupBubbles, 'setup');
-      renderBubbles(els.setupBubblesBottom, bottomSetupBubbles, 'setup');
-      els.setupBubblesTop.style.display = topSetupBubbles.length ? '' : 'none';
-      els.setupBubblesBottom.style.display = bottomSetupBubbles.length ? '' : 'none';
+      const isAnyReplyMode = stop.playerReply.type === 'any';
+      renderBubbles(els.msgBubbles, stop.messages || [], 'messages');
       renderBubbles(els.correctBubbles, correctBubbles, 'correct');
       renderBubbles(els.incorrectBubbles, incorrectBubbles, 'incorrect');
       els.correctSection.style.display = showReplyFlow && correctBubbles.length ? 'block' : 'none';
-      els.incorrectSection.style.display = showReplyFlow && incorrectBubbles.length ? 'block' : 'none';
+      els.incorrectSection.style.display = showReplyFlow && !isAnyReplyMode && incorrectBubbles.length ? 'block' : 'none';
     }
 
     function renderHeader() {
@@ -1531,8 +2026,19 @@
       els.headerLogoAlt.value = h.logoAlt || '';
     }
 
+    function renderBuilderOptions() {
+      const opts = ensureBuilderOptionsHeader(state.header);
+      if (els.builderCorrectReplies) {
+        els.builderCorrectReplies.value = answersToText(opts.correctReplies || []);
+      }
+      if (els.builderIncorrectReplies) {
+        els.builderIncorrectReplies.value = answersToText(opts.incorrectReplies || []);
+      }
+    }
+
     function renderAll() {
       renderHeader();
+      renderBuilderOptions();
       renderStopList();
       renderStopEditor();
       renderWarnings();
@@ -1543,10 +2049,23 @@
       els.headerTitle.addEventListener('input', (e) => {
         state.header.title = e.target.value;
         state.header.pageTitle = e.target.value;
+        renderStopList();
       });
       els.headerSubtitle.addEventListener('input', (e) => { state.header.subtitle = e.target.value; });
       els.headerLogoUrl.addEventListener('input', (e) => { state.header.logoUrl = e.target.value; });
       els.headerLogoAlt.addEventListener('input', (e) => { state.header.logoAlt = e.target.value; });
+      if (els.builderCorrectReplies) {
+        els.builderCorrectReplies.addEventListener('input', (e) => {
+          const opts = ensureBuilderOptionsHeader(state.header);
+          opts.correctReplies = parseAnswers(e.target.value);
+        });
+      }
+      if (els.builderIncorrectReplies) {
+        els.builderIncorrectReplies.addEventListener('input', (e) => {
+          const opts = ensureBuilderOptionsHeader(state.header);
+          opts.incorrectReplies = parseAnswers(e.target.value);
+        });
+      }
     }
 
     // One-time event bindings for stop + reply inputs.
@@ -1576,15 +2095,7 @@
       els.replyType.addEventListener('change', (e) => {
         const stop = getSelectedStop();
         if (!stop) return;
-        const nextType = e.target.value;
-        const correct = Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
-        const incorrect = Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
-
-        if (nextType === 'any') {
-          stop.playerReply = { type: 'any', placeholder: '', storesAs: '', correct, incorrect };
-        } else {
-          stop.playerReply = { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct, incorrect };
-        }
+        setPlayerReplyType(stop, e.target.value);
         renderAll();
       });
 
@@ -1610,6 +2121,7 @@
         const stop = getSelectedStop();
         if (!stop || stop.playerReply.type !== 'any') return;
         stop.playerReply.storesAs = e.target.value;
+        updateHtmlVariableHints();
       });
 
       els.removeReplyBtn.addEventListener('click', () => {
@@ -1623,16 +2135,13 @@
       els.addBubbleBtn.addEventListener('click', () => {
         const stop = getSelectedStop();
         if (!stop) return;
-        stop.setup.push({ name: nextBubbleName(stop, 'message'), msgType: 'text', html: '', callToAction: false, bottomAdded: true });
+        const bubbleName = nextBubbleName(stop, 'bubble');
+        stop.messages.push({ name: bubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false });
         renderAll();
-      });
-
-      document.getElementById('addCtaBtn').addEventListener('click', () => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        stop.setup.push({ name: nextBubbleName(stop, 'action'), msgType: 'text', html: '', callToAction: true, bottomAdded: false });
-        ensureReplyScaffoldForCallToAction(stop);
-        renderAll();
+        const flash = document.getElementById('addBubbleFlash');
+        flash.textContent = bubbleName + ' Added';
+        flash.classList.add('visible');
+        setTimeout(() => flash.classList.remove('visible'), 1800);
       });
     }
 
@@ -1644,7 +2153,7 @@
           const normalized = ensureStop(s, i);
           return {
             id: normalized.id,
-            setup: normalized.setup,
+            messages: normalized.messages,
             playerReply: normalized.playerReply
           };
         })
@@ -1718,11 +2227,11 @@
       }
       window.open(url, '_blank');
     }
-    document.getElementById('playGameLink').addEventListener('click', (e) => {
+    document.getElementById('playGameLinkFooter').addEventListener('click', (e) => {
       e.preventDefault();
       openGameWithSavePrompt('index.html');
     });
-    document.getElementById('revealGameLink').addEventListener('click', (e) => {
+    document.getElementById('revealGameLinkFooter').addEventListener('click', (e) => {
       e.preventDefault();
       openGameWithSavePrompt('index.html?reveal');
     });
@@ -1733,7 +2242,7 @@
         const ok = window.confirm('Clear the current builder contents and start a new empty document?');
         if (!ok) return;
       }
-      state = deepClone(DEFAULT_DOC);
+      state = defaultState();
       selectedStopIndex = -1;
       stopNameBlurValidated = false;
       renderAll();
@@ -1780,6 +2289,3 @@
   </script>
 </body>
 </html>
-
-
-

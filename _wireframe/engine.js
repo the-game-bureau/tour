@@ -23,6 +23,7 @@ if (location.search.includes('reset')) {
 
 let state = { step: 0, team: null, vars: {} };
 let stops = [];
+let lastBubblePlaceholder = '';
 const DEFAULT_HEADER = {
   title: 'Scavenger Hunt',
   subtitle: 'Mission Control',
@@ -104,6 +105,9 @@ function addMsg(msg, animate) {
   if (bubble.querySelector('img')) wrap.classList.add('has-img');
   wrap.appendChild(bubble);
   chatEl.appendChild(wrap);
+  if (msg && Object.prototype.hasOwnProperty.call(msg, 'placeholder')) {
+    lastBubblePlaceholder = typeof msg.placeholder === 'string' ? msg.placeholder : '';
+  }
   return wrap;
 }
 
@@ -147,7 +151,8 @@ function normalizeBubble(bubble) {
     name: bubble.name || undefined,
     html: bubble.html || '',
     callToAction: !!(bubble.callToAction || bubble.red || bubble.cmd),
-    forAnswer: bubble.forAnswer || ''
+    forAnswer: bubble.forAnswer || '',
+    placeholder: typeof bubble.placeholder === 'string' ? bubble.placeholder : ''
   };
 }
 
@@ -196,15 +201,15 @@ function normalizePlayerReply(playerReply) {
 }
 
 function normalizeStop(stop, index) {
-  const setup = Array.isArray(stop && stop.setup)
-    ? stop.setup.map(normalizeBubble).filter(Boolean)
+  const msgs = Array.isArray(stop && stop.messages)
+    ? stop.messages.map(normalizeBubble).filter(Boolean)
     : Array.isArray(stop && stop.reveal)
       ? stop.reveal.map(normalizeBubble).filter(Boolean)
       : [];
   const playerReply = normalizePlayerReply((stop && stop.playerReply) || (stop && stop.action) || null);
   return {
     id: (stop && stop.id) || 'stop-' + (index + 1),
-    setup,
+    messages: msgs,
     playerReply
   };
 }
@@ -272,7 +277,7 @@ function renderInput() {
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'answer-input';
-  input.placeholder = playerReply.placeholder || '';
+  input.placeholder = String(lastBubblePlaceholder || playerReply.placeholder || '');
   input.setAttribute('autocomplete', 'off');
   input.setAttribute('autocorrect', 'off');
   input.setAttribute('spellcheck', 'false');
@@ -323,10 +328,11 @@ function renderInput() {
               ? 'Check that spelling. If needed, text <strong>504-581-5652</strong> for help from Mission Control.'
               : 'Not quite. Text <strong>504-581-5652</strong> and Mission Control will help.' }];
 
-      const setup = stops[state.step].setup || [];
-      const lastSetup = setup.length ? setup[setup.length - 1] : null;
+      const msgs = stops[state.step].messages || [];
+      const lastSetup = msgs.length ? msgs[msgs.length - 1] : null;
       const toShow = lastSetup ? incorrectBubbles.concat([lastSetup]) : incorrectBubbles;
 
+      lastBubblePlaceholder = '';
       showBubbles(toShow, () => renderInput());
       scrollBottom(true);
       return;
@@ -399,17 +405,20 @@ function doAdvance(matchedAnswer) {
   scrollBottom(true);
 
   if (state.step >= stops.length) {
+    lastBubblePlaceholder = '';
     renderInput();
     return;
   }
 
-  const nextSetup = stops[state.step].setup || [];
-  const allBubbles = correctBubbles.concat(nextSetup);
+  const nextMsgs = stops[state.step].messages || [];
+  const allBubbles = correctBubbles.concat(nextMsgs);
   if (!allBubbles.length) {
+    lastBubblePlaceholder = '';
     renderInput();
     return;
   }
 
+  lastBubblePlaceholder = '';
   showBubbles(allBubbles, () => renderInput());
 }
 
@@ -438,7 +447,7 @@ function buildRevealPlayerReplyMessage(playerReply) {
 function revealAllBubbles() {
   chatEl.innerHTML = '';
   stops.forEach((stop) => {
-    (stop.setup || []).forEach((msg) => addMsg(msg, false));
+    (stop.messages || []).forEach((msg) => addMsg(msg, false));
     const replyMsg = buildRevealPlayerReplyMessage(stop.playerReply);
     if (replyMsg) addMsg(replyMsg, false);
     ((stop.playerReply && stop.playerReply.correct) || []).forEach((msg) => addMsg(msg, false));
@@ -449,13 +458,17 @@ function revealAllBubbles() {
 }
 
 function replayProgress() {
+  lastBubblePlaceholder = '';
   for (let i = 0; i <= state.step; i += 1) {
     if (i >= stops.length) break;
-    (stops[i].setup || []).forEach((msg) => addMsg(msg, false));
+    (stops[i].messages || []).forEach((msg) => addMsg(msg, false));
     if (i < state.step && stops[i].playerReply) {
       const pr = stops[i].playerReply;
       if (pr.type === 'any' && pr.storesAs && state.vars[pr.storesAs]) {
         addMsg({ fromPlayer: true, text: state.vars[pr.storesAs] }, false);
+      }
+      if (pr.type === 'button') {
+        addMsg({ fromPlayer: true, text: pr.playerText || pr.text || '' }, false);
       }
       pickCorrectBubble(pr.correct || [], '').forEach((msg) => addMsg(msg, false));
     }
@@ -494,7 +507,8 @@ async function initGame() {
     return;
   }
 
-  setTimeout(() => showBubbles(stops[0].setup || [], () => renderInput()), 400);
+  lastBubblePlaceholder = '';
+  setTimeout(() => showBubbles(stops[0].messages || [], () => renderInput()), 400);
 }
 
 initGame();
