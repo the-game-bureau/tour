@@ -13,6 +13,8 @@ const TEAMS = {
 const TEAM_LETTER_MAP = { a: 'beignet', b: 'lagniappe', c: 'rougarou', d: 'tch' };
 const TEAM_KEY_MAP = { beignet: 'beignet', lagniappe: 'lagniappe', tchoupitoulas: 'tch', rougarou: 'rougarou' };
 const REVEAL_ALL = new URLSearchParams(location.search).has('reveal');
+const START_STOP = new URLSearchParams(location.search).get('start');
+const PREVIEW_MODE = new URLSearchParams(location.search).has('preview');
 
 if (location.search.includes('reset')) {
   try {
@@ -24,6 +26,9 @@ if (location.search.includes('reset')) {
 let state = { step: 0, team: null, vars: {} };
 let stops = [];
 let lastBubblePlaceholder = '';
+let TYPING_THINK = 600;
+let TYPING_PAUSE = 150;
+let DEFAULT_PLACEHOLDER = 'Type here...';
 const DEFAULT_HEADER = {
   title: 'Scavenger Hunt',
   subtitle: 'Mission Control',
@@ -92,7 +97,6 @@ function addMsg(msg, animate) {
   const wrap = document.createElement('div');
   const isCallToAction = !!msg.callToAction;
   wrap.className = 'msg ' + (msg.fromPlayer ? 'from-player' : 'from-game') + (isCallToAction ? ' call-to-action' : '');
-  if (msg.name) wrap.dataset.bubble = msg.name;
   if (!animate) wrap.style.animation = 'none';
 
   const bubble = document.createElement('div');
@@ -121,17 +125,15 @@ function addTyping() {
 }
 
 function showBubbles(bubbles, onDone, opts) {
-  const think = (opts && opts.think) || 600;
-  const pause = (opts && opts.pause) || 150;
+  const think = (opts && opts.think) || TYPING_THINK;
+  const pause = (opts && opts.pause) || TYPING_PAUSE;
 
-  function next(i) {
-    if (i >= bubbles.length) {
-      if (onDone) onDone();
-      return;
-    }
-    const typing = addTyping();
-    setTimeout(() => {
-      typing.remove();
+  if (!bubbles.length) { if (onDone) onDone(); return; }
+
+  const typing = addTyping();
+  setTimeout(() => {
+    typing.remove();
+    function next(i) {
       addMsg(bubbles[i], true);
       scrollBottom(true);
       if (i < bubbles.length - 1) {
@@ -139,16 +141,14 @@ function showBubbles(bubbles, onDone, opts) {
       } else if (onDone) {
         onDone();
       }
-    }, think);
-  }
-
-  next(0);
+    }
+    next(0);
+  }, think);
 }
 
 function normalizeBubble(bubble) {
   if (!bubble || typeof bubble !== 'object') return null;
   return {
-    name: bubble.name || undefined,
     html: bubble.html || '',
     callToAction: !!(bubble.callToAction || bubble.red || bubble.cmd),
     forAnswer: bubble.forAnswer || '',
@@ -215,9 +215,21 @@ function normalizeStop(stop, index) {
 }
 
 async function loadStops() {
-  const resp = await fetch('stops.json', { cache: 'no-store' });
-  if (!resp.ok) throw new Error('Unable to load stops.json');
-  const payload = await resp.json();
+  let payload;
+  if (PREVIEW_MODE) {
+    try {
+      const raw = localStorage.getItem('nola360_preview_stops');
+      if (raw) {
+        localStorage.removeItem('nola360_preview_stops');
+        payload = JSON.parse(raw);
+      }
+    } catch (e) {}
+  }
+  if (!payload) {
+    const resp = await fetch('stops.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error('Unable to load stops.json');
+    payload = await resp.json();
+  }
   const list = Array.isArray(payload) ? payload : payload && Array.isArray(payload.stops) ? payload.stops : [];
   const header = payload && typeof payload === 'object' && payload.header && typeof payload.header === 'object'
     ? payload.header
@@ -238,6 +250,16 @@ function applyHeaderConfig(config) {
     headerLogoEl.alt = header.logoAlt || header.title;
   }
   document.title = header.pageTitle || header.title || DEFAULT_HEADER.pageTitle;
+  const opts = header.builderOptions || {};
+  if (typeof opts.typingDelay === 'number') TYPING_THINK = opts.typingDelay;
+  if (typeof opts.bubblePause === 'number') TYPING_PAUSE = opts.bubblePause;
+  if (opts.defaultPlaceholder) DEFAULT_PLACEHOLDER = opts.defaultPlaceholder;
+if (header.faviconUrl) {
+    var link = document.querySelector("link[rel~='icon']") || document.createElement('link');
+    link.rel = 'icon';
+    link.href = header.faviconUrl;
+    document.head.appendChild(link);
+  }
 }
 
 if (restartBtnEl) {
@@ -249,7 +271,7 @@ if (restartBtnEl) {
   });
 }
 
-function renderInput() {
+function renderInput(disabled) {
   inputAreaEl.innerHTML = '';
   if (state.step >= stops.length) return;
 
@@ -262,10 +284,13 @@ function renderInput() {
     const btn = document.createElement('button');
     btn.className = 'choice-btn neutral';
     btn.textContent = playerReply.text;
-    btn.addEventListener('click', () => {
-      addMsg({ fromPlayer: true, text: playerReply.playerText || playerReply.text }, true);
-      doAdvance();
-    });
+    btn.disabled = !!disabled;
+    if (!disabled) {
+      btn.addEventListener('click', () => {
+        addMsg({ fromPlayer: true, text: playerReply.playerText || playerReply.text }, true);
+        doAdvance();
+      });
+    }
     wrap.appendChild(btn);
     inputAreaEl.appendChild(wrap);
     return;
@@ -277,15 +302,17 @@ function renderInput() {
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'answer-input';
-  input.placeholder = String(lastBubblePlaceholder || playerReply.placeholder || '');
+  input.placeholder = String(lastBubblePlaceholder || playerReply.placeholder || DEFAULT_PLACEHOLDER);
   input.setAttribute('autocomplete', 'off');
   input.setAttribute('autocorrect', 'off');
   input.setAttribute('spellcheck', 'false');
   input.setAttribute('autocapitalize', 'off');
+  input.disabled = !!disabled;
 
   const sendBtn = document.createElement('button');
   sendBtn.className = 'submit-btn';
   sendBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+  sendBtn.disabled = !!disabled;
 
   if (playerReply.type === 'any') {
     const submitAny = () => {
@@ -303,7 +330,7 @@ function renderInput() {
     row.appendChild(input);
     row.appendChild(sendBtn);
     inputAreaEl.appendChild(row);
-    setTimeout(() => input.focus(), 150);
+    if (!disabled) setTimeout(() => input.focus(), 150);
     return;
   }
 
@@ -366,7 +393,7 @@ function renderInput() {
   row.appendChild(input);
   row.appendChild(sendBtn);
   inputAreaEl.appendChild(row);
-  setTimeout(() => input.focus(), 150);
+  if (!disabled) setTimeout(() => input.focus(), 150);
 }
 
 function pickCorrectBubble(correctBubbles, matchedAnswer) {
@@ -419,6 +446,7 @@ function doAdvance(matchedAnswer) {
   }
 
   lastBubblePlaceholder = '';
+  renderInput(true);
   showBubbles(allBubbles, () => renderInput());
 }
 
@@ -502,12 +530,27 @@ async function initGame() {
     saveState();
   }
 
+// ?start=stop-id — jump directly to a specific stop without replaying history (for testing from builder)
+  const jumpTo = START_STOP;
+  if (jumpTo) {
+    const startIdx = stops.findIndex((s) => s.id === jumpTo);
+    if (startIdx >= 0) {
+      state.step = startIdx;
+      history.replaceState(null, '', location.pathname);
+      lastBubblePlaceholder = '';
+      renderInput(true);
+      setTimeout(() => showBubbles(stops[startIdx].messages || [], () => renderInput()), 400);
+      return;
+    }
+  }
+
   if (state.step > 0) {
     replayProgress();
     return;
   }
 
   lastBubblePlaceholder = '';
+  renderInput(true);
   setTimeout(() => showBubbles(stops[0].messages || [], () => renderInput()), 400);
 }
 

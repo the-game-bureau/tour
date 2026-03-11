@@ -1,11 +1,12 @@
 {
   "_comment": "File: stops.json | Purpose: Source-of-truth game stops data loaded by engine.js and edited via builder.html.",
   "header": {
-    "title": "Scavenger Hunt",
+    "title": "The Exciting Scavenger Hunt",
     "subtitle": "Mission Control",
     "logoUrl": "logo.png",
     "logoAlt": "Game Logo",
-    "pageTitle": "Scavenger Hunt",
+    "faviconUrl": "index.ico",
+    "pageTitle": "The Exciting Scavenger Hunt",
     "builderOptions": {
       "correctReplies": [
         "Correct. Nice work.",
@@ -18,11 +19,12 @@
         "That is correct.",
         "Excellent. Proceed.",
         "Yes. Keep going.",
-        "Yeah you right."
+        "Yes!"
       ],
       "incorrectReplies": [
         "Not quite. Try again.",
-        "Close, but not correct.",
+        "Close",
+        "but not correct.",
         "Incorrect. Give it another shot.",
         "That answer does not match.",
         "Nope. Try a different answer.",
@@ -30,16 +32,151 @@
         "Not yet. Check your spelling.",
         "That is not the one.",
         "Incorrect. One more try.",
-        "Try again before moving on."
-      ]
+        "Try again before moving on.",
+        "No. Try again."
+      ],
+      "typingDelay": 600,
+      "bubblePause": 150,
+      "defaultPlaceholder": "Type here..."
     }
   },
   "stops": [
     {
-      "id": "stop-1",
+      "id": "PlayerName",
       "messages": [
         {
-          "name": "scavenger-hunt-stop-1-bubble-1",
+          "html": "Hello. What's your name?",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Type your name here...",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        },
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "fromPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
+        "type": "any",
+        "correct": [
+          {
+            "html": "Nice to meet you {{name}}",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "direction": "toPlayer",
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": ""
+          }
+        ],
+        "incorrect": [
+          {
+            "html": "Not yet. Check your spelling.",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "direction": "toPlayer",
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": ""
+          }
+        ],
+        "placeholder": "",
+        "storesAs": "name"
+      }
+    },
+    {
+      "id": "Squirrel",
+      "messages": [
+        {
+          "html": "Look a sqirrel!",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "LAFAYETTE",
+      "messages": [
+        {
+          "html": "Who is America's Favorite Fighting Frenchmen?",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        },
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        },
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        },
+        {
           "html": "",
           "callToAction": false,
           "forAnswer": "",
@@ -54,7 +191,114 @@
         }
       ],
       "playerReply": {
-        "name": "",
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "STATUES",
+      "messages": [
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "STOP-5",
+      "messages": [
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "STOP-6",
+      "messages": [
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "goTo": ""
+      }
+    },
+    {
+      "id": "STOP-7",
+      "messages": [
+        {
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "direction": "toPlayer",
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": ""
+        }
+      ],
+      "playerReply": {
         "type": "text",
         "correct": [],
         "incorrect": [],

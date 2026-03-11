@@ -73,6 +73,10 @@ body {
   line-height: 1.3;
 }
 
+#header-title {
+  font-weight: 700;
+}
+
 /* Header online status row */
 .contact-status {
   font-size: 0.72rem;

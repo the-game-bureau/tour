@@ -30,7 +30,7 @@
       --danger: #c1121f;
       --muted: #5a5a5a;
       --bubble-gap: 12px;
-      --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --sans: "JetBrains Mono", "Courier New", monospace;
       --mono: "JetBrains Mono", "Courier New", monospace;
     }
 
@@ -39,8 +39,8 @@
     body {
       margin: 0;
       background:
-        linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(0,0,0,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,160,240,0.18) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(100,160,240,0.18) 1px, transparent 1px),
         var(--bg);
       background-size: 28px 28px, 28px 28px, auto;
       color: var(--ink);
@@ -106,8 +106,6 @@
     .header-card .sub { margin-bottom: 2px; }
     .header-card h1 { margin-bottom: 4px; }
     .header-card .folder-note { margin: 0; }
-    #tile-game-footer { padding: 10px 16px; }
-    #tile-game-footer .toolbar { margin-bottom: 0; }
 
     button {
       border: 1px solid var(--line);
@@ -210,8 +208,6 @@
       width: 100%;
       display: block;
     }
-    .game-details-item { cursor: pointer; }
-    .game-details-item.locked { background: #fff; }
     .stop-item.dragging { opacity: 0.45; transform: rotate(1.5deg); cursor: grabbing; }
     .stop-item.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
     .stop-item.drop-before::before,
@@ -231,11 +227,7 @@
       cursor: default;
       background: #f7f3ec;
     }
-    .stop-item.locked.game-details-item {
-      background: #fff;
-    }
-
-    .stop-item.active {
+.stop-item.active {
       border-color: var(--accent);
       box-shadow: inset 0 0 0 1px var(--accent);
       padding-right: 108px;
@@ -282,11 +274,7 @@
       color: #ff4d57;
       background: #ffffff;
     }
-    .bubble-btns {
-      display: flex;
-      gap: 4px;
-    }
-    .stop-action.disabled,
+.stop-action.disabled,
     .stop-action:disabled {
       opacity: 0.3;
       cursor: not-allowed;
@@ -368,7 +356,7 @@
     .bubble {
       border: 1px solid var(--line);
       border-radius: 0;
-      background: #fff;
+      background: #dbeafe;
       padding: 10px;
       margin: 0;
       cursor: default;
@@ -403,11 +391,11 @@
     .bubble-type-row span.type-pair { display: flex; align-items: center; gap: 4px; }
 
     .bubble-top {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: flex;
+      gap: 2px;
     }
 
     .empty {
@@ -532,7 +520,8 @@
       color: #cc0000;
       cursor: pointer;
     }
-    .bubble.cta-bubble { border-color: #cc0000; }
+    .bubble.from-player-bubble { background: #f1f5f9; }
+    .bubble.cta-bubble { background: #fee2e2; border-color: #cc0000; }
     .bubble-flash {
       font-size: 0.72rem;
       font-weight: 700;
@@ -554,6 +543,59 @@
       margin-top: 8px;
     }
 
+    .dirty-badge {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 3px;
+      font-size: 0.76rem;
+      color: #475569;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      visibility: hidden;
+    }
+
+    .norm-preview {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: #555;
+      min-height: 1rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .undo-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: #fff;
+      padding: 10px 16px;
+      font-size: 0.84rem;
+      letter-spacing: 0.03em;
+      display: none;
+      align-items: center;
+      gap: 14px;
+      z-index: 9999;
+      border: 1px solid #444;
+      white-space: nowrap;
+    }
+    .undo-toast button {
+      border: 1px solid #fff;
+      color: #fff;
+      background: transparent;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: var(--sans);
+    }
+    .undo-toast button:hover { background: rgba(255,255,255,0.15); }
+
     @media (max-width: 980px) {
       .layout { grid-template-columns: 1fr; }
       .page-head {
@@ -569,29 +611,59 @@
 </head>
 <body>
   <div class="page">
-    <div id="tile-game-header" class="card header-card" data-tile-name="game-header">
-      <p class="sub">The Game Bureau</p>
-      <h1>Game Builder</h1>
-      <p id="folderNote" class="folder-note">You are in the <strong id="folderNameText"></strong> folder.</p>
+    <div id="tile-game-header" class="card header-card" data-tile-name="game-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <div>
+        <p class="sub">The Game Bureau</p>
+        <h1>Game Builder</h1>
+        <p id="folderNote" class="folder-note">You are editing <strong>stops.json</strong> in the <strong id="folderNameText"></strong> folder.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <div style="position:relative;">
+          <button id="saveBtn" type="button" title="SAVE" style="display:inline-flex;align-items:center;gap:6px;">Save <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></button>
+          <span id="dirtyBadge" class="dirty-badge">UNSAVED</span>
+        </div>
+        <button id="mobilePreviewBtn" type="button" title="OPEN IN MOBILE-SIZED POPUP" style="display:inline-flex;align-items:center;gap:6px;">Preview <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></button>
+      </div>
     </div>
     <div id="status" class="status"></div>
     <div id="warnings" class="warnings"></div>
 
+    <div id="tile-game-details-full" class="card" data-tile-name="game-details-full">
+      <h2 class="tile-label">Game Details</h2>
+      <div id="headerEditor">
+        <div class="row">
+          <div>
+            <label for="headerTitle">TITLE / PAGE TITLE</label>
+            <input id="headerTitle" type="text">
+          </div>
+          <div>
+            <label for="headerSubtitle">Subtitle (Guide Name)</label>
+            <input id="headerSubtitle" type="text">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="headerLogoUrl">Logo Location (URL or Local File Name)</label>
+            <input id="headerLogoUrl" type="text">
+          </div>
+          <div>
+            <label for="headerLogoAlt">LOGO ALTERNATE TEXT</label>
+            <input id="headerLogoAlt" type="text">
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="headerFaviconUrl">Favicon Location (URL or Local File Name)</label>
+            <input id="headerFaviconUrl" type="text" placeholder="index.ico">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="layout">
       <div class="left-column">
-        <div id="tile-game-details" class="card" data-tile-name="game-details">
-          <h2 class="tile-label">Game</h2>
-          <div class="toolbar compact-toolbar">
-            <button id="newBtn" type="button" title="A NEW BLANK">New</button>
-            <button id="loadBtn" type="button" title="LOAD FROM CURRENT FOLDER">Load</button>
-            <span class="toolbar-sep" aria-hidden="true"></span>
-            <button id="saveBtn" class="primary" type="button" title="SAVE">Save</button>
-          </div>
-          <div id="gameDetailsSlot" class="stack"></div>
-        </div>
-
-        <div id="tile-stop-list" class="card" data-tile-name="stop-list">
-        <h2 class="tile-label">Stops</h2>
+<div id="tile-stop-list" class="card" data-tile-name="stop-list">
+        <h2 class="tile-label">STOPS: <span id="stopCount">0</span></h2>
         <div id="stopList" class="stack"></div>
         <div id="addStopDock" class="toolbar is-hidden">
           <button id="addStopBtn" class="primary" type="button">New</button>
@@ -600,30 +672,7 @@
       </div>
 
       <div id="tile-bubbles" class="card" data-tile-name="bubbles">
-        <h2 id="detailsTileLabel" class="tile-label">Game Details</h2>
-        <div id="headerEditor">
-          <div class="row">
-            <div>
-              <label for="headerTitle">TITLE / PAGE TITLE</label>
-              <input id="headerTitle" type="text">
-            </div>
-            <div>
-              <label for="headerSubtitle">Subtitle (Guide Name)</label>
-              <input id="headerSubtitle" type="text">
-            </div>
-          </div>
-          <div class="row">
-            <div>
-              <label for="headerLogoUrl">Logo URL / Local File</label>
-              <input id="headerLogoUrl" type="text">
-            </div>
-            <div>
-              <label for="headerLogoAlt">LOGO ALTERNATE TEXT</label>
-              <input id="headerLogoAlt" type="text">
-            </div>
-          </div>
-          <p id="gameAssetsHint" class="field-hint">Place <strong>logo.png</strong> (avatar image) and <strong>index.ico</strong> (browser tab icon) in the game folder.</p>
-        </div>
+        <h2 id="detailsTileLabel" class="tile-label">Stop Details</h2>
 
         <div id="stopEditor" class="is-hidden">
           <div class="mini-tile">
@@ -671,6 +720,7 @@
                 <div>
                   <label for="replyAnswers">Answers (comma or newline separated)</label>
                   <textarea id="replyAnswers"></textarea>
+                  <div id="replyAnswersNorm" class="field-hint tight norm-preview"></div>
                 </div>
               </div>
             </div>
@@ -711,15 +761,27 @@
 
     </div>
 
-    <div id="tile-game-footer" class="card header-card" data-tile-name="game-footer">
-      <div class="toolbar">
-        <a id="playGameLinkFooter" href="index.html" target="_blank"><button type="button" title="PLAY CURRENT">PLAY</button></a>
-        <a id="revealGameLinkFooter" href="index.html?reveal" target="_blank"><button type="button" title="SHOW EVERYTHING EXPANDED">REVEAL</button></a>
+<div id="tile-builder-options" class="card header-card" data-tile-name="builder-options">
+      <h2 class="tile-label">Default Options</h2>
+      <div class="row">
+        <div>
+          <label for="builderTypingDelay">Typing Delay (ms)</label>
+          <input id="builderTypingDelay" type="number" min="0" max="3000" step="50" placeholder="600">
+          <p class="field-hint tight">How long the "..." indicator shows before each bubble appears.</p>
+        </div>
+        <div>
+          <label for="builderBubblePause">Bubble Pause (ms)</label>
+          <input id="builderBubblePause" type="number" min="0" max="2000" step="50" placeholder="150">
+          <p class="field-hint tight">Gap between consecutive bubbles.</p>
+        </div>
       </div>
-    </div>
-
-    <div id="tile-builder-options" class="card header-card" data-tile-name="builder-options">
-      <h2 class="tile-label">Builder Options</h2>
+      <div class="row">
+        <div>
+          <label for="builderDefaultPlaceholder">Typing Placeholder</label>
+          <input id="builderDefaultPlaceholder" type="text" placeholder="Type here...">
+          <p class="field-hint tight">Default text shown in the answer box. Override per-bubble below.</p>
+        </div>
+      </div>
       <div class="row">
         <div>
           <label for="builderCorrectReplies">Default Correct Replies</label>
@@ -735,6 +797,10 @@
     </div>
   </div>
 
+  <div id="undoToast" class="undo-toast" role="status">
+    Stop deleted. <button id="undoDeleteBtn" type="button">Undo</button>
+  </div>
+
   <script>
     const DEFAULT_DOC = {
       _comment: 'File: stops.json | Purpose: Source-of-truth game stops data loaded by engine.js and edited via builder.html.',
@@ -743,6 +809,7 @@
         subtitle: 'Mission Control',
         logoUrl: 'logo.png',
         logoAlt: 'Game Logo',
+        faviconUrl: 'index.ico',
         pageTitle: 'WALKING TOUR'
       },
       stops: []
@@ -775,6 +842,9 @@
     ];
 
     DEFAULT_DOC.header.builderOptions = {
+      typingDelay: 600,
+      bubblePause: 150,
+      defaultPlaceholder: 'Type here...',
       correctReplies: CORRECT_BUBBLE_SUGGESTIONS.slice(),
       incorrectReplies: INCORRECT_BUBBLE_SUGGESTIONS.slice()
     };
@@ -787,10 +857,9 @@
     function defaultState() {
       const s = deepClone(DEFAULT_DOC);
       const firstStopId = 'stop-1';
-      const firstBubbleName = buildBubbleName((s.header && s.header.title) || '', firstStopId, 'bubble', 1);
       s.stops = [{
         id: firstStopId,
-        messages: [{ name: firstBubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }],
+        messages: [{ msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }],
         playerReply: { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] }
       }];
       return s;
@@ -804,16 +873,14 @@
     // Cached DOM references used across render + event phases.
     const els = {
       status: document.getElementById('status'),
-      gameDetailsSlot: document.getElementById('gameDetailsSlot'),
-      stopList: document.getElementById('stopList'),
-      headerEditor: document.getElementById('headerEditor'),
+stopList: document.getElementById('stopList'),
       stopEditor: document.getElementById('stopEditor'),
       detailsTileLabel: document.getElementById('detailsTileLabel'),
-      gameAssetsHint: document.getElementById('gameAssetsHint'),
       headerTitle: document.getElementById('headerTitle'),
       headerSubtitle: document.getElementById('headerSubtitle'),
       headerLogoUrl: document.getElementById('headerLogoUrl'),
       headerLogoAlt: document.getElementById('headerLogoAlt'),
+      headerFaviconUrl: document.getElementById('headerFaviconUrl'),
       stopId: document.getElementById('stopId'),
       stopNameInlineWarning: document.getElementById('stopNameInlineWarning'),
       msgBubbles: document.getElementById('msgBubbles'),
@@ -836,7 +903,10 @@
       warnings: document.getElementById('warnings'),
       folderNote: document.getElementById('folderNote'),
       folderNameText: document.getElementById('folderNameText'),
-      builderCorrectReplies: document.getElementById('builderCorrectReplies'),
+      builderTypingDelay: document.getElementById('builderTypingDelay'),
+      builderBubblePause: document.getElementById('builderBubblePause'),
+      builderDefaultPlaceholder: document.getElementById('builderDefaultPlaceholder'),
+builderCorrectReplies: document.getElementById('builderCorrectReplies'),
       builderIncorrectReplies: document.getElementById('builderIncorrectReplies')
     };
 
@@ -883,18 +953,31 @@
         .filter(Boolean);
     }
 
+    // Mirror of engine.js norm() — strip $,.whitespace then lowercase.
+    function norm(s) {
+      return String(s || '').toLowerCase().replace(/[$,.\s]/g, '');
+    }
+
+    function renderAnswersNormPreview(text) {
+      const el = document.getElementById('replyAnswersNorm');
+      if (!el) return;
+      const answers = parseAnswers(text);
+      if (!answers.length) { el.textContent = ''; return; }
+      el.textContent = 'Normalized: ' + answers.map(norm).join(', ');
+    }
+
     function ensureBuilderOptionsHeader(headerObj) {
       if (!headerObj || typeof headerObj !== 'object') return DEFAULT_DOC.header.builderOptions;
       if (!headerObj.builderOptions || typeof headerObj.builderOptions !== 'object') {
         headerObj.builderOptions = {};
       }
-      if (!Array.isArray(headerObj.builderOptions.correctReplies)) {
-        headerObj.builderOptions.correctReplies = CORRECT_BUBBLE_SUGGESTIONS.slice();
-      }
-      if (!Array.isArray(headerObj.builderOptions.incorrectReplies)) {
-        headerObj.builderOptions.incorrectReplies = INCORRECT_BUBBLE_SUGGESTIONS.slice();
-      }
-      return headerObj.builderOptions;
+      const bo = headerObj.builderOptions;
+      if (typeof bo.typingDelay !== 'number') bo.typingDelay = 600;
+      if (typeof bo.bubblePause !== 'number') bo.bubblePause = 150;
+      if (typeof bo.defaultPlaceholder !== 'string') bo.defaultPlaceholder = 'Type here...';
+if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGESTIONS.slice();
+      if (!Array.isArray(bo.incorrectReplies)) bo.incorrectReplies = INCORRECT_BUBBLE_SUGGESTIONS.slice();
+      return bo;
     }
 
     function getCorrectReplySuggestions() {
@@ -916,33 +999,6 @@
       return cleaned || String(fallback || 'playerAnswer');
     }
 
-    function slugNamePart(text, fallback) {
-      const slug = String(text || '')
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      return slug || String(fallback || 'x');
-    }
-
-    function getGameNameForBubbleNames() {
-      const currentTitle = String((state && state.header && state.header.title) || '').trim();
-      if (currentTitle) return currentTitle;
-      const defaultTitle = String((DEFAULT_DOC && DEFAULT_DOC.header && DEFAULT_DOC.header.title) || '').trim();
-      if (defaultTitle) return defaultTitle;
-      return getCurrentFolderName() || 'game';
-    }
-
-    function buildBubbleNameBase(gameName, stopId, bubbleType) {
-      const gamePart = slugNamePart(gameName, 'game');
-      const stopPart = slugNamePart(stopId, 'stop');
-      const typePart = slugNamePart(bubbleType, 'bubble');
-      return gamePart + '-' + stopPart + '-' + typePart;
-    }
-
-    function buildBubbleName(gameName, stopId, bubbleType, index) {
-      const idx = Number.isFinite(index) && index > 0 ? Math.floor(index) : 1;
-      return buildBubbleNameBase(gameName, stopId, bubbleType) + '-' + idx;
-    }
 
     function getCurrentVariableNames() {
       const names = [];
@@ -979,20 +1035,7 @@
       return list[Math.floor(Math.random() * list.length)];
     }
 
-    function nextBubbleName(stop, prefix) {
-      const base = buildBubbleNameBase(getGameNameForBubbleNames(), (stop && stop.id) || '', prefix) + '-';
-      const allNames = collectBubbleIds(stop);
-      let max = 0;
-      allNames.forEach((n) => {
-        if (n.startsWith(base)) {
-          const num = parseInt(n.slice(base.length), 10);
-          if (!isNaN(num) && num > max) max = num;
-        }
-      });
-      return base + (max + 1);
-    }
-
-    function nextNameFromPrevious(previousName, fallbackBase) {
+function nextNameFromPrevious(previousName, fallbackBase) {
       const prev = String(previousName || '').trim();
       const base = String(fallbackBase || 'msg').trim() || 'msg';
       if (!prev) return base + '-1';
@@ -1061,12 +1104,10 @@
       if (!stop || !stop.playerReply || typeof stop.playerReply !== 'object') {
         stop.playerReply = { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
       }
-      if (!stop.playerReply.name) stop.playerReply.name = nextBubbleName(stop, 'reply');
       if (!Array.isArray(stop.playerReply.correct)) stop.playerReply.correct = [];
       if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
       if (!stop.playerReply.correct.length) {
         stop.playerReply.correct.push({
-          name: nextBubbleName(stop, 'correct'),
           html: pickRandomSuggestion(getCorrectReplySuggestions()),
           callToAction: false,
           forAnswer: ''
@@ -1074,7 +1115,6 @@
       }
       if (includeIncorrect && !stop.playerReply.incorrect.length) {
         stop.playerReply.incorrect.push({
-          name: nextBubbleName(stop, 'incorrect'),
           html: pickRandomSuggestion(getIncorrectReplySuggestions()),
           callToAction: true,
           forAnswer: ''
@@ -1101,9 +1141,8 @@
       if (!Array.isArray(stop.playerReply.incorrect)) stop.playerReply.incorrect = [];
       if (typeof stop.playerReply.storesAs !== 'string') stop.playerReply.storesAs = '';
       if (typeof stop.playerReply.placeholder !== 'string') stop.playerReply.placeholder = '';
-      if (typeof stop.playerReply.name !== 'string') stop.playerReply.name = '';
       if (stop.playerReply.type === 'any' && !String(stop.playerReply.storesAs || '').trim()) {
-        stop.playerReply.storesAs = toVarKey(stop.playerReply.name || (stop.id + '_incoming'), 'playerAnswer');
+        stop.playerReply.storesAs = toVarKey(stop.id + '_incoming', 'playerAnswer');
       }
       ensureReplyScaffoldForCallToAction(stop, { includeIncorrect: stop.playerReply.type !== 'any' });
     }
@@ -1114,18 +1153,7 @@
       stop.playerReply = ensurePlayerReply(null);
     }
 
-    function collectBubbleIds(stop) {
-      const ids = [];
-      const msgs = Array.isArray(stop.messages) ? stop.messages : [];
-      const correct = stop.playerReply && Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct : [];
-      const incorrect = stop.playerReply && Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect : [];
-      msgs.forEach((b) => ids.push(String((b && b.name) || '').trim()));
-      correct.forEach((b) => ids.push(String((b && b.name) || '').trim()));
-      incorrect.forEach((b) => ids.push(String((b && b.name) || '').trim()));
-      return ids.filter(Boolean);
-    }
-
-    function findDuplicates(values) {
+function findDuplicates(values) {
       const seen = new Set();
       const dupes = new Set();
       values.forEach((v) => {
@@ -1150,14 +1178,7 @@
         warnings.push('Two stops cannot have the same name: ' + displayNames.join(', '));
       }
 
-      state.stops.forEach((stop) => {
-        const dupes = findDuplicates(collectBubbleIds(stop));
-        if (dupes.length) {
-          warnings.push('Stop \u201c' + stop.id + '\u201d has duplicate bubble IDs: ' + dupes.join(', '));
-        }
-      });
-
-      state.stops.forEach((stop) => {
+state.stops.forEach((stop) => {
         const ctaCount = Array.isArray(stop.messages) ? stop.messages.filter((b) => b && b.callToAction).length : 0;
         if (ctaCount > 1) {
           warnings.push('Stop \u201c' + stop.id + '\u201d has ' + ctaCount + ' call-to-action bubbles \u2014 only one is allowed per stop.');
@@ -1210,9 +1231,8 @@
     }
 
     function ensureBubble(b) {
-      if (!b || typeof b !== 'object') return { name: '', html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, direction: 'toPlayer' };
+      if (!b || typeof b !== 'object') return { html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, direction: 'toPlayer' };
       return {
-        name: String(b.name || ''),
         html: String(b.html || ''),
         callToAction: !!(b.callToAction || b.red || b.cmd),
         forAnswer: String(b.forAnswer || ''),
@@ -1229,12 +1249,11 @@
 
     function ensurePlayerReply(r) {
       if (!r || typeof r !== 'object') {
-        return { name: '', type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
+        return { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] };
       }
       const allBubbles = (arr) => Array.isArray(arr) ? arr.map(ensureBubble) : [];
       const type = r.type === 'any' ? 'any' : 'text';
       const base = {
-        name: String(r.name || ''),
         type,
         correct: allBubbles(r.correct),
         incorrect: allBubbles(r.incorrect)
@@ -1284,13 +1303,19 @@
       return state.stops[selectedStopIndex];
     }
 
+    function nextStopNumber() {
+      const existing = new Set(state.stops.map((s) => String(s.id || '').toUpperCase()));
+      let n = state.stops.length + 1;
+      while (existing.has('STOP-' + n)) n++;
+      return n;
+    }
+
     function createEmptyStop() {
-      const id = 'new-stop-' + (state.stops.length + 1);
-      const bubbleName = buildBubbleName(getGameNameForBubbleNames(), id, 'bubble', 1);
+      const id = 'STOP-' + nextStopNumber();
       return {
         id,
         messages: [
-          { name: bubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }
+          { msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }
         ],
         playerReply: {
           type: 'text',
@@ -1309,21 +1334,10 @@
     function renderStopList() {
       const addStopBtn = document.getElementById('addStopBtn');
       els.stopList.innerHTML = '';
-      if (els.gameDetailsSlot) els.gameDetailsSlot.innerHTML = '';
+      const stopCountEl = document.getElementById('stopCount');
+      if (stopCountEl) stopCountEl.textContent = state.stops.length;
 
-      const headerBtn = document.createElement('button');
-      headerBtn.type = 'button';
-      headerBtn.className = 'stop-item locked game-details-item' + (selectedStopIndex === -1 ? ' active' : '');
-      const gameTitle = String((state.header && state.header.title) || '').trim() || 'UNTITLED';
-      headerBtn.innerHTML = '<div>' + gameTitle + '</div><div class="stop-meta">STOPS: ' + state.stops.length + '</div>';
-      headerBtn.addEventListener('click', () => {
-        selectedStopIndex = -1;
-        stopNameBlurValidated = false;
-        renderAll();
-      });
-      if (els.gameDetailsSlot) els.gameDetailsSlot.appendChild(headerBtn);
-
-      if (!state.stops.length) {
+if (!state.stops.length) {
         if (addStopBtn) {
           const addStopRow = document.createElement('div');
           addStopRow.className = 'stop-add-row';
@@ -1374,19 +1388,7 @@
             e.stopPropagation();
             if (!copiedStop) return;
             const clone = JSON.parse(JSON.stringify(copiedStop));
-            const oldId = clone.id;
-            clone.id = oldId + '-copy';
-            const renameBubble = (b) => {
-              if (b && b.name && String(b.name).startsWith(oldId)) {
-                b.name = clone.id + b.name.slice(oldId.length);
-              }
-              return b;
-            };
-            if (Array.isArray(clone.messages)) clone.messages = clone.messages.map(renameBubble);
-            if (clone.playerReply) {
-              if (Array.isArray(clone.playerReply.correct)) clone.playerReply.correct = clone.playerReply.correct.map(renameBubble);
-              if (Array.isArray(clone.playerReply.incorrect)) clone.playerReply.incorrect = clone.playerReply.incorrect.map(renameBubble);
-            }
+            clone.id = 'STOP-' + nextStopNumber();
             const insertAt = selectedStopIndex >= 0 ? selectedStopIndex + 1 : state.stops.length;
             state.stops.splice(insertAt, 0, clone);
             selectedStopIndex = insertAt;
@@ -1400,9 +1402,10 @@
           stopDelete.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            state.stops.splice(i, 1);
+            const removed = state.stops.splice(i, 1)[0];
             if (!state.stops.length) selectedStopIndex = -1;
             else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
+            showUndoToast(removed, i);
             renderAll();
           });
         }
@@ -1520,7 +1523,9 @@
         const isToPlayer = !isMessages || !bubble.direction || bubble.direction === 'toPlayer';
         const msgType = (isMessages && isToPlayer) ? (bubble.msgType || 'text') : null;
 
-        wrap.className = 'bubble' + (isMessages && bubble.callToAction ? ' cta-bubble' : '');
+        wrap.className = 'bubble'
+          + (isMessages && !isToPlayer ? ' from-player-bubble' : '')
+          + (isMessages && bubble.callToAction ? ' cta-bubble' : '');
 
         if (isMessages) {
           const isFrom = bubble.direction === 'fromPlayer';
@@ -1560,30 +1565,15 @@
           wrap.appendChild(dirRow);
         }
 
-        // Header row: BUBBLE NAME input + move/remove buttons
-        const nameLabel = document.createElement('label');
-        nameLabel.textContent = isMessages ? 'Bubble Name' : (listKey === 'correct' ? 'Correct Bubble' : 'Incorrect Bubble');
-        wrap.appendChild(nameLabel);
-
         const topRow = document.createElement('div');
         topRow.className = 'bubble-top';
-
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.className = 'bubble-name-input';
-        nameInput.placeholder = 'bubble-name';
-        nameInput.value = String(bubble.name || '').replace(/"/g, '&quot;');
-        topRow.appendChild(nameInput);
-
-        const btnGroup = document.createElement('div');
-        btnGroup.className = 'bubble-btns';
 
         const removeBtn = document.createElement('button');
         removeBtn.type = 'button';
         removeBtn.className = 'stop-action stop-delete bubble-remove';
         removeBtn.title = 'REMOVE';
         removeBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
-        btnGroup.appendChild(removeBtn);
+        topRow.appendChild(removeBtn);
 
         const upBtn = document.createElement('button');
         upBtn.type = 'button';
@@ -1591,7 +1581,7 @@
         upBtn.title = 'MOVE UP';
         upBtn.disabled = idx === 0;
         upBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>';
-        btnGroup.appendChild(upBtn);
+        topRow.appendChild(upBtn);
 
         const downBtn = document.createElement('button');
         downBtn.type = 'button';
@@ -1599,9 +1589,8 @@
         downBtn.title = 'MOVE DOWN';
         downBtn.disabled = idx === bubbles.length - 1;
         downBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
-        btnGroup.appendChild(downBtn);
+        topRow.appendChild(downBtn);
 
-        topRow.appendChild(btnGroup);
         wrap.appendChild(topRow);
 
         const appendTypingPlaceholderField = (target) => {
@@ -1612,7 +1601,7 @@
           const placeholderInput = document.createElement('input');
           placeholderInput.type = 'text';
           placeholderInput.className = 'bubble-placeholder-input';
-          placeholderInput.placeholder = 'Shown in the typing field';
+          placeholderInput.placeholder = ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...';
           const placeholderStop = isMessages && !isToPlayer ? getSelectedStop() : null;
           placeholderInput.value = placeholderStop && placeholderStop.playerReply
             ? String(placeholderStop.playerReply.placeholder || bubble.placeholder || '')
@@ -1784,9 +1773,7 @@
             if (!stop.playerReply || typeof stop.playerReply !== 'object') {
               stop.playerReply = ensurePlayerReply(null);
             }
-            if (!stop.playerReply.name && bubble.name) stop.playerReply.name = String(bubble.name || '');
             setPlayerReplyType(stop, stop.playerReply.type);
-            if (!bubble.name && stop.playerReply.name) bubble.name = stop.playerReply.name;
 
             const incomingMode = stop.playerReply.type === 'any' ? 'any' : 'text';
             const modeRow = document.createElement('div');
@@ -1844,7 +1831,6 @@
             const flowHint = document.createElement('p');
             flowHint.className = 'field-hint';
             wrap.appendChild(flowHint);
-            appendTypingPlaceholderField(wrap);
 
             const applyIncomingModeUi = () => {
               const isAny = stop.playerReply.type === 'any';
@@ -1883,7 +1869,7 @@
             storesInput.addEventListener('blur', () => {
               if (stop.playerReply.type !== 'any') return;
               if (!String(stop.playerReply.storesAs || '').trim()) {
-                stop.playerReply.storesAs = toVarKey(stop.playerReply.name || bubble.name || (stop.id + '_incoming'), 'playerAnswer');
+                stop.playerReply.storesAs = toVarKey(stop.id + '_incoming', 'playerAnswer');
                 renderAll();
               }
             });
@@ -1892,29 +1878,15 @@
         } else {
           // Correct / incorrect bubbles — plain HTML textarea
           const lbl = document.createElement('label');
-          lbl.textContent = 'HTML';
+          lbl.textContent = listKey === 'correct' ? 'Correct Answer Response' : 'Incorrect Answer Response';
           const ta = document.createElement('textarea');
           ta.value = String(bubble.html || '');
           ta.addEventListener('input', (e) => { bubbles[idx].html = e.target.value; });
           wrap.appendChild(lbl);
           wrap.appendChild(ta);
-          appendTypingPlaceholderField(wrap);
           wrap.appendChild(createHtmlVariableHint());
         }
 
-        // Wire name input
-        nameInput.addEventListener('input', (e) => {
-          bubbles[idx].name = e.target.value;
-          if (isMessages && !isToPlayer) {
-            const stop = getSelectedStop();
-            if (stop && stop.playerReply && typeof stop.playerReply === 'object') {
-              stop.playerReply.name = e.target.value;
-              if (stop.playerReply.type === 'any' && !String(stop.playerReply.storesAs || '').trim()) {
-                stop.playerReply.storesAs = toVarKey(e.target.value, 'playerAnswer');
-              }
-            }
-          }
-        });
 
         // Remove
         removeBtn.addEventListener('click', () => {
@@ -1960,27 +1932,14 @@
       });
     }
 
-    // Switches right-side details panel between game-level and stop-level edit modes.
+    // Switches right-side details panel between stop-level edit modes.
     function renderStopEditor() {
       const stop = getSelectedStop();
-      if (selectedStopIndex === -1) {
-        els.detailsTileLabel.textContent = 'Game Details';
-        els.headerEditor.style.display = 'grid';
+      if (selectedStopIndex === -1 || !stop) {
         els.stopEditor.style.display = 'none';
-        if (els.gameAssetsHint) els.gameAssetsHint.style.display = '';
         return;
       }
 
-      if (!stop) {
-        els.detailsTileLabel.textContent = 'Stop Details';
-        els.headerEditor.style.display = 'none';
-        els.stopEditor.style.display = 'none';
-        if (els.gameAssetsHint) els.gameAssetsHint.style.display = 'none';
-        return;
-      }
-
-      els.detailsTileLabel.textContent = 'Stop Details';
-      els.headerEditor.style.display = 'none';
       els.stopEditor.style.display = 'grid';
       if (els.gameAssetsHint) els.gameAssetsHint.style.display = 'none';
 
@@ -1993,6 +1952,7 @@
       els.replyName.value = stop.playerReply.name || '';
       els.replyPlaceholder.value = stop.playerReply.placeholder || '';
       els.replyAnswers.value = answersToText(stop.playerReply.answers || []);
+      renderAnswersNormPreview(els.replyAnswers.value);
       els.replyAnyPlaceholder.value = stop.playerReply.placeholder || '';
       els.replyStoresAs.value = stop.playerReply.storesAs || '';
 
@@ -2001,12 +1961,11 @@
       if (showReplyFlow) setPlayerReplyType(stop, stop.playerReply.type);
       els.playerReplySection.style.display = showReplyFlow && !hasIncomingBubble ? 'block' : 'none';
 
-      const stopNameTile = els.stopEditor.firstElementChild;
-      els.stopEditor.insertBefore(els.addBubbleRow, stopNameTile ? stopNameTile.nextSibling : null);
       els.stopEditor.appendChild(els.msgBubbles);
       els.stopEditor.appendChild(els.playerReplySection);
       els.stopEditor.appendChild(els.correctSection);
       els.stopEditor.appendChild(els.incorrectSection);
+      els.stopEditor.appendChild(els.addBubbleRow);
 
       const correctBubbles = stop.playerReply.correct || [];
       const incorrectBubbles = stop.playerReply.incorrect || [];
@@ -2024,16 +1983,16 @@
       els.headerSubtitle.value = h.subtitle || '';
       els.headerLogoUrl.value = h.logoUrl || '';
       els.headerLogoAlt.value = h.logoAlt || '';
+      els.headerFaviconUrl.value = h.faviconUrl || '';
     }
 
     function renderBuilderOptions() {
       const opts = ensureBuilderOptionsHeader(state.header);
-      if (els.builderCorrectReplies) {
-        els.builderCorrectReplies.value = answersToText(opts.correctReplies || []);
-      }
-      if (els.builderIncorrectReplies) {
-        els.builderIncorrectReplies.value = answersToText(opts.incorrectReplies || []);
-      }
+      if (els.builderTypingDelay) els.builderTypingDelay.value = opts.typingDelay;
+      if (els.builderBubblePause) els.builderBubblePause.value = opts.bubblePause;
+      if (els.builderDefaultPlaceholder) els.builderDefaultPlaceholder.value = opts.defaultPlaceholder;
+if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(opts.correctReplies || []);
+      if (els.builderIncorrectReplies) els.builderIncorrectReplies.value = answersToText(opts.incorrectReplies || []);
     }
 
     function renderAll() {
@@ -2043,6 +2002,7 @@
       renderStopEditor();
       renderWarnings();
       renderInlineStopNameWarning();
+      renderDirtyBadge();
     }
 
     function attachHeaderEvents() {
@@ -2054,7 +2014,26 @@
       els.headerSubtitle.addEventListener('input', (e) => { state.header.subtitle = e.target.value; });
       els.headerLogoUrl.addEventListener('input', (e) => { state.header.logoUrl = e.target.value; });
       els.headerLogoAlt.addEventListener('input', (e) => { state.header.logoAlt = e.target.value; });
-      if (els.builderCorrectReplies) {
+      els.headerFaviconUrl.addEventListener('input', (e) => { state.header.faviconUrl = e.target.value; });
+      if (els.builderTypingDelay) {
+        els.builderTypingDelay.addEventListener('input', (e) => {
+          const opts = ensureBuilderOptionsHeader(state.header);
+          opts.typingDelay = parseInt(e.target.value, 10) || 600;
+        });
+      }
+      if (els.builderBubblePause) {
+        els.builderBubblePause.addEventListener('input', (e) => {
+          const opts = ensureBuilderOptionsHeader(state.header);
+          opts.bubblePause = parseInt(e.target.value, 10) || 150;
+        });
+      }
+      if (els.builderDefaultPlaceholder) {
+        els.builderDefaultPlaceholder.addEventListener('input', (e) => {
+          const opts = ensureBuilderOptionsHeader(state.header);
+          opts.defaultPlaceholder = e.target.value;
+        });
+      }
+if (els.builderCorrectReplies) {
         els.builderCorrectReplies.addEventListener('input', (e) => {
           const opts = ensureBuilderOptionsHeader(state.header);
           opts.correctReplies = parseAnswers(e.target.value);
@@ -2109,6 +2088,7 @@
         const stop = getSelectedStop();
         if (!stop || stop.playerReply.type !== 'text') return;
         stop.playerReply.answers = parseAnswers(e.target.value);
+        renderAnswersNormPreview(e.target.value);
       });
 
       els.replyAnyPlaceholder.addEventListener('input', (e) => {
@@ -2135,11 +2115,10 @@
       els.addBubbleBtn.addEventListener('click', () => {
         const stop = getSelectedStop();
         if (!stop) return;
-        const bubbleName = nextBubbleName(stop, 'bubble');
-        stop.messages.push({ name: bubbleName, msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false });
+        stop.messages.push({ msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false });
         renderAll();
         const flash = document.getElementById('addBubbleFlash');
-        flash.textContent = bubbleName + ' Added';
+        flash.textContent = 'Bubble Added';
         flash.classList.add('visible');
         setTimeout(() => flash.classList.remove('visible'), 1800);
       });
@@ -2166,11 +2145,40 @@
       return JSON.stringify(a) === JSON.stringify(b);
     }
 
+    function isDirty() {
+      return loadedStopsSnapshot !== null && !docsEqual(toDoc(), loadedStopsSnapshot);
+    }
+
+    function renderDirtyBadge() {
+      const badge = document.getElementById('dirtyBadge');
+      if (!badge) return;
+      badge.style.visibility = isDirty() ? 'visible' : 'hidden';
+    }
+
+    let undoDeleteTimer = null;
+    let deletedStopUndo = null;
+
+    function showUndoToast(stopObj, index) {
+      deletedStopUndo = { stop: stopObj, index };
+      if (undoDeleteTimer) clearTimeout(undoDeleteTimer);
+      const toast = document.getElementById('undoToast');
+      if (toast) toast.style.display = 'flex';
+      undoDeleteTimer = setTimeout(dismissUndoToast, 5000);
+    }
+
+    function dismissUndoToast() {
+      if (undoDeleteTimer) { clearTimeout(undoDeleteTimer); undoDeleteTimer = null; }
+      deletedStopUndo = null;
+      const toast = document.getElementById('undoToast');
+      if (toast) toast.style.display = 'none';
+    }
+
     async function loadStopsFile(options) {
       const opts = options || {};
       const skipConfirm = !!opts.skipConfirm;
       try {
         const resp = await fetch('stops.json', { cache: 'no-store' });
+        if (resp.status === 404) { loadedStopsSnapshot = {}; renderDirtyBadge(); return; }
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const doc = ensureDoc(await resp.json());
         const currentDoc = toDoc();
@@ -2180,7 +2188,7 @@
         }
         state = doc;
         loadedStopsSnapshot = deepClone(doc);
-        selectedStopIndex = -1;
+        selectedStopIndex = state.stops.length ? 0 : -1;
         stopNameBlurValidated = false;
         renderAll();
         setStatus('Loaded ./stops.json from this folder.', 'ok');
@@ -2205,19 +2213,36 @@
       try {
         const doc = toDoc();
         const text = JSON.stringify(doc, null, 2) + '\n';
-        downloadStops(text);
+        if (window.showSaveFilePicker) {
+          let handle;
+          try {
+            handle = await window.showSaveFilePicker({
+              suggestedName: 'stops.json',
+              types: [{ description: 'JSON file', accept: { 'application/json': ['.json'] } }]
+            });
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+            throw err;
+          }
+          const writable = await handle.createWritable();
+          await writable.write(text);
+          await writable.close();
+        } else {
+          downloadStops(text);
+        }
+        loadedStopsSnapshot = deepClone(doc);
+        renderDirtyBadge();
         const warnings = renderWarnings();
         if (warnings.length) {
-          setStatus('Downloaded stops.json with validation warnings shown below.', 'warn');
+          setStatus('Saved stops.json with validation warnings shown below.', 'warn');
         } else {
-          setStatus('Downloaded stops.json. Replace ./stops.json in this folder with the downloaded file.', 'ok');
+          setStatus('Saved stops.json.', 'ok');
         }
       } catch (err) {
-        setStatus(err.message || 'Save cancelled.', 'error');
+        setStatus(err.message || 'Save failed.', 'error');
       }
     }
 
-    document.getElementById('loadBtn').addEventListener('click', loadStopsFile);
     document.getElementById('saveBtn').addEventListener('click', saveStops);
     function openGameWithSavePrompt(url) {
       const differsFromLoaded = loadedStopsSnapshot && !docsEqual(toDoc(), loadedStopsSnapshot);
@@ -2227,27 +2252,7 @@
       }
       window.open(url, '_blank');
     }
-    document.getElementById('playGameLinkFooter').addEventListener('click', (e) => {
-      e.preventDefault();
-      openGameWithSavePrompt('index.html');
-    });
-    document.getElementById('revealGameLinkFooter').addEventListener('click', (e) => {
-      e.preventDefault();
-      openGameWithSavePrompt('index.html?reveal');
-    });
 
-    document.getElementById('newBtn').addEventListener('click', () => {
-      const currentDoc = toDoc();
-      if (!docsEqual(currentDoc, DEFAULT_DOC)) {
-        const ok = window.confirm('Clear the current builder contents and start a new empty document?');
-        if (!ok) return;
-      }
-      state = defaultState();
-      selectedStopIndex = -1;
-      stopNameBlurValidated = false;
-      renderAll();
-      setStatus('New empty document ready.', 'ok');
-    });
 
     document.getElementById('addStopBtn').addEventListener('click', () => {
       const stop = createEmptyStop();
@@ -2259,12 +2264,32 @@
     });
 
     let copiedStop = null;
+
+    document.getElementById('undoDeleteBtn').addEventListener('click', () => {
+      if (!deletedStopUndo) return;
+      const { stop, index } = deletedStopUndo;
+      state.stops.splice(index, 0, stop);
+      selectedStopIndex = index;
+      dismissUndoToast();
+      renderAll();
+    });
+
+    document.getElementById('mobilePreviewBtn').addEventListener('click', () => {
+      try {
+        localStorage.setItem('nola360_preview_stops', JSON.stringify(toDoc()));
+      } catch (e) {}
+      window.open('index.html?preview', 'mobile_preview', 'width=390,height=844,resizable=yes,scrollbars=yes');
+    });
+
+
     renderFolderNote();
     attachHeaderEvents();
     attachStopEvents();
     renderAll();
-    loadedStopsSnapshot = null;
-    setStatus('New blank game ready.', 'ok');
+    loadedStopsSnapshot = deepClone(toDoc());
+    loadStopsFile({ skipConfirm: true });
+    document.addEventListener('input', renderDirtyBadge);
+    document.addEventListener('change', renderDirtyBadge);
 
     // Auto-scroll while dragging near viewport edges
     let dragScrollFrame = null;
@@ -2286,6 +2311,12 @@
     });
     document.addEventListener('dragend', () => cancelAnimationFrame(dragScrollFrame));
     document.addEventListener('drop', () => cancelAnimationFrame(dragScrollFrame));
+    window.addEventListener('beforeunload', (e) => {
+      if (isDirty()) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
   </script>
 </body>
 </html>
