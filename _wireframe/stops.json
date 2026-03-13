@@ -42,179 +42,853 @@
   },
   "stops": [
     {
+      "id": "intro",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_2",
+          "html": "Welcome to Away Games!",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Yes!",
+          "replyIncorrect": "Incorrect. One more try.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        },
+        {
+          "bubbleId": "bubble_mmnxqpl1_2",
+          "html": "<iframe src=\"https://www.youtube.com/embed/caqxkOKPE2U\" frameborder=\"0\" allowfullscreen style=\"width:100%;aspect-ratio:16/9;display:block;\"></iframe>",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "video",
+          "src": "https://www.youtube.com/watch?v=caqxkOKPE2U",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "That is correct.",
+          "replyIncorrect": "Not quite. Try again.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "which way",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_6",
+          "html": "Are you on the RED team or the BLUE team?",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Type RED or BLUE...",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "branch",
+          "answers": [],
+          "replyCorrect": "Right on target.",
+          "replyIncorrect": "Almost. Re-read the clue.",
+          "storesAs": "which_way_reply",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [
+                "red"
+              ],
+              "goToBubbleId": "bubble_mmnvercx_9",
+              "goToStopId": "",
+              "reply": ""
+            },
+            {
+              "answers": [
+                "BLUE"
+              ],
+              "goToBubbleId": "bubble_mmnvercx_10",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_7",
+            "html": "Exactly right.",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_8",
+            "html": "Nope. Try a different answer.",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "red",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_9",
+          "html": "red branch followed",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Right on target.",
+          "replyIncorrect": "Not yet. Check your spelling.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": "looking for the correct answer bubble example"
+      }
+    },
+    {
+      "id": "blue",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_10",
+          "html": "blue branch followed",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Correct. Nice work.",
+          "replyIncorrect": "Almost. Re-read the clue.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": "looking for the correct answer bubble example"
+      }
+    },
+    {
+      "id": "looking for the correct answer bubble example",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_11",
+          "html": "This is a test of question bubble. It's expecting a specific response. Test it with an incorrect and then a correct answer.\nHow many states are in The United States of America?",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Type your answer...",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "word",
+          "answers": [
+            "50",
+            "fifty"
+          ],
+          "replyCorrect": "Yes! God bless America",
+          "replyIncorrect": "Seriously?",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_12",
+            "html": "Exactly right.",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_13",
+            "html": "Close",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "testing any old response",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_14",
+          "html": "This is a test of gathering any old response as a variable for later use.\nWhat's your name?",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Type your name here...",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "any",
+          "answers": [],
+          "replyCorrect": "Excellent. Proceed.",
+          "replyIncorrect": "Close",
+          "storesAs": "{namen}",
+          "replyResponse": "Hello {namen}!",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_15",
+            "html": "Yes!",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_16",
+            "html": "Not yet. Check your spelling.",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "any test",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_17",
+          "html": "Who bist do?",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Type your name here...",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "any",
+          "answers": [],
+          "replyCorrect": "That is correct.",
+          "replyIncorrect": "That is not the one.",
+          "storesAs": "namen",
+          "replyResponse": "Hello {namen}!",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_18",
+            "html": "Excellent. Proceed.",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_19",
+            "html": "No. Try again.",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "buy game",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmnvercx_20",
+          "html": "<a href=\"#\" class=\"action-btn pay-btn\">CLICK HERE TO BUY</a>",
+          "callToAction": true,
+          "forAnswer": "",
+          "placeholder": "Enter Your Code To Continue",
+          "bottomAdded": false,
+          "msgType": "pay",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "word",
+          "answers": [
+            "NOLA"
+          ],
+          "replyCorrect": "Let's Continue!",
+          "replyIncorrect": "No. Try again.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        },
+        {
+          "bubbleId": "bubble_mmnvercx_21",
+          "html": "Game continuation.",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Correct. Nice work.",
+          "replyIncorrect": "Close",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_22",
+            "html": "Yes!",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_23",
+            "html": "Close",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
       "id": "PlayerName",
       "messages": [
         {
+          "bubbleId": "bubble_mmnvercx_27",
           "html": "Hello. What's your name?",
           "callToAction": true,
           "forAnswer": "",
           "placeholder": "Type your name here...",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Perfect. Next clue unlocked.",
+          "replyIncorrect": "Try again before moving on.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         },
         {
+          "bubbleId": "bubble_mmnvercx_28",
           "html": "",
           "callToAction": false,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "fromPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Correct. Nice work.",
+          "replyIncorrect": "Try again before moving on.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
         "type": "any",
         "correct": [
           {
+            "bubbleId": "bubble_mmnvercx_29",
             "html": "Nice to meet you {{name}}",
             "callToAction": false,
             "forAnswer": "",
             "placeholder": "",
             "bottomAdded": false,
-            "direction": "toPlayer",
             "msgType": "text",
             "src": "",
             "alt": "",
             "label": "",
-            "href": ""
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
           }
         ],
         "incorrect": [
           {
+            "bubbleId": "bubble_mmnvercx_30",
             "html": "Not yet. Check your spelling.",
             "callToAction": true,
             "forAnswer": "",
             "placeholder": "",
             "bottomAdded": false,
-            "direction": "toPlayer",
             "msgType": "text",
             "src": "",
             "alt": "",
             "label": "",
-            "href": ""
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
           }
         ],
         "placeholder": "",
-        "storesAs": "name"
+        "storesAs": "name",
+        "nextStopId": ""
       }
     },
     {
-      "id": "Squirrel",
+      "id": "LAFAYETTE!",
       "messages": [
         {
-          "html": "Look a sqirrel!",
-          "callToAction": false,
-          "forAnswer": "",
-          "placeholder": "",
-          "bottomAdded": false,
-          "direction": "toPlayer",
-          "msgType": "text",
-          "src": "",
-          "alt": "",
-          "label": "",
-          "href": ""
-        }
-      ],
-      "playerReply": {
-        "type": "text",
-        "correct": [],
-        "incorrect": [],
-        "placeholder": "",
-        "answers": [],
-        "setsTeam": false,
-        "goTo": ""
-      }
-    },
-    {
-      "id": "LAFAYETTE",
-      "messages": [
-        {
+          "bubbleId": "bubble_mmnvercx_24",
           "html": "Who is America's Favorite Fighting Frenchmen?",
-          "callToAction": false,
+          "callToAction": true,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
-        },
-        {
-          "html": "",
-          "callToAction": false,
-          "forAnswer": "",
-          "placeholder": "",
-          "bottomAdded": false,
-          "direction": "toPlayer",
-          "msgType": "text",
-          "src": "",
-          "alt": "",
-          "label": "",
-          "href": ""
-        },
-        {
-          "html": "",
-          "callToAction": false,
-          "forAnswer": "",
-          "placeholder": "",
-          "bottomAdded": false,
-          "direction": "toPlayer",
-          "msgType": "text",
-          "src": "",
-          "alt": "",
-          "label": "",
-          "href": ""
-        },
-        {
-          "html": "",
-          "callToAction": false,
-          "forAnswer": "",
-          "placeholder": "",
-          "bottomAdded": false,
-          "direction": "toPlayer",
-          "msgType": "text",
-          "src": "",
-          "alt": "",
-          "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "word",
+          "answers": [
+            "LAFAYETTE"
+          ],
+          "replyCorrect": "Correct!",
+          "replyIncorrect": "Not quite. Try again.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
         "type": "text",
-        "correct": [],
-        "incorrect": [],
+        "correct": [
+          {
+            "bubbleId": "bubble_mmnvercx_25",
+            "html": "Exactly right.",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [
+          {
+            "bubbleId": "bubble_mmnvercx_26",
+            "html": "No. Try again.",
+            "callToAction": true,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
-        "goTo": ""
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
       }
     },
     {
-      "id": "STATUES",
+      "id": "name change is super cool",
       "messages": [
         {
+          "bubbleId": "bubble_mmnvercx_31",
           "html": "",
           "callToAction": false,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Excellent. Proceed.",
+          "replyIncorrect": "Not yet. Check your spelling.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
@@ -224,24 +898,40 @@
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
-        "goTo": ""
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
       }
     },
     {
-      "id": "STOP-5",
+      "id": "ONE",
       "messages": [
         {
-          "html": "",
+          "bubbleId": "bubble_mmoeotqx_2",
+          "html": "One",
           "callToAction": false,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Great answer. Moving on.",
+          "replyIncorrect": "No. Try again.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
@@ -251,24 +941,40 @@
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
-        "goTo": ""
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
       }
     },
     {
-      "id": "STOP-6",
+      "id": "THREE",
       "messages": [
         {
-          "html": "",
+          "bubbleId": "bubble_mmoep9uu_4",
+          "html": "Three",
           "callToAction": false,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Yes. Keep going.",
+          "replyIncorrect": "Nope. Try a different answer.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
@@ -278,24 +984,40 @@
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
-        "goTo": ""
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
       }
     },
     {
-      "id": "STOP-7",
+      "id": "TWO",
       "messages": [
         {
-          "html": "",
+          "bubbleId": "bubble_mmoep4rv_3",
+          "html": "Two",
           "callToAction": false,
           "forAnswer": "",
           "placeholder": "",
           "bottomAdded": false,
-          "direction": "toPlayer",
           "msgType": "text",
           "src": "",
           "alt": "",
           "label": "",
-          "href": ""
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Right on target.",
+          "replyIncorrect": "No. Try again.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
         }
       ],
       "playerReply": {
@@ -305,7 +1027,266 @@
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
-        "goTo": ""
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "FOUR",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmoeph3j_5",
+          "html": "Four",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "Perfect. Next clue unlocked.",
+          "replyIncorrect": "Nope. Try a different answer.",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": [
+            {
+              "answers": [],
+              "goToBubbleId": "",
+              "goToStopId": "",
+              "reply": ""
+            }
+          ]
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [],
+        "setsTeam": false,
+        "anytime": false,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "help",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmogsud3_2",
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "",
+          "replyIncorrect": "",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": []
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmogsud4_3",
+            "html": "Call KK",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [
+          "help"
+        ],
+        "setsTeam": false,
+        "anytime": true,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "quit",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmogv7td_2",
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "",
+          "replyIncorrect": "",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": []
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmogv7td_3",
+            "html": "Ok, dude",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [
+          "quit"
+        ],
+        "setsTeam": false,
+        "anytime": true,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    },
+    {
+      "id": "hint",
+      "messages": [
+        {
+          "bubbleId": "bubble_mmohigju_4",
+          "html": "",
+          "callToAction": false,
+          "forAnswer": "",
+          "placeholder": "",
+          "bottomAdded": false,
+          "msgType": "text",
+          "src": "",
+          "alt": "",
+          "label": "",
+          "href": "",
+          "replyExpected": "no",
+          "answers": [],
+          "replyCorrect": "",
+          "replyIncorrect": "",
+          "storesAs": "",
+          "replyResponse": "",
+          "branches": []
+        }
+      ],
+      "playerReply": {
+        "type": "text",
+        "correct": [
+          {
+            "bubbleId": "bubble_mmohigju_5",
+            "html": "Call the hint hotline at 504-581-5652.",
+            "callToAction": false,
+            "forAnswer": "",
+            "placeholder": "",
+            "bottomAdded": false,
+            "msgType": "text",
+            "src": "",
+            "alt": "",
+            "label": "",
+            "href": "",
+            "replyExpected": "no",
+            "answers": [],
+            "replyCorrect": "",
+            "replyIncorrect": "",
+            "storesAs": "",
+            "replyResponse": "",
+            "branches": []
+          }
+        ],
+        "incorrect": [],
+        "placeholder": "",
+        "answers": [
+          "hint"
+        ],
+        "setsTeam": false,
+        "anytime": true,
+        "goTo": "",
+        "nextStopId": ""
+      }
+    }
+  ],
+  "routes": [
+    {
+      "matchVar": "teamName",
+      "variantNames": [
+        "Beignet",
+        "Lagniappe",
+        "Rougarou",
+        "Tchoupitoulas"
+      ],
+      "variants": {
+        "Beignet": [
+          "ONE",
+          "TWO",
+          "THREE",
+          "FOUR"
+        ],
+        "Lagniappe": [
+          "TWO",
+          "THREE",
+          "FOUR",
+          "ONE"
+        ],
+        "Rougarou": [
+          "THREE",
+          "FOUR",
+          "ONE",
+          "TWO"
+        ],
+        "Tchoupitoulas": [
+          "FOUR",
+          "ONE",
+          "TWO",
+          "THREE"
+        ]
       }
     }
   ]

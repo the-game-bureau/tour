@@ -29,7 +29,14 @@
       --accent: #111111;
       --danger: #c1121f;
       --muted: #5a5a5a;
-      --bubble-gap: 12px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 32px;
+      --bubble-gap: var(--space-4);
       --sans: "JetBrains Mono", "Courier New", monospace;
       --mono: "JetBrains Mono", "Courier New", monospace;
     }
@@ -50,10 +57,10 @@
     .page {
       max-width: 1360px;
       margin: 0 auto;
-      padding: 22px 18px 30px;
+      padding: var(--space-6) var(--space-5) var(--space-7);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: var(--space-4);
     }
 
 
@@ -79,7 +86,7 @@
     }
     .folder-note strong { color: var(--ink); font-weight: 700; }
     .tile-label {
-      margin: 0 0 8px;
+      margin: 0 0 var(--space-3);
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: 0.03em;
@@ -88,29 +95,16 @@
     }
 
 
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .compact-toolbar { margin-bottom: 10px; }
-    .toolbar-sep {
-      width: 1px;
-      height: 18px;
-      background: var(--line);
-      align-self: center;
-      flex-shrink: 0;
-    }
-    .header-card { padding: 14px 16px; }
-    .header-card .sub { margin-bottom: 2px; }
-    .header-card h1 { margin-bottom: 4px; }
+    .header-card { padding: var(--space-4); }
+    .header-card .sub { margin-bottom: var(--space-1); }
+    .header-card h1 { margin-bottom: var(--space-2); }
     .header-card .folder-note { margin: 0; }
+    /* Default options: remove side padding offset so it aligns with other cards */
 
     button {
       border: 1px solid var(--line);
       border-radius: 0;
-      padding: 9px 12px;
+      padding: 10px 14px;
       font-size: 0.8rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -125,12 +119,6 @@
       color: var(--ink);
       border-color: var(--line);
       font-weight: 400;
-    }
-
-    button.danger {
-      background: #fff;
-      color: var(--ink);
-      border-color: var(--line);
     }
 
     .status {
@@ -153,96 +141,34 @@
       background: #fff7e8;
       border: 1px solid #f1d7a3;
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: var(--space-3) var(--space-4);
       margin: 0;
       display: none;
       line-height: 1.45;
     }
     .warnings ul { margin: 0 0 0 18px; padding: 0; }
-    .warnings strong { display: block; margin-bottom: 4px; }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 320px minmax(460px, 1fr);
-      gap: 12px;
-      align-items: start;
-    }
-    .layout > * {
-      min-width: 0;
-    }
-    .left-column {
-      display: grid;
-      gap: 12px;
-      align-content: start;
-      min-width: 0;
-    }
+    .warnings strong { display: block; margin-bottom: var(--space-2); }
 
     .card {
       background: var(--panel);
       border: 2px solid var(--line);
       border-radius: 0;
-      padding: 14px;
+      padding: var(--space-4);
       box-shadow: none;
       min-width: 0;
     }
 
     .card h2 {
-      margin: 0 0 14px;
+      margin: 0 0 var(--space-4);
       font-size: 0.78rem;
       letter-spacing: 0.09em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .stack { display: flex; flex-direction: column; gap: 8px; }
+    .stack { display: flex; flex-direction: column; gap: var(--space-3); }
     .stop-add-row { margin: 0; }
 
-    .stop-item {
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: 0;
-      padding: 9px 10px;
-      cursor: grab;
-      text-align: left;
-      position: relative;
-      width: 100%;
-      display: block;
-    }
-    .stop-item.dragging { opacity: 0.45; transform: rotate(1.5deg); cursor: grabbing; }
-    .stop-item.drag-over { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-    .stop-item.drop-before::before,
-    .stop-item.drop-after::after {
-      content: "";
-      position: absolute;
-      left: 6px;
-      right: 6px;
-      height: 3px;
-      background: var(--accent);
-      box-shadow: 0 0 0 1px #fff;
-      pointer-events: none;
-    }
-    .stop-item.drop-before::before { top: -7px; }
-    .stop-item.drop-after::after { bottom: -7px; }
-    .stop-item.locked {
-      cursor: default;
-      background: #f7f3ec;
-    }
-.stop-item.active {
-      border-color: var(--accent);
-      box-shadow: inset 0 0 0 1px var(--accent);
-      padding-right: 108px;
-    }
-
-    .stop-actions {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: none;
-      align-items: center;
-      gap: 4px;
-    }
-    .stop-item.active .stop-actions { display: inline-flex; }
     .stop-action {
       color: #475569;
       background: #f8fafc;
@@ -280,30 +206,24 @@
       cursor: not-allowed;
     }
 
-    .stop-meta {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
     .row {
       display: grid;
-      gap: 10px;
+      gap: var(--space-3);
       grid-template-columns: 1fr 1fr;
-      margin-bottom: 10px;
+      margin-bottom: var(--space-3);
     }
 
     .row.full { grid-template-columns: 1fr; }
 
     label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: var(--space-2);
       font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
       font-weight: 700;
+      line-height: 1.2;
     }
 
     input[type="text"], textarea, select {
@@ -312,9 +232,10 @@
       border-radius: 0;
       background: #fff;
       color: var(--ink);
-      padding: 8px 10px;
+      padding: var(--space-2) var(--space-3);
       font-size: 0.86rem;
       font-family: var(--sans);
+      line-height: 1.35;
     }
 
     textarea {
@@ -326,16 +247,16 @@
     .check {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: var(--space-2);
       font-size: 0.84rem;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: var(--space-2);
     }
 
     .check input { accent-color: var(--accent); }
 
     .section-title {
-      margin: 0 0 10px;
+      margin: 0 0 var(--space-3);
       padding-top: 0;
       border-top: 0;
       font-size: 0.72rem;
@@ -348,16 +269,16 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
     }
     .section-head .section-title { margin: 0; }
 
     .bubble {
-      border: 1px solid var(--line);
+      border: 2px solid var(--line);
       border-radius: 0;
-      background: #dbeafe;
-      padding: 10px;
+      background: #ffffff;
+      padding: var(--space-3);
       margin: 0;
       cursor: default;
       position: relative;
@@ -366,57 +287,215 @@
       border-color: #60a5fa;
       box-shadow: inset 0 0 0 1px #93c5fd;
     }
-    .bubble-tail {
-      display: none;
-      position: absolute;
-      left: 18px;
-      bottom: -8px;
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border-left: 1px solid #60a5fa;
-      border-bottom: 1px solid #60a5fa;
-      transform: rotate(-45deg);
-      pointer-events: none;
-    }
-    .bubble.photo-bubble .bubble-tail { display: block; }
     .bubble-type-row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
+      column-gap: var(--space-2);
+      row-gap: var(--space-1);
+      margin-bottom: var(--space-2);
     }
     .bubble-type-row label { margin: 0; white-space: nowrap; cursor: pointer; }
     .bubble-type-row input[type="radio"] { accent-color: #0f766e; cursor: pointer; margin: 0; }
-    .bubble-type-row span.type-pair { display: flex; align-items: center; gap: 4px; }
+    .bubble-type-row span.type-pair { display: inline-flex; align-items: center; gap: 6px; min-height: 20px; }
+
+    .msg-type-section,
+    .reply-fields,
+    .bubble-reply-section {
+      display: grid;
+      gap: var(--space-2);
+    }
+    .bubble-reply-section { margin-top: var(--space-3); }
+    .msg-type-section label,
+    .reply-fields label {
+      margin: 0;
+    }
+    .bubble-reply-label {
+      margin: 0;
+    }
+    .bubble-reply-section .bubble-type-row {
+      margin-bottom: 0;
+    }
+    .msg-type-section input[type="text"],
+    .msg-type-section textarea,
+    .reply-fields input[type="text"],
+    .reply-fields textarea {
+      margin: 0;
+    }
+    .msg-type-section .field-hint,
+    .reply-fields .field-hint {
+      margin-top: 0;
+    }
+    .branch-rule-list {
+      display: grid;
+      gap: var(--space-3);
+    }
+    .branch-rule-card {
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      padding: var(--space-3);
+      display: grid;
+      gap: var(--space-2);
+    }
+    .branch-rule-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+    .branch-rule-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .branch-add-row {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .bubble-chat-stage {
+      border: 1px solid #d7dde6;
+      background: #f8fafc;
+      padding: 10px;
+      min-height: 62px;
+    }
+    .bubble-html-shell {
+      position: relative;
+      background: #1a73e8;
+      border-radius: 20px;
+      border-bottom-left-radius: 5px;
+      overflow: visible;
+      max-width: min(90%, 920px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+    .bubble-html-shell::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -8px;
+      width: 20px;
+      height: 20px;
+      background: #1a73e8;
+      border-bottom-right-radius: 16px;
+      z-index: 0;
+    }
+    .bubble-html-shell::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: -12px;
+      width: 12px;
+      height: 20px;
+      background: #ffffff;
+      border-bottom-right-radius: 10px;
+      z-index: 0;
+    }
+    .bubble.cta-bubble .bubble-html-shell {
+      background: #cc0000;
+    }
+    .bubble.cta-bubble .bubble-html-shell::before {
+      background: #cc0000;
+    }
+    .bubble-html-input {
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      border: 0;
+      border-radius: 20px;
+      width: 100%;
+      color: #ffffff;
+      padding: 0.6rem 0.9rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.5;
+      min-height: 86px;
+      resize: none;
+      overflow: hidden;
+    }
+    .bubble-html-input::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .bubble-html-input:focus {
+      outline: none;
+    }
+    .bubble-answer-shell {
+      position: relative;
+      margin-left: auto;
+      background: #e5e7eb;
+      color: #111827;
+      border-radius: 20px;
+      border-bottom-right-radius: 5px;
+      max-width: min(80%, 760px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+    .bubble-answer-shell::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      background: #e5e7eb;
+      border-bottom-left-radius: 16px;
+      z-index: 0;
+    }
+    .bubble-answer-shell::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: -12px;
+      width: 12px;
+      height: 20px;
+      background: #f8fafc;
+      border-bottom-left-radius: 10px;
+      z-index: 0;
+    }
+    .bubble-answer-input {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      background: transparent;
+      border: 0;
+      color: #111827;
+      border-radius: 20px;
+      padding: 0.6rem 0.9rem;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.45;
+      min-height: 56px;
+      resize: none;
+      overflow: hidden;
+    }
+    .bubble-answer-input::placeholder {
+      color: rgba(17, 24, 39, 0.58);
+    }
+    .bubble-answer-input:focus {
+      outline: none;
+    }
 
     .bubble-top {
       position: absolute;
-      top: 6px;
-      right: 6px;
+      top: var(--space-2);
+      right: var(--space-2);
       display: flex;
-      gap: 2px;
+      gap: var(--space-1);
     }
 
     .empty {
       font-size: 0.86rem;
       color: var(--muted);
-      padding: 8px;
+      padding: var(--space-2) var(--space-3);
       border: 1px solid var(--line);
       border-radius: 0;
       background: #fff;
     }
 
-    .mini-tile {
-      border: 1px solid var(--line);
-      background: #fff;
-      padding: 10px;
-    }
-
     .inline-warning {
       color: #c1121f;
       font-weight: 700;
-      margin-left: 8px;
+      margin-left: var(--space-2);
       letter-spacing: 0;
       text-transform: none;
       font-size: 0.78rem;
@@ -424,92 +503,42 @@
     .is-hidden { display: none; }
     .row.no-margin { margin-bottom: 0; }
     .field-hint {
-      margin: 8px 0 0;
+      margin: var(--space-2) 0 0;
       font-size: 0.8em;
       color: #888;
     }
-    .field-hint.tight { margin-top: 4px; }
+    .field-hint.tight { margin-top: var(--space-1); }
 
     #headerEditor {
       display: grid;
-      gap: 12px;
+      gap: var(--space-4);
     }
-
-    #stopEditor {
+    #headerEditor .row {
       display: grid;
       gap: var(--bubble-gap);
     }
-    #addBubbleRow {
-      margin-bottom: 0;
-      border: 0;
-      background: transparent;
-      padding: 0;
-    }
-
-    #msgBubbles,
-    #correctBubbles,
-    #incorrectBubbles {
+    .bubble-list {
       display: flex;
       flex-direction: column;
       gap: var(--bubble-gap);
       min-height: 0;
     }
 
-    /* Direction toggle on bubble cards */
-    .bubble-direction {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .bubble-direction .dir-label {
+    .bubble-details-label {
       font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
-      transition: color 0.15s;
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
+      margin-bottom: var(--space-3);
     }
-    .bubble-direction .dir-label.active { color: var(--ink); }
-    .dir-switch {
-      position: relative;
-      width: 36px;
-      height: 20px;
-      flex-shrink: 0;
-    }
-    .dir-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
-    .dir-track {
-      position: absolute;
-      inset: 0;
-      background: var(--line);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .dir-track::after {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border-radius: 50%;
-      transition: transform 0.15s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-    .dir-switch input:checked + .dir-track { background: var(--ink); }
-    .dir-switch input:checked + .dir-track::after { transform: translateX(16px); }
 
     /* Call to Action checkbox row */
     .cta-row {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: var(--space-2);
+      margin-bottom: var(--space-2);
     }
     .cta-row input[type="checkbox"] {
       width: auto;
@@ -520,8 +549,7 @@
       color: #cc0000;
       cursor: pointer;
     }
-    .bubble.from-player-bubble { background: #f1f5f9; }
-    .bubble.cta-bubble { background: #fee2e2; border-color: #cc0000; }
+    .bubble.cta-bubble { background: #ffffff; border-color: #cc0000; }
     .bubble-flash {
       font-size: 0.72rem;
       font-weight: 700;
@@ -532,23 +560,12 @@
       transition: opacity 0.15s;
     }
     .bubble-flash.visible { opacity: 1; }
-    #correctSection,
-    #incorrectSection {
-      margin: 0;
-      padding: 0;
-    }
-
-    #stopEditor > .section-title,
-    #headerEditor > .section-title {
-      margin-top: 8px;
-    }
-
     .dirty-badge {
       position: absolute;
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      margin-top: 3px;
+      margin-top: var(--space-1);
       font-size: 0.76rem;
       color: #475569;
       font-weight: 700;
@@ -573,12 +590,12 @@
       transform: translateX(-50%);
       background: #111;
       color: #fff;
-      padding: 10px 16px;
+      padding: var(--space-3) var(--space-4);
       font-size: 0.84rem;
       letter-spacing: 0.03em;
       display: none;
       align-items: center;
-      gap: 14px;
+      gap: var(--space-3);
       z-index: 9999;
       border: 1px solid #444;
       white-space: nowrap;
@@ -587,7 +604,7 @@
       border: 1px solid #fff;
       color: #fff;
       background: transparent;
-      padding: 4px 10px;
+      padding: var(--space-1) var(--space-3);
       font-size: 0.78rem;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -596,41 +613,565 @@
     }
     .undo-toast button:hover { background: rgba(255,255,255,0.15); }
 
-    @media (max-width: 980px) {
-      .layout { grid-template-columns: 1fr; }
-      .page-head {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .page-actions {
-        margin-top: 0;
-        justify-content: flex-start;
-      }
+    /* ── Shared section-card pattern (game details + stop cards) ─────── */
+
+    /* Game details: strip .card padding so header/body handle their own */
+
+    /* Section header — used by game details AND stop card headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      cursor: pointer;
+      user-select: none;
     }
+    .stop-header {
+      cursor: default;
+    }
+    .section-header.expanded {
+      border-bottom: 2px solid var(--line);
+    }
+    .section-title-text {
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      flex: 1;
+      min-width: 0;
+    }
+    .stop-title-edit[contenteditable="true"] {
+      user-select: text;
+      cursor: text;
+      outline: none;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stop-title-edit[contenteditable="true"]:focus {
+      text-overflow: clip;
+      white-space: normal;
+    }
+    .section-meta {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-family: var(--mono);
+    }
+    .stop-name-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28em;
+      flex: 0 1 auto;
+      min-width: 0;
+    }
+    .stop-name-suffix {
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink);
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .stop-card .section-meta { margin-right: auto; }
+    .stop-group-dots {
+      display: inline-flex;
+      gap: 3px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .stop-group-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    /* ── Anytime section ──────────────────────────────────────────────── */
+    #anytime-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    #anytimeList {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .anytime-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      background: #4ecf98;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    /* ── Anytime bubble preview editor ───────────────────────────────── */
+    .anytime-editor {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-4);
+      background: #fff;
+    }
+    .anytime-bubble-row {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+    .anytime-bubble-lbl {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .anytime-bubble-preview {
+      display: flex;
+    }
+    .anytime-bubble-preview.right { justify-content: flex-end; }
+    .anytime-bubble-preview.left  { justify-content: flex-start; }
+    .anytime-chat-bubble {
+      max-width: 72%;
+      padding: 9px 13px;
+      border-radius: 18px;
+      font-size: 0.88rem;
+      line-height: 1.4;
+      position: relative;
+    }
+    .anytime-chat-bubble.player {
+      background: #e5e7eb;
+      color: #111;
+      border-bottom-right-radius: 4px;
+    }
+    .anytime-chat-bubble.game {
+      background: #1a73e8;
+      color: #fff;
+      border-bottom-left-radius: 4px;
+    }
+    .anytime-chat-bubble textarea,
+    .anytime-chat-bubble input[type="text"] {
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      font: inherit;
+      color: inherit;
+      width: 100%;
+      min-width: 160px;
+      padding: 0;
+      margin: 0;
+    }
+    .anytime-chat-bubble.player textarea,
+    .anytime-chat-bubble.player input[type="text"] {
+      color: #111;
+    }
+    .anytime-chat-bubble.game textarea,
+    .anytime-chat-bubble.game input[type="text"] {
+      color: #fff;
+    }
+    .anytime-chat-bubble.game textarea::placeholder,
+    .anytime-chat-bubble.game input[type="text"]::placeholder { color: rgba(255,255,255,0.55); }
+    .anytime-chat-bubble.player textarea::placeholder,
+    .anytime-chat-bubble.player input[type="text"]::placeholder { color: rgba(0,0,0,0.38); }
+    .section-toggle {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--line);
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+    }
+    .section-body {
+      padding: var(--space-4);
+      background: #fff;
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    /* ── Stop cards — inline accordion ───────────────────────────────── */
+    #stops-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    #stopList {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .stop-card {
+      border: 2px solid var(--line);
+      background: var(--panel);
+      position: relative;
+    }
+    .stop-card.dragging {
+      opacity: 0.5;
+      transform: rotate(1.5deg);
+      cursor: grabbing;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 50;
+    }
+    .stop-card.drop-before { box-shadow: 0 -4px 0 var(--accent); }
+    .stop-card.drop-after  { box-shadow: 0  4px 0 var(--accent); }
+
+    .stop-grip {
+      color: var(--muted);
+      cursor: grab;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+    .stop-grip:active {
+      cursor: grabbing;
+    }
+    .stop-grip svg { width: 14px; height: 14px; pointer-events: none; }
+
+    .stop-card-actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-shrink: 0;
+    }
+
+    .stop-card-body {
+      padding: var(--space-4);
+      background: #fff;
+      display: grid;
+      gap: var(--bubble-gap);
+    }
+
+    .stops-add-row {
+      margin-top: var(--space-2);
+    }
+
+    /* ── Content section headers ──────────────────────────────────────── */
+    .content-section { display: flex; flex-direction: column; gap: var(--space-3); }
+    .content-section-header {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: var(--space-2);
+      border-bottom: 2px solid var(--line);
+    }
+
+    /* ── Group board ──────────────────────────────────────────────────── */
+    #group-board { display: flex; flex-direction: column; gap: var(--space-4); }
+
+    .group-setup {
+      padding: var(--space-4);
+      background: var(--panel);
+      border: 2px solid var(--line);
+      display: grid;
+      gap: var(--space-4);
+    }
+    .group-setup-row {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .group-setup-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .group-setup-field label { margin: 0; }
+    .route-stop-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-4);
+    }
+    .route-stop-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .route-stop-check input { width: auto; accent-color: var(--accent); cursor: pointer; }
+
+    .group-swimlane {
+      display: flex;
+      gap: var(--space-3);
+      overflow-x: auto;
+      padding-bottom: var(--space-2);
+      align-items: flex-start;
+    }
+    .route-column {
+      flex: 1;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+    }
+    .route-column-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--panel);
+      border: 2px solid var(--line);
+      border-bottom: none;
+    }
+    .route-team-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .route-team-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--ink);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .route-stop-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      min-height: 48px;
+      border: 2px solid var(--line);
+      padding: var(--space-1);
+      background: #fff;
+    }
+    .route-stop-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      cursor: grab;
+      user-select: none;
+    }
+    .route-stop-card:active { cursor: grabbing; }
+    .route-stop-card.dragging { opacity: 0.35; }
+    .route-stop-card.drop-before { box-shadow: 0 -3px 0 var(--accent); }
+    .route-stop-card.drop-after  { box-shadow: 0  3px 0 var(--accent); }
+    .route-step-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      font-family: var(--mono);
+      flex-shrink: 0;
+      min-width: 1.4em;
+    }
+    .route-stop-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .route-stop-suffix {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 400;
+      flex-shrink: 0;
+    }
+    .group-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      padding: var(--space-7);
+      letter-spacing: 0.04em;
+      background: var(--panel);
+      border: 2px solid var(--line);
+    }
+
+    /* ── Map board ────────────────────────────────────────────────────── */
+    #map-board { display: flex; gap: var(--space-4); align-items: flex-start; }
+
+    .map-stop-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      flex: 0 0 240px;
+      min-width: 0;
+    }
+    .map-stop-node {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border: 2px solid var(--line);
+      background: var(--panel);
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .map-stop-node:hover { background: #e8edf2; }
+    .map-stop-node.selected { background: #fff; border-color: var(--accent); }
+    .map-stop-node-name {
+      flex: 1;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .map-stop-node-suffix {
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .map-conn-dots {
+      display: flex;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .map-conn-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .map-panel {
+      flex: 1;
+      min-width: 0;
+      border: 2px solid var(--line);
+      background: var(--panel);
+    }
+    .map-panel-empty {
+      padding: var(--space-7);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+    .map-panel-header {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 2px solid var(--line);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: var(--panel);
+    }
+    .map-conn-list {
+      display: flex;
+      flex-direction: column;
+    }
+    .map-conn-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid #d7dde6;
+      background: #fff;
+    }
+    .map-conn-row:last-child { border-bottom: none; }
+    .map-conn-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex-shrink: 0;
+      min-width: 72px;
+    }
+    .map-conn-arrow {
+      color: var(--muted);
+      flex-shrink: 0;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .map-conn-target {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      flex: 1;
+      min-width: 0;
+    }
+    .map-conn-target:hover { text-decoration: underline; }
+    .map-conn-target.missing { color: var(--danger); cursor: default; text-decoration: none; }
+    .map-conn-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-style: italic;
+      flex-shrink: 0;
+    }
+    .map-conn-team-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .map-anytime-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #111;
+      color: #fff;
+      padding: 2px 5px;
+      flex-shrink: 0;
+    }
+
   </style>
 </head>
 <body>
   <div class="page">
-    <div id="tile-game-header" class="card header-card" data-tile-name="game-header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div id="tile-game-header" class="card header-card" data-tile-name="game-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
       <div>
         <p class="sub">The Game Bureau</p>
         <h1>Game Builder</h1>
         <p id="folderNote" class="folder-note">You are editing <strong>stops.json</strong> in the <strong id="folderNameText"></strong> folder.</p>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
         <div style="position:relative;">
-          <button id="saveBtn" type="button" title="SAVE" style="display:inline-flex;align-items:center;gap:6px;">Save <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></button>
+          <button id="saveBtn" type="button" title="SAVE" style="display:inline-flex;align-items:center;gap:8px;">Save <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></button>
           <span id="dirtyBadge" class="dirty-badge">UNSAVED</span>
         </div>
-        <button id="mobilePreviewBtn" type="button" title="OPEN IN MOBILE-SIZED POPUP" style="display:inline-flex;align-items:center;gap:6px;">Preview <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></button>
+        <button id="mobilePreviewBtn" type="button" title="OPEN IN MOBILE-SIZED POPUP" style="display:inline-flex;align-items:center;gap:8px;">Preview <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></button>
       </div>
     </div>
     <div id="status" class="status"></div>
     <div id="warnings" class="warnings"></div>
 
-    <div id="tile-game-details-full" class="card" data-tile-name="game-details-full">
-      <h2 class="tile-label">Game Details</h2>
-      <div id="headerEditor">
+    <div id="tile-game-details-full" class="stop-card" data-tile-name="game-details-full">
+      <div class="section-header expanded" id="gameDetailsHeader">
+        <span class="section-title-text">Game Details</span>
+        <span class="section-meta">STOPS: <span id="stopCount">0</span></span>
+        <button type="button" class="section-toggle" id="gameDetailsToggle" title="Collapse">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+      </div>
+      <div id="headerEditor" class="section-body">
         <div class="row">
           <div>
             <label for="headerTitle">TITLE / PAGE TITLE</label>
@@ -657,144 +1198,59 @@
             <input id="headerFaviconUrl" type="text" placeholder="index.ico">
           </div>
         </div>
+        <div class="row">
+          <div>
+            <label for="builderTypingDelay">Typing Delay (ms)</label>
+            <input id="builderTypingDelay" type="number" min="0" max="3000" step="50" placeholder="600">
+            <p class="field-hint tight">How long the "..." indicator shows before each bubble appears.</p>
+          </div>
+          <div>
+            <label for="builderBubblePause">Bubble Pause (ms)</label>
+            <input id="builderBubblePause" type="number" min="0" max="2000" step="50" placeholder="150">
+            <p class="field-hint tight">Gap between consecutive bubbles.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="builderDefaultPlaceholder">Typing Placeholder</label>
+            <input id="builderDefaultPlaceholder" type="text" placeholder="Type here...">
+            <p class="field-hint tight">Default text shown in the answer box. Override per-bubble below.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="builderCorrectReplies">DEFAULT REPLIES BACK TO CORRECT</label>
+            <textarea id="builderCorrectReplies"></textarea>
+            <p class="field-hint tight">Comma or newline separated. Used when creating a new CORRECT REPLY bubble.</p>
+          </div>
+          <div>
+            <label for="builderIncorrectReplies">DEFAULT REPLIES BACK TO INCORRECT</label>
+            <textarea id="builderIncorrectReplies"></textarea>
+            <p class="field-hint tight">Comma or newline separated. Used when creating a new INCORRECT REPLY bubble.</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="layout">
-      <div class="left-column">
-<div id="tile-stop-list" class="card" data-tile-name="stop-list">
-        <h2 class="tile-label">STOPS: <span id="stopCount">0</span></h2>
-        <div id="stopList" class="stack"></div>
-        <div id="addStopDock" class="toolbar is-hidden">
-          <button id="addStopBtn" class="primary" type="button">New</button>
+    <div id="content-area">
+      <div id="anytime-section" class="content-section">
+        <div id="anytimeList"></div>
+        <div class="stops-add-row">
+          <button id="addAnytimeBtn" class="primary" type="button">New Anytime Stop</button>
         </div>
       </div>
-      </div>
-
-      <div id="tile-bubbles" class="card" data-tile-name="bubbles">
-        <h2 id="detailsTileLabel" class="tile-label">Stop Details</h2>
-
-        <div id="stopEditor" class="is-hidden">
-          <div class="mini-tile">
-            <div class="row full no-margin">
-              <div>
-                <label for="stopId">STOP NAME <span id="stopNameInlineWarning" class="inline-warning is-hidden">DUPLICATE STOP NAME</span></label>
-                <input id="stopId" type="text">
-              </div>
-            </div>
-          </div>
-
-          <div id="msgBubbles"></div>
-
-          <div id="playerReplySection" class="mini-tile">
-            <div class="section-head">
-              <div class="section-title">Player Reply</div>
-              <button id="removeReplyBtn" type="button" class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>
-              </button>
-            </div>
-            <div class="row full">
-              <div>
-                <label for="replyName">Name</label>
-                <input id="replyName" type="text">
-              </div>
-            </div>
-            <div class="row">
-              <div>
-                <label for="replyType">Reply Type</label>
-                <select id="replyType">
-                  <option value="text">text</option>
-                  <option value="any">any (accepts anything)</option>
-                </select>
-              </div>
-            </div>
-
-            <div id="textReplyFields">
-              <div class="row">
-                <div>
-                  <label for="replyPlaceholder">Placeholder</label>
-                  <input id="replyPlaceholder" type="text">
-                </div>
-              </div>
-              <div class="row full">
-                <div>
-                  <label for="replyAnswers">Answers (comma or newline separated)</label>
-                  <textarea id="replyAnswers"></textarea>
-                  <div id="replyAnswersNorm" class="field-hint tight norm-preview"></div>
-                </div>
-              </div>
-            </div>
-
-            <div id="anyReplyFields" class="is-hidden">
-              <div class="row">
-                <div>
-                  <label for="replyAnyPlaceholder">Placeholder</label>
-                  <input id="replyAnyPlaceholder" type="text" placeholder="Your name&hellip;">
-                </div>
-                <div>
-                  <label for="replyStoresAs">Store answer as variable</label>
-                  <input id="replyStoresAs" type="text" placeholder="playerName">
-                  <p class="field-hint tight">Use <code>{{playerName}}</code> in any bubble HTML.</p>
-                </div>
-              </div>
-            </div>
-
-
-          </div>
-
-          <div id="correctSection">
-            <div id="correctBubbles"></div>
-          </div>
-
-          <div id="incorrectSection">
-            <div id="incorrectBubbles"></div>
-          </div>
-
-          <div id="addBubbleRow" class="row">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <button id="addBubbleBtn" type="button">Add Bubble</button>
-              <span id="addBubbleFlash" class="bubble-flash"></span>
-            </div>
-          </div>
+      <div id="stops-section" class="content-section">
+        <div class="content-section-header">Stops</div>
+        <div id="stopList"></div>
+        <div class="stops-add-row">
+          <button id="addStopBtn" class="primary" type="button">New Stop</button>
         </div>
       </div>
-
+      <div id="group-board" class="content-section"></div>
+      <div id="map-board" class="content-section"></div>
     </div>
 
-<div id="tile-builder-options" class="card header-card" data-tile-name="builder-options">
-      <h2 class="tile-label">Default Options</h2>
-      <div class="row">
-        <div>
-          <label for="builderTypingDelay">Typing Delay (ms)</label>
-          <input id="builderTypingDelay" type="number" min="0" max="3000" step="50" placeholder="600">
-          <p class="field-hint tight">How long the "..." indicator shows before each bubble appears.</p>
-        </div>
-        <div>
-          <label for="builderBubblePause">Bubble Pause (ms)</label>
-          <input id="builderBubblePause" type="number" min="0" max="2000" step="50" placeholder="150">
-          <p class="field-hint tight">Gap between consecutive bubbles.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <label for="builderDefaultPlaceholder">Typing Placeholder</label>
-          <input id="builderDefaultPlaceholder" type="text" placeholder="Type here...">
-          <p class="field-hint tight">Default text shown in the answer box. Override per-bubble below.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div>
-          <label for="builderCorrectReplies">Default Correct Replies</label>
-          <textarea id="builderCorrectReplies"></textarea>
-          <p class="field-hint tight">Comma or newline separated. Used when creating a new CORRECT REPLY bubble.</p>
-        </div>
-        <div>
-          <label for="builderIncorrectReplies">Default Incorrect Replies</label>
-          <textarea id="builderIncorrectReplies"></textarea>
-          <p class="field-hint tight">Comma or newline separated. Used when creating a new INCORRECT REPLY bubble.</p>
-        </div>
-      </div>
-    </div>
+
   </div>
 
   <div id="undoToast" class="undo-toast" role="status">
@@ -812,6 +1268,7 @@
         faviconUrl: 'index.ico',
         pageTitle: 'WALKING TOUR'
       },
+      routes: [],
       stops: []
     };
 
@@ -854,12 +1311,13 @@
       STOP_INDEX: 'text/x-stop-index'
     };
 
+    let bubbleIdCounter = 1;
     function defaultState() {
       const s = deepClone(DEFAULT_DOC);
-      const firstStopId = 'stop-1';
+      const firstStopId = 'NEW-1';
       s.stops = [{
         id: firstStopId,
-        messages: [{ msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }],
+        messages: [{ bubbleId: createBubbleId(), msgType: 'text', html: '', callToAction: false, bottomAdded: false }],
         playerReply: { type: 'text', placeholder: '', answers: [], setsTeam: false, goTo: '', correct: [], incorrect: [] }
       }];
       return s;
@@ -867,46 +1325,27 @@
 
     let state = defaultState();
     let selectedStopIndex = -1;
-    let stopNameBlurValidated = false;
     let loadedStopsSnapshot = null;
+    let gameDetailsCollapsed = false;
+    let expandedStops = new Set();
+    let expandedAnytime = new Set();
 
     // Cached DOM references used across render + event phases.
     const els = {
       status: document.getElementById('status'),
-stopList: document.getElementById('stopList'),
-      stopEditor: document.getElementById('stopEditor'),
-      detailsTileLabel: document.getElementById('detailsTileLabel'),
+      stopList: document.getElementById('stopList'),
       headerTitle: document.getElementById('headerTitle'),
       headerSubtitle: document.getElementById('headerSubtitle'),
       headerLogoUrl: document.getElementById('headerLogoUrl'),
       headerLogoAlt: document.getElementById('headerLogoAlt'),
       headerFaviconUrl: document.getElementById('headerFaviconUrl'),
-      stopId: document.getElementById('stopId'),
-      stopNameInlineWarning: document.getElementById('stopNameInlineWarning'),
-      msgBubbles: document.getElementById('msgBubbles'),
-      addBubbleBtn: document.getElementById('addBubbleBtn'),
-      playerReplySection: document.getElementById('playerReplySection'),
-      removeReplyBtn: document.getElementById('removeReplyBtn'),
-      replyName: document.getElementById('replyName'),
-      replyType: document.getElementById('replyType'),
-      textReplyFields: document.getElementById('textReplyFields'),
-      anyReplyFields: document.getElementById('anyReplyFields'),
-      replyAnyPlaceholder: document.getElementById('replyAnyPlaceholder'),
-      replyStoresAs: document.getElementById('replyStoresAs'),
-      replyPlaceholder: document.getElementById('replyPlaceholder'),
-      replyAnswers: document.getElementById('replyAnswers'),
-      correctSection: document.getElementById('correctSection'),
-      correctBubbles: document.getElementById('correctBubbles'),
-      incorrectSection: document.getElementById('incorrectSection'),
-      incorrectBubbles: document.getElementById('incorrectBubbles'),
-      addBubbleRow: document.getElementById('addBubbleRow'),
       warnings: document.getElementById('warnings'),
       folderNote: document.getElementById('folderNote'),
       folderNameText: document.getElementById('folderNameText'),
       builderTypingDelay: document.getElementById('builderTypingDelay'),
       builderBubblePause: document.getElementById('builderBubblePause'),
       builderDefaultPlaceholder: document.getElementById('builderDefaultPlaceholder'),
-builderCorrectReplies: document.getElementById('builderCorrectReplies'),
+      builderCorrectReplies: document.getElementById('builderCorrectReplies'),
       builderIncorrectReplies: document.getElementById('builderIncorrectReplies')
     };
 
@@ -948,7 +1387,7 @@ builderCorrectReplies: document.getElementById('builderCorrectReplies'),
 
     function parseAnswers(text) {
       return String(text || '')
-        .split(/\n|,/g)
+        .split(/\n|,|;/g)
         .map((s) => s.trim())
         .filter(Boolean);
     }
@@ -1002,9 +1441,18 @@ if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGES
 
     function getCurrentVariableNames() {
       const names = [];
+      const normalizeVarName = (raw) => {
+        const str = String(raw || '').trim();
+        const wrapped = str.match(/^\{\{\s*([A-Za-z_]\w*)\s*\}\}$|^\{\s*([A-Za-z_]\w*)\s*\}$/);
+        return wrapped ? (wrapped[1] || wrapped[2]) : str;
+      };
       (state.stops || []).forEach((stop) => {
-        const key = String((stop && stop.playerReply && stop.playerReply.storesAs) || '').trim();
+        const key = normalizeVarName((stop && stop.playerReply && stop.playerReply.storesAs) || '');
         if (key) names.push(key);
+        (Array.isArray(stop && stop.messages) ? stop.messages : []).forEach((bubble) => {
+          const bKey = normalizeVarName((bubble && bubble.storesAs) || '');
+          if (bKey) names.push(bKey);
+        });
       });
       return Array.from(new Set(names));
     }
@@ -1012,9 +1460,9 @@ if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGES
     function getHtmlVariableHintText() {
       const names = getCurrentVariableNames();
       if (names.length) {
-        return 'Use {{variableName}} syntax. Current variables: ' + names.join(', ') + '.';
+        return 'HTML ok. Use {variableName} syntax. Current variables: ' + names.map(n => '{' + n + '}').join(', ') + '.';
       }
-      return 'Use {{variableName}} syntax. Current variables: none yet.';
+      return 'HTML ok. Use {variableName} syntax. Current variables: none yet.';
     }
 
     function updateHtmlVariableHints() {
@@ -1034,16 +1482,87 @@ if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGES
       if (!Array.isArray(list) || !list.length) return '';
       return list[Math.floor(Math.random() * list.length)];
     }
+    function autoSizeTextarea(el) {
+      if (!el) return;
+      const minHeight = parseInt((window.getComputedStyle(el).minHeight || '0').replace('px', ''), 10) || 0;
+      el.style.height = 'auto';
+      el.style.height = Math.max(el.scrollHeight, minHeight) + 'px';
+    }
+    function bindAutoSizeTextarea(el) {
+      if (!el) return;
+      el.addEventListener('input', () => autoSizeTextarea(el));
+      requestAnimationFrame(() => autoSizeTextarea(el));
+    }
 
-function nextNameFromPrevious(previousName, fallbackBase) {
-      const prev = String(previousName || '').trim();
-      const base = String(fallbackBase || 'msg').trim() || 'msg';
-      if (!prev) return base + '-1';
-      const match = prev.match(/^(.*?)(\d+)$/);
-      if (!match) return prev + '-1';
-      const prefix = match[1];
-      const nextNum = String(parseInt(match[2], 10) + 1);
-      return prefix + nextNum;
+    function createBubbleId() {
+      return 'bubble_' + Date.now().toString(36) + '_' + (bubbleIdCounter++);
+    }
+    function ensureBubbleId(bubble) {
+      if (!bubble || typeof bubble !== 'object') return '';
+      if (!String(bubble.bubbleId || '').trim()) {
+        bubble.bubbleId = createBubbleId();
+      }
+      return String(bubble.bubbleId);
+    }
+    function stripHtmlPreview(text) {
+      return String(text || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+    function bubbleDisplayName(rawText, fallbackName) {
+      const previewRaw = stripHtmlPreview(rawText);
+      if (previewRaw) return previewRaw.length > 56 ? previewRaw.slice(0, 56) + '...' : previewRaw;
+      return String(fallbackName || 'Untitled bubble');
+    }
+    function getEligibleBranchTargets(currentBubbleId) {
+      const out = [];
+      (state.stops || []).forEach((stop) => {
+        const stopName = String(stop.id || '').toUpperCase();
+        const msgs = Array.isArray(stop && stop.messages) ? stop.messages : [];
+        const validMsgs = msgs.filter(b => b && typeof b === 'object');
+        msgs.forEach((b, bIdx) => {
+          if (!b || typeof b !== 'object') return;
+          const id = ensureBubbleId(b);
+          if (!id || id === currentBubbleId) return;
+          const label = validMsgs.length > 1
+            ? stopName + ' STOP · bubble ' + (bIdx + 1)
+            : stopName + ' STOP';
+          out.push({ id, label });
+        });
+      });
+      return out;
+    }
+
+    function reseedStopBubbleIds(stop) {
+      if (!stop || !Array.isArray(stop.messages)) return;
+      const idMap = new Map();
+      stop.messages.forEach((b) => {
+        if (!b || typeof b !== 'object') return;
+        const oldId = String(b.bubbleId || '').trim();
+        const newId = createBubbleId();
+        b.bubbleId = newId;
+        if (oldId) idMap.set(oldId, newId);
+      });
+      stop.messages.forEach((b) => {
+        if (!b || typeof b !== 'object' || !Array.isArray(b.branches)) return;
+        b.branches.forEach((rule) => {
+          if (!rule || typeof rule !== 'object') return;
+          const target = String(rule.goToBubbleId || '').trim();
+          if (target && idMap.has(target)) {
+            rule.goToBubbleId = idMap.get(target);
+          }
+        });
+      });
+    }
+
+    const bubbleUidMap = new WeakMap();
+    let bubbleUidCounter = 1;
+    function getBubbleUid(bubble) {
+      if (!bubble || typeof bubble !== 'object') return 'bubble-0';
+      let id = bubbleUidMap.get(bubble);
+      if (!id) {
+        id = 'bubble-' + (bubbleUidCounter++);
+        bubbleUidMap.set(bubble, id);
+      }
+      return id;
     }
 
     function moveStopToInsertionIndex(arr, fromIndex, insertionIndex) {
@@ -1062,15 +1581,28 @@ function nextNameFromPrevious(previousName, fallbackBase) {
     function reconcileSelectedStopIndexAfterMove(fromIndex, newIndex) {
       if (selectedStopIndex === fromIndex) {
         selectedStopIndex = newIndex;
-        return;
+      } else {
+        if (fromIndex < selectedStopIndex) selectedStopIndex -= 1;
+        if (newIndex <= selectedStopIndex) selectedStopIndex += 1;
       }
-      if (fromIndex < selectedStopIndex) selectedStopIndex -= 1;
-      if (newIndex <= selectedStopIndex) selectedStopIndex += 1;
+      // Shift expandedStops to match new indices
+      const wasExpanded = expandedStops.has(fromIndex);
+      const newSet = new Set();
+      expandedStops.forEach(idx => {
+        if (idx === fromIndex) return;
+        if (fromIndex < newIndex) {
+          newSet.add(idx > fromIndex && idx <= newIndex ? idx - 1 : idx);
+        } else {
+          newSet.add(idx >= newIndex && idx < fromIndex ? idx + 1 : idx);
+        }
+      });
+      if (wasExpanded) newSet.add(newIndex);
+      expandedStops = newSet;
     }
 
     function clearStopDropIndicators() {
-      els.stopList.querySelectorAll('.stop-item').forEach((el) => {
-        el.classList.remove('drag-over', 'drop-before', 'drop-after');
+      els.stopList.querySelectorAll('.stop-card').forEach((el) => {
+        el.classList.remove('drop-before', 'drop-after');
       });
     }
 
@@ -1147,13 +1679,7 @@ function nextNameFromPrevious(previousName, fallbackBase) {
       ensureReplyScaffoldForCallToAction(stop, { includeIncorrect: stop.playerReply.type !== 'any' });
     }
 
-    function removePlayerReplyFlow(stop) {
-      if (!stop) return;
-      stop.messages = (Array.isArray(stop.messages) ? stop.messages : []).filter((b) => !(b && b.callToAction));
-      stop.playerReply = ensurePlayerReply(null);
-    }
-
-function findDuplicates(values) {
+    function findDuplicates(values) {
       const seen = new Set();
       const dupes = new Set();
       values.forEach((v) => {
@@ -1207,43 +1733,53 @@ state.stops.forEach((stop) => {
       return warnings;
     }
 
-    function renderInlineStopNameWarning() {
-      const stop = getSelectedStop();
-      if (!stop || selectedStopIndex < 0) {
-        els.stopNameInlineWarning.style.display = 'none';
-        return;
-      }
-      if (!stopNameBlurValidated) {
-        els.stopNameInlineWarning.style.display = 'none';
-        return;
-      }
-      const name = String(stop.id || '').trim().toLowerCase();
-      if (!name) {
-        els.stopNameInlineWarning.style.display = 'none';
-        return;
-      }
-      const dupCount = state.stops.filter((s) => String((s && s.id) || '').trim().toLowerCase() === name).length;
-      els.stopNameInlineWarning.style.display = dupCount > 1 ? 'inline' : 'none';
-    }
-
     function answersToText(arr) {
       return Array.isArray(arr) ? arr.join('\n') : '';
     }
 
-    function ensureBubble(b) {
-      if (!b || typeof b !== 'object') return { html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, direction: 'toPlayer' };
+    function ensureBranchRule(rule) {
+      const src = rule && typeof rule === 'object' ? rule : {};
+      const answers = Array.isArray(src.answers)
+        ? src.answers.map((x) => String(x).trim()).filter(Boolean)
+        : parseAnswers(src.answer !== undefined ? src.answer : src.forAnswer);
       return {
+        answers,
+        goToBubbleId: String(src.goToBubbleId || src.goToBubble || '').trim(),
+        goToStopId: String(src.goToStopId || src.goTo || src.nextStop || '').trim(),
+        reply: String(src.reply || src.replyBack || src.html || '')
+      };
+    }
+
+    function ensureBubble(b) {
+      if (!b || typeof b !== 'object') return { bubbleId: createBubbleId(), html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, msgType: 'text', src: '', alt: '', label: '', href: '', replyExpected: 'no', answers: [], replyCorrect: '', replyIncorrect: '', storesAs: '', replyResponse: '', branches: [] };
+      const replyExpectedRaw = String(b.replyExpected || 'no').toLowerCase();
+      const re = ['no', 'word', 'any', 'branch'].includes(replyExpectedRaw) ? replyExpectedRaw : 'no';
+      const msgTypeRaw = String(b.msgType || 'text').toLowerCase();
+      const msgType = ['text', 'image', 'video', 'button', 'pay'].includes(msgTypeRaw) ? msgTypeRaw : 'text';
+      const branchSource = Array.isArray(b.branches)
+        ? b.branches
+        : Array.isArray(b.branchMap)
+          ? b.branchMap
+          : [];
+      return {
+        bubbleId: String(b.bubbleId || createBubbleId()),
         html: String(b.html || ''),
-        callToAction: !!(b.callToAction || b.red || b.cmd),
+        callToAction: re !== 'no' ? true : !!(b.callToAction || b.red || b.cmd),
         forAnswer: String(b.forAnswer || ''),
         placeholder: String(b.placeholder || ''),
         bottomAdded: !!b.bottomAdded,
-        direction: b.direction === 'fromPlayer' ? 'fromPlayer' : 'toPlayer',
-        msgType: String(b.msgType || 'text'),
+        msgType,
         src: String(b.src || ''),
         alt: String(b.alt || ''),
         label: String(b.label || ''),
-        href: String(b.href || '')
+        href: String(b.href || ''),
+        replyExpected: re,
+        answers: Array.isArray(b.answers) ? b.answers.map(String) : [],
+        replyCorrect: String(b.replyCorrect || ''),
+        replyIncorrect: String(b.replyIncorrect || ''),
+        storesAs: String(b.storesAs || ''),
+        replyResponse: String(b.replyResponse || ''),
+        branches: branchSource.map(ensureBranchRule)
       };
     }
 
@@ -1261,12 +1797,15 @@ state.stops.forEach((stop) => {
       if (type === 'any') {
         base.placeholder = String(r.placeholder || '');
         base.storesAs = String(r.storesAs || '');
+        base.nextStopId = String(r.nextStopId || '').trim();
         return base;
       }
       base.placeholder = String(r.placeholder || '');
       base.answers = Array.isArray(r.answers) ? r.answers.map((x) => String(x)) : [];
       base.setsTeam = !!r.setsTeam;
+      base.anytime = !!r.anytime;
       base.goTo = String(r.goTo || '');
+      base.nextStopId = String(r.nextStopId || '').trim();
       return base;
     }
 
@@ -1294,6 +1833,7 @@ state.stops.forEach((stop) => {
         throw new Error('Missing "stops" array.');
       }
       out.stops = doc.stops.map(ensureStop);
+      if (Array.isArray(doc.routes)) out.routes = deepClone(doc.routes);
       if (typeof doc._comment === 'string') out._comment = doc._comment;
       return out;
     }
@@ -1306,16 +1846,16 @@ state.stops.forEach((stop) => {
     function nextStopNumber() {
       const existing = new Set(state.stops.map((s) => String(s.id || '').toUpperCase()));
       let n = state.stops.length + 1;
-      while (existing.has('STOP-' + n)) n++;
+      while (existing.has('NEW-' + n)) n++;
       return n;
     }
 
     function createEmptyStop() {
-      const id = 'STOP-' + nextStopNumber();
+      const id = 'NEW-' + nextStopNumber();
       return {
         id,
         messages: [
-          { msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false }
+          { bubbleId: createBubbleId(), msgType: 'text', html: '', callToAction: false, bottomAdded: false }
         ],
         playerReply: {
           type: 'text',
@@ -1330,108 +1870,260 @@ state.stops.forEach((stop) => {
     }
 
 
-    // Left-column rendering for GAME card + STOPS list.
+    // Renders all stops as inline collapsible cards. The selected stop is expanded and contains els.stopEditor.
     function renderStopList() {
-      const addStopBtn = document.getElementById('addStopBtn');
       els.stopList.innerHTML = '';
       const stopCountEl = document.getElementById('stopCount');
-      if (stopCountEl) stopCountEl.textContent = state.stops.length;
-
-if (!state.stops.length) {
-        if (addStopBtn) {
-          const addStopRow = document.createElement('div');
-          addStopRow.className = 'stop-add-row';
-          addStopRow.appendChild(addStopBtn);
-          els.stopList.appendChild(addStopRow);
-        }
-        return;
-      }
+      if (stopCountEl) stopCountEl.textContent = state.stops.filter((s) => !(s && s.playerReply && s.playerReply.anytime)).length;
 
       state.stops.forEach((stop, i) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'stop-item' + (i === selectedStopIndex ? ' active' : '');
-        btn.dataset.stopIndex = String(i);
-        btn.draggable = true;
+        // Anytime stops live in the anytime section only
+        if (stop && stop.playerReply && stop.playerReply.anytime) return;
+        const isExpanded = expandedStops.has(i);
         const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
           + (Array.isArray(stop.playerReply && stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
           + (Array.isArray(stop.playerReply && stop.playerReply.incorrect) ? stop.playerReply.incorrect.length : 0);
-        btn.innerHTML = '<div>' + stop.id + '</div><div class="stop-meta">Bubbles: ' + totalBubbles + '</div>'
-          + (i === selectedStopIndex
-            ? '<span class="stop-actions">'
-              + '<span class="stop-action stop-copy" title="COPY" aria-label="COPY"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg></span>'
-              + '<span class="stop-action stop-paste' + (copiedStop ? '' : ' disabled') + '" title="PASTE" aria-label="PASTE"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg></span>'
-              + '<span class="stop-action stop-delete" title="REMOVE" aria-label="REMOVE"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg></span>'
-              + '</span>'
-            : '');
-        btn.addEventListener('click', () => {
-          selectedStopIndex = i;
-          stopNameBlurValidated = false;
+
+        const card = document.createElement('div');
+        card.className = 'stop-card' + (isExpanded ? ' expanded' : '');
+        card.dataset.stopIndex = String(i);
+        card.draggable = false;
+
+        // --- Header ---
+        const hdr = document.createElement('div');
+        hdr.className = 'section-header stop-header' + (isExpanded ? ' expanded' : '');
+
+        const grip = document.createElement('span');
+        grip.className = 'stop-grip';
+        grip.title = 'Click to collapse, drag to reorder';
+        grip.setAttribute('role', 'button');
+        grip.setAttribute('tabindex', '0');
+        grip.setAttribute('aria-label', 'Collapse stop or drag to reorder');
+        grip.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>';
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'section-title-text stop-title-edit';
+        nameEl.contentEditable = 'true';
+        nameEl.spellcheck = false;
+        nameEl.setAttribute('role', 'textbox');
+        nameEl.setAttribute('aria-label', 'Stop name');
+        nameEl.textContent = stop.id;
+
+        const suffixEl = document.createElement('span');
+        suffixEl.className = 'stop-name-suffix';
+        suffixEl.textContent = 'STOP';
+        suffixEl.setAttribute('aria-hidden', 'true');
+
+        const nameGroup = document.createElement('span');
+        nameGroup.className = 'stop-name-group';
+        nameGroup.appendChild(nameEl);
+        nameGroup.appendChild(suffixEl);
+
+        const metaEl = document.createElement('span');
+        metaEl.className = 'section-meta';
+        metaEl.textContent = totalBubbles + (totalBubbles === 1 ? ' bubble' : ' bubbles');
+
+        // Group membership dots
+        const groupDotsEl = document.createElement('span');
+        groupDotsEl.className = 'stop-group-dots';
+        if (Array.isArray(state.routes) && state.routes.length) {
+          const route = state.routes[0];
+          if (route && route.variants) {
+            Object.keys(route.variants).forEach(function(varName) {
+              const arr = route.variants[varName];
+              if (Array.isArray(arr) && arr.indexOf(stop.id) >= 0) {
+                const dot = document.createElement('span');
+                dot.className = 'stop-group-dot';
+                dot.style.background = getVariantColor(varName);
+                dot.title = varName;
+                groupDotsEl.appendChild(dot);
+              }
+            });
+          }
+        }
+
+        const actions = document.createElement('span');
+        actions.className = 'stop-card-actions';
+
+        const copyBtn = document.createElement('span');
+        copyBtn.className = 'stop-action stop-copy';
+        copyBtn.title = 'COPY';
+        copyBtn.setAttribute('aria-label', 'COPY');
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg>';
+
+        const pasteBtn = document.createElement('span');
+        pasteBtn.className = 'stop-action stop-paste' + (copiedStop ? '' : ' disabled');
+        pasteBtn.title = 'PASTE';
+        pasteBtn.setAttribute('aria-label', 'PASTE');
+        pasteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg>';
+
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'stop-action stop-delete';
+        deleteBtn.title = 'REMOVE';
+        deleteBtn.setAttribute('aria-label', 'REMOVE');
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(pasteBtn);
+        actions.appendChild(deleteBtn);
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'section-toggle';
+        toggleBtn.innerHTML = isExpanded ? SVG_CHEVRON_UP : SVG_CHEVRON_DOWN;
+
+        hdr.appendChild(grip);
+        hdr.appendChild(nameGroup);
+        hdr.appendChild(metaEl);
+        if (groupDotsEl.children.length) hdr.appendChild(groupDotsEl);
+        hdr.appendChild(actions);
+        hdr.appendChild(toggleBtn);
+        card.appendChild(hdr);
+
+        // --- Expanded body ---
+        if (isExpanded) {
+          const body = document.createElement('div');
+          body.className = 'stop-card-body';
+          renderStopEditorInto(body, stop);
+          card.appendChild(body);
+        }
+
+        // --- Events ---
+        toggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isExpanded) {
+            expandedStops.delete(i);
+          } else {
+            expandedStops.add(i);
+            selectedStopIndex = i;
+          }
           renderAll();
         });
 
-        const stopCopy = btn.querySelector('.stop-copy');
-        if (stopCopy) {
-          stopCopy.addEventListener('click', (e) => {
+        nameEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
             e.preventDefault();
-            e.stopPropagation();
-            copiedStop = JSON.parse(JSON.stringify(stop));
-            setStatus('Stop copied.', 'ok');
-            renderAll();
-          });
-        }
+            nameEl.blur();
+          }
+        });
+        nameEl.addEventListener('input', () => {
+          stop.id = String(nameEl.textContent || '');
+        });
+        nameEl.addEventListener('blur', () => {
+          const next = String(nameEl.textContent || '').replace(/\s+/g, ' ').trim();
+          stop.id = next || stop.id || ('NEW-' + (i + 1));
+          nameEl.textContent = stop.id;
+          renderWarnings();
+        });
 
-        const stopPaste = btn.querySelector('.stop-paste');
-        if (stopPaste) {
-          stopPaste.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!copiedStop) return;
-            const clone = JSON.parse(JSON.stringify(copiedStop));
-            clone.id = 'STOP-' + nextStopNumber();
-            const insertAt = selectedStopIndex >= 0 ? selectedStopIndex + 1 : state.stops.length;
-            state.stops.splice(insertAt, 0, clone);
-            selectedStopIndex = insertAt;
-            stopNameBlurValidated = false;
-            renderAll();
-          });
-        }
+        copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          copiedStop = JSON.parse(JSON.stringify(stop));
+          setStatus('Stop copied.', 'ok');
+          renderAll();
+        });
 
-        const stopDelete = btn.querySelector('.stop-delete');
-        if (stopDelete) {
-          stopDelete.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const removed = state.stops.splice(i, 1)[0];
-            if (!state.stops.length) selectedStopIndex = -1;
-            else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
-            showUndoToast(removed, i);
+        pasteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (!copiedStop) return;
+          const clone = JSON.parse(JSON.stringify(copiedStop));
+          clone.id = 'NEW-' + nextStopNumber();
+          reseedStopBubbleIds(clone);
+          state.stops.splice(i + 1, 0, clone);
+          const shifted = new Set();
+          expandedStops.forEach(idx => shifted.add(idx > i ? idx + 1 : idx));
+          shifted.add(i + 1);
+          expandedStops = shifted;
+          selectedStopIndex = i + 1;
+
+          renderAll();
+        });
+
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const removed = state.stops.splice(i, 1)[0];
+          const shifted = new Set();
+          expandedStops.forEach(idx => { if (idx !== i) shifted.add(idx > i ? idx - 1 : idx); });
+          expandedStops = shifted;
+          if (selectedStopIndex === i) selectedStopIndex = -1;
+          else if (selectedStopIndex > i) selectedStopIndex--;
+          if (!state.stops.length) selectedStopIndex = -1;
+          else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
+          showUndoToast(removed, i);
+          renderAll();
+        });
+
+        // Drag and drop (handle only)
+        let dragFromHandle = false;
+        let didHandleDrag = false;
+        const armHandleDrag = () => {
+          dragFromHandle = true;
+          didHandleDrag = false;
+          card.draggable = true;
+        };
+        const disarmHandleDrag = () => {
+          setTimeout(() => {
+            dragFromHandle = false;
+            card.draggable = false;
+          }, 0);
+        };
+        const collapseOnHandleAction = (e) => {
+          if (e) e.stopPropagation();
+          if (didHandleDrag) {
+            didHandleDrag = false;
+            return;
+          }
+          if (expandedStops.has(i)) {
+            expandedStops.delete(i);
+            if (selectedStopIndex === i) selectedStopIndex = -1;
             renderAll();
-          });
-        }
-        btn.addEventListener('dragstart', (e) => {
+          }
+        };
+        grip.addEventListener('mousedown', armHandleDrag);
+        grip.addEventListener('touchstart', armHandleDrag, { passive: true });
+        grip.addEventListener('click', (e) => {
+          collapseOnHandleAction(e);
+          disarmHandleDrag();
+        });
+        grip.addEventListener('mouseleave', disarmHandleDrag);
+        grip.addEventListener('touchend', disarmHandleDrag);
+        grip.addEventListener('touchcancel', disarmHandleDrag);
+        grip.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            collapseOnHandleAction(e);
+          }
+        });
+        card.addEventListener('dragstart', (e) => {
+          const startedOnHandle = dragFromHandle || !!(e.target && e.target.closest('.stop-grip'));
+          if (!startedOnHandle) {
+            e.preventDefault();
+            return;
+          }
+          didHandleDrag = true;
           e.dataTransfer.setData(DND_MIME.STOP_INDEX, String(i));
           e.dataTransfer.effectAllowed = 'move';
-          btn.classList.add('dragging');
+          card.classList.add('dragging');
         });
-        btn.addEventListener('dragend', () => {
+        card.addEventListener('dragend', () => {
+          dragFromHandle = false;
+          card.draggable = false;
           clearStopDropIndicators();
-          btn.classList.remove('dragging');
+          card.classList.remove('dragging');
         });
-        btn.addEventListener('dragover', (e) => {
+        card.addEventListener('dragover', (e) => {
           e.preventDefault();
-          const rect = btn.getBoundingClientRect();
+          const rect = card.getBoundingClientRect();
           const before = e.clientY < rect.top + rect.height / 2;
           clearStopDropIndicators();
-          btn.classList.add('drag-over');
-          btn.classList.add(before ? 'drop-before' : 'drop-after');
+          card.classList.add(before ? 'drop-before' : 'drop-after');
         });
-        btn.addEventListener('dragleave', () => {
-          btn.classList.remove('drag-over', 'drop-before', 'drop-after');
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drop-before', 'drop-after');
         });
-        btn.addEventListener('drop', (e) => {
+        card.addEventListener('drop', (e) => {
           e.preventDefault();
-          const rect = btn.getBoundingClientRect();
+          const rect = card.getBoundingClientRect();
           const before = e.clientY < rect.top + rect.height / 2;
           clearStopDropIndicators();
           const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
@@ -1441,21 +2133,15 @@ if (!state.stops.length) {
           reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
           renderAll();
         });
-        els.stopList.appendChild(btn);
+
+        els.stopList.appendChild(card);
       });
 
-      if (addStopBtn) {
-        const addStopRow = document.createElement('div');
-        addStopRow.className = 'stop-add-row';
-        addStopRow.appendChild(addStopBtn);
-        els.stopList.appendChild(addStopRow);
-      }
-
-      // Fallback drop target so drag-and-drop still works when releasing in list whitespace (common while auto-scrolling).
+      // Fallback drop target for whitespace between cards
       els.stopList.ondragover = (e) => {
         if (!e.dataTransfer) return;
-        if (e.target && e.target.closest('.stop-item[data-stop-index]')) return;
-        const items = Array.from(els.stopList.querySelectorAll('.stop-item[data-stop-index]'));
+        if (e.target && e.target.closest('.stop-card[data-stop-index]')) return;
+        const items = Array.from(els.stopList.querySelectorAll('.stop-card[data-stop-index]'));
         if (!items.length) return;
         e.preventDefault();
         const insertionIndex = getInsertionIndexFromY(items, e.clientY);
@@ -1464,8 +2150,8 @@ if (!state.stops.length) {
       els.stopList.ondrop = (e) => {
         if (!e.dataTransfer) return;
         if (!Array.from(e.dataTransfer.types || []).includes(DND_MIME.STOP_INDEX)) return;
-        if (e.target && e.target.closest('.stop-item[data-stop-index]')) return;
-        const items = Array.from(els.stopList.querySelectorAll('.stop-item[data-stop-index]'));
+        if (e.target && e.target.closest('.stop-card[data-stop-index]')) return;
+        const items = Array.from(els.stopList.querySelectorAll('.stop-card[data-stop-index]'));
         if (!items.length) return;
         e.preventDefault();
         const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
@@ -1478,6 +2164,17 @@ if (!state.stops.length) {
       };
     }
 
+    function getYouTubeEmbedUrl(src) {
+      const s = String(src || '').trim();
+      const short = s.match(/youtu\.be\/([A-Za-z0-9_-]{11})/);
+      if (short) return 'https://www.youtube.com/embed/' + short[1];
+      const watch = s.match(/[?&]v=([A-Za-z0-9_-]{11})/);
+      if (watch) return 'https://www.youtube.com/embed/' + watch[1];
+      const embed = s.match(/youtube\.com\/embed\/([A-Za-z0-9_-]{11})/);
+      if (embed) return 'https://www.youtube.com/embed/' + embed[1];
+      return null;
+    }
+
     function generateBubbleHtml(bubble) {
       const t = bubble.msgType || 'text';
       if (t === 'image') {
@@ -1486,6 +2183,11 @@ if (!state.stops.length) {
         return '<img src="' + src + '" alt="' + alt + '" style="max-width:100%;">';
       }
       if (t === 'video') {
+        const ytEmbed = getYouTubeEmbedUrl(bubble.src || '');
+        if (ytEmbed) {
+          const src = ytEmbed.replace(/"/g, '&quot;');
+          return '<iframe src="' + src + '" frameborder="0" allowfullscreen style="width:100%;aspect-ratio:16/9;display:block;"></iframe>';
+        }
         const src = (bubble.src || '').replace(/"/g, '&quot;');
         return '<video src="' + src + '" controls style="max-width:100%;"></video>';
       }
@@ -1503,10 +2205,12 @@ if (!state.stops.length) {
     }
 
     // Renders bubble editors in the details tile (no drag/drop here).
-    function renderBubbles(container, bubbles, listKey) {
+    function renderBubbles(container, bubbles, listKey, stopRef) {
       container.innerHTML = '';
+      container.classList.add('bubble-list');
 
       bubbles.forEach((bubble, idx) => {
+        const bubbleId = ensureBubbleId(bubble);
         if (!String(bubble.html || '').trim()) {
           const suggestions = listKey === 'correct'
             ? getCorrectReplySuggestions()
@@ -1520,49 +2224,19 @@ if (!state.stops.length) {
 
         const wrap = document.createElement('div');
         const isMessages = listKey === 'messages';
-        const isToPlayer = !isMessages || !bubble.direction || bubble.direction === 'toPlayer';
-        const msgType = (isMessages && isToPlayer) ? (bubble.msgType || 'text') : null;
+        const msgType = isMessages ? (bubble.msgType || 'text') : null;
+        const replyMode = String((bubble && bubble.replyExpected) || 'no').toLowerCase();
+        const bubbleNeedsReply = replyMode === 'word' || replyMode === 'any' || replyMode === 'branch';
 
         wrap.className = 'bubble'
-          + (isMessages && !isToPlayer ? ' from-player-bubble' : '')
-          + (isMessages && bubble.callToAction ? ' cta-bubble' : '');
+          + (isMessages && bubbleNeedsReply ? ' cta-bubble' : '');
+        wrap.dataset.bubbleId = bubbleId;
 
         if (isMessages) {
-          const isFrom = bubble.direction === 'fromPlayer';
-          const dirId = 'dir-' + listKey + '-' + idx;
-          const dirRow = document.createElement('div');
-          dirRow.className = 'bubble-direction';
-
-          const toLabel = document.createElement('span');
-          toLabel.className = 'dir-label' + (!isFrom ? ' active' : '');
-          toLabel.textContent = 'TO PLAYER';
-
-          const switchWrap = document.createElement('label');
-          switchWrap.className = 'dir-switch';
-          const switchInput = document.createElement('input');
-          switchInput.type = 'checkbox';
-          switchInput.id = dirId;
-          switchInput.checked = isFrom;
-          const track = document.createElement('span');
-          track.className = 'dir-track';
-          switchWrap.appendChild(switchInput);
-          switchWrap.appendChild(track);
-
-          const fromLabel = document.createElement('span');
-          fromLabel.className = 'dir-label' + (isFrom ? ' active' : '');
-          fromLabel.textContent = 'FROM PLAYER';
-
-          switchInput.addEventListener('change', () => {
-            bubble.direction = switchInput.checked ? 'fromPlayer' : 'toPlayer';
-            renderAll();
-          });
-          toLabel.addEventListener('click', () => { if (switchInput.checked) { switchInput.checked = false; switchInput.dispatchEvent(new Event('change')); } });
-          fromLabel.addEventListener('click', () => { if (!switchInput.checked) { switchInput.checked = true; switchInput.dispatchEvent(new Event('change')); } });
-
-          dirRow.appendChild(toLabel);
-          dirRow.appendChild(switchWrap);
-          dirRow.appendChild(fromLabel);
-          wrap.appendChild(dirRow);
+          const detailsLabel = document.createElement('div');
+          detailsLabel.className = 'bubble-details-label';
+          detailsLabel.textContent = 'BUBBLE DETAILS';
+          wrap.appendChild(detailsLabel);
         }
 
         const topRow = document.createElement('div');
@@ -1575,57 +2249,14 @@ if (!state.stops.length) {
         removeBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
         topRow.appendChild(removeBtn);
 
-        const upBtn = document.createElement('button');
-        upBtn.type = 'button';
-        upBtn.className = 'stop-action bubble-up';
-        upBtn.title = 'MOVE UP';
-        upBtn.disabled = idx === 0;
-        upBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>';
-        topRow.appendChild(upBtn);
-
-        const downBtn = document.createElement('button');
-        downBtn.type = 'button';
-        downBtn.className = 'stop-action bubble-down';
-        downBtn.title = 'MOVE DOWN';
-        downBtn.disabled = idx === bubbles.length - 1;
-        downBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
-        topRow.appendChild(downBtn);
-
         wrap.appendChild(topRow);
 
-        const appendTypingPlaceholderField = (target) => {
-          const placeholderLabel = document.createElement('label');
-          placeholderLabel.textContent = 'Typing Placeholder';
-          target.appendChild(placeholderLabel);
-
-          const placeholderInput = document.createElement('input');
-          placeholderInput.type = 'text';
-          placeholderInput.className = 'bubble-placeholder-input';
-          placeholderInput.placeholder = ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...';
-          const placeholderStop = isMessages && !isToPlayer ? getSelectedStop() : null;
-          placeholderInput.value = placeholderStop && placeholderStop.playerReply
-            ? String(placeholderStop.playerReply.placeholder || bubble.placeholder || '')
-            : String(bubble.placeholder || '');
-          placeholderInput.style.marginBottom = '8px';
-          target.appendChild(placeholderInput);
-
-          placeholderInput.addEventListener('input', (e) => {
-            bubbles[idx].placeholder = e.target.value;
-            if (isMessages && !isToPlayer) {
-              const stop = getSelectedStop();
-              if (stop && stop.playerReply && typeof stop.playerReply === 'object') {
-                stop.playerReply.placeholder = e.target.value;
-              }
-            }
-          });
-        };
-
-        // TO PLAYER content: type radios + CTA checkbox + content sections
-        if (isMessages && isToPlayer) {
+        if (isMessages) {
           // Type radio buttons row
           const typeRow = document.createElement('div');
           typeRow.className = 'bubble-type-row';
-          const radioName = 'msgtype-' + listKey + '-' + idx;
+          const bubbleUid = bubbleId || getBubbleUid(bubble);
+          const radioName = 'msgtype-' + bubbleUid;
           ['text', 'image', 'video', 'button', 'pay'].forEach(t => {
             const rid = radioName + '-' + t;
             const radio = document.createElement('input');
@@ -1645,20 +2276,6 @@ if (!state.stops.length) {
           });
           wrap.appendChild(typeRow);
 
-          // Call to Action checkbox
-          const ctaRow = document.createElement('div');
-          ctaRow.className = 'cta-row';
-          const ctaCheck = document.createElement('input');
-          ctaCheck.type = 'checkbox';
-          ctaCheck.id = 'cta-' + idx + '-' + listKey;
-          ctaCheck.checked = !!bubble.callToAction;
-          const ctaLabel = document.createElement('label');
-          ctaLabel.htmlFor = ctaCheck.id;
-          ctaLabel.textContent = 'CALL TO ACTION';
-          ctaRow.appendChild(ctaCheck);
-          ctaRow.appendChild(ctaLabel);
-          wrap.appendChild(ctaRow);
-
           // Content sections
           const sections = {
             text: (() => {
@@ -1666,14 +2283,15 @@ if (!state.stops.length) {
               d.className = 'msg-type-section';
               d.dataset.type = 'text';
               if (msgType !== 'text') d.style.display = 'none';
-              const lbl = document.createElement('label');
-              lbl.textContent = 'HTML';
               const ta = document.createElement('textarea');
               ta.className = 'bubble-html-input';
               ta.value = String(bubble.html || '');
-              d.appendChild(lbl);
-              d.appendChild(ta);
+              const shell = document.createElement('div');
+              shell.className = 'bubble-html-shell';
+              shell.appendChild(ta);
+              d.appendChild(shell);
               d.appendChild(createHtmlVariableHint());
+              bindAutoSizeTextarea(ta);
               return d;
             })(),
             image: (() => {
@@ -1682,7 +2300,7 @@ if (!state.stops.length) {
               d.dataset.type = 'image';
               if (msgType !== 'image') d.style.display = 'none';
               d.innerHTML = '<label>Image URL</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">'
-                + '<label style="margin-top:6px;">Alt text</label><input type="text" class="bubble-alt-input" placeholder="description" value="' + String(bubble.alt || '').replace(/"/g, '&quot;') + '">';
+                + '<label>Alt text</label><input type="text" class="bubble-alt-input" placeholder="description" value="' + String(bubble.alt || '').replace(/"/g, '&quot;') + '">';
               return d;
             })(),
             video: (() => {
@@ -1690,7 +2308,7 @@ if (!state.stops.length) {
               d.className = 'msg-type-section';
               d.dataset.type = 'video';
               if (msgType !== 'video') d.style.display = 'none';
-              d.innerHTML = '<label>Video URL (.mp4 or YouTube embed)</label><input type="text" class="bubble-src-input" placeholder="https://..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">';
+              d.innerHTML = '<label>Video URL — paste a YouTube link or direct .mp4</label><input type="text" class="bubble-src-input" placeholder="https://www.youtube.com/watch?v=..." value="' + String(bubble.src || '').replace(/"/g, '&quot;') + '">';
               return d;
             })(),
             button: (() => {
@@ -1699,7 +2317,7 @@ if (!state.stops.length) {
               d.dataset.type = 'button';
               if (msgType !== 'button') d.style.display = 'none';
               d.innerHTML = '<label>Button label</label><input type="text" class="bubble-label-input" placeholder="Click here" value="' + String(bubble.label || '').replace(/"/g, '&quot;') + '">'
-                + '<label style="margin-top:6px;">Link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
+                + '<label>Link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
               return d;
             })(),
             pay: (() => {
@@ -1708,36 +2326,21 @@ if (!state.stops.length) {
               d.dataset.type = 'pay';
               if (msgType !== 'pay') d.style.display = 'none';
               d.innerHTML = '<label>Pay button label</label><input type="text" class="bubble-label-input" placeholder="CLICK HERE TO BUY" value="' + String(bubble.label || '').replace(/"/g, '&quot;') + '">'
-                + '<label style="margin-top:6px;">Product link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
+                + '<label>Product link (href)</label><input type="text" class="bubble-href-input" placeholder="https://..." value="' + String(bubble.href || '').replace(/"/g, '&quot;') + '">';
               return d;
             })()
           };
           Object.values(sections).forEach(s => wrap.appendChild(s));
-          appendTypingPlaceholderField(wrap);
 
           const applyBubbleVisualType = () => {
             wrap.classList.toggle('photo-bubble', (bubble.msgType || 'text') === 'image');
-            wrap.classList.toggle('cta-bubble', !!bubble.callToAction);
+            wrap.classList.toggle('cta-bubble', (bubble.replyExpected || 'no') !== 'no');
           };
           applyBubbleVisualType();
-
-          ctaCheck.addEventListener('change', (e) => {
-            bubble.callToAction = e.target.checked;
-            applyBubbleVisualType();
-          });
 
           typeRow.querySelectorAll('input[type="radio"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
               bubble.msgType = e.target.value;
-              if (e.target.value === 'pay') {
-                if (!bubble.callToAction) {
-                  bubble.callToAction = true;
-                  ctaCheck.checked = true;
-                }
-              } else if (bubble.callToAction) {
-                bubble.callToAction = false;
-                ctaCheck.checked = false;
-              }
               wrap.querySelectorAll('.msg-type-section').forEach(s => {
                 s.style.display = s.dataset.type === e.target.value ? '' : 'none';
               });
@@ -1746,151 +2349,240 @@ if (!state.stops.length) {
             });
           });
 
-          const htmlInput = wrap.querySelector('.bubble-html-input');
-          if (htmlInput) htmlInput.addEventListener('input', (e) => { bubble.html = e.target.value; });
+          // REPLY EXPECTED section
+          const replyExpected = bubble.replyExpected || 'no';
+          const replySection = document.createElement('div');
+          replySection.className = 'bubble-reply-section';
+          const replyLbl = document.createElement('div');
+          replyLbl.className = 'bubble-details-label bubble-reply-label';
+          replyLbl.textContent = 'REPLY EXPECTED';
+          replySection.appendChild(replyLbl);
 
-          const srcInput = wrap.querySelector('.bubble-src-input');
-          if (srcInput) srcInput.addEventListener('input', (e) => { bubble.src = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          const replyRow = document.createElement('div');
+          replyRow.className = 'bubble-type-row';
+          const rName = 'reply-' + bubbleUid;
+          ['no', 'word', 'any', 'branch'].forEach(val => {
+            const rid = rName + '-' + val;
+            const r = document.createElement('input');
+            r.type = 'radio'; r.name = rName; r.value = val; r.id = rid; r.checked = replyExpected === val;
+            const rl = document.createElement('label');
+            rl.htmlFor = rid; rl.textContent = val.toUpperCase();
+            const p = document.createElement('span');
+            p.className = 'type-pair'; p.appendChild(r); p.appendChild(rl);
+            replyRow.appendChild(p);
+          });
+          replySection.appendChild(replyRow);
 
-          const altInput = wrap.querySelector('.bubble-alt-input');
-          if (altInput) altInput.addEventListener('input', (e) => { bubble.alt = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          // WORD fields
+          const wordFields = document.createElement('div');
+          wordFields.className = 'reply-fields';
+          wordFields.style.display = replyExpected === 'word' ? '' : 'none';
+          const mkLbl = (t) => { const l = document.createElement('label'); l.textContent = t; return l; };
+          const mkTA = (val, onChange) => { const ta = document.createElement('textarea'); ta.value = val; ta.addEventListener('input', e => onChange(e.target.value)); return ta; };
+          const mkInput = (val, ph, onChange) => { const i = document.createElement('input'); i.type = 'text'; i.value = val; i.placeholder = ph; i.addEventListener('input', e => onChange(e.target.value)); return i; };
+          const wPh = mkInput(bubble.placeholder || '', ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...', v => { bubble.placeholder = v; });
+          const wAnswers = mkTA(answersToText(bubble.answers || []), v => { bubble.answers = parseAnswers(v); });
+          wAnswers.className = 'bubble-answer-input';
+          wAnswers.placeholder = 'One per line or use ; separator';
+          const wAnswersShell = document.createElement('div');
+          wAnswersShell.className = 'bubble-answer-shell';
+          wAnswersShell.appendChild(wAnswers);
+          const wAnswersStage = document.createElement('div');
+          wAnswersStage.className = 'bubble-chat-stage';
+          wAnswersStage.appendChild(wAnswersShell);
+          bindAutoSizeTextarea(wAnswers);
+          if (!String(bubble.replyCorrect || '').trim()) {
+            bubble.replyCorrect = pickRandomSuggestion(getCorrectReplySuggestions());
+          }
+          if (!String(bubble.replyIncorrect || '').trim()) {
+            bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
+          }
+          const wCorrect = mkTA(bubble.replyCorrect || '', v => { bubble.replyCorrect = v; });
+          const wIncorrect = mkTA(bubble.replyIncorrect || '', v => { bubble.replyIncorrect = v; });
+          const expectedReplyLbl = mkLbl('EXPECTED REPLY');
+          const expectedReplyHint = document.createElement('p');
+          expectedReplyHint.className = 'field-hint tight';
+          expectedReplyHint.textContent = 'Separate acceptable replies with a semicolon (;) or put each on its own line.';
+          [mkLbl('Typing Placeholder'), wPh, expectedReplyLbl, expectedReplyHint, wAnswersStage, mkLbl('REPLY BACK TO CORRECT'), wCorrect, mkLbl('REPLY BACK TO INCORRECT'), wIncorrect].forEach(el => wordFields.appendChild(el));
+          replySection.appendChild(wordFields);
 
-          const labelInput = wrap.querySelector('.bubble-label-input');
-          if (labelInput) labelInput.addEventListener('input', (e) => { bubble.label = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          // ANY fields
+          const anyFields = document.createElement('div');
+          anyFields.className = 'reply-fields';
+          anyFields.style.display = replyExpected === 'any' ? '' : 'none';
+          const aPh = mkInput(bubble.placeholder || '', ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...', v => { bubble.placeholder = v; });
+          const aStores = mkInput(bubble.storesAs || '', '{variable}', v => { bubble.storesAs = v; updateHtmlVariableHints(); });
+          const aResp = mkTA(bubble.replyResponse || '', v => { bubble.replyResponse = v; });
+          [mkLbl('Typing Placeholder'), aPh, mkLbl('REPLY STORED AS'), aStores, mkLbl('RESPONSE'), aResp].forEach(el => anyFields.appendChild(el));
+          replySection.appendChild(anyFields);
 
-          const hrefInput = wrap.querySelector('.bubble-href-input');
-          if (hrefInput) hrefInput.addEventListener('input', (e) => { bubble.href = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          const branchFields = document.createElement('div');
+          branchFields.className = 'reply-fields';
+          branchFields.style.display = replyExpected === 'branch' ? '' : 'none';
+          const bPh = mkInput(bubble.placeholder || '', ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...', v => { bubble.placeholder = v; });
+          const bStores = mkInput(bubble.storesAs || '', 'variableName', v => { bubble.storesAs = v; updateHtmlVariableHints(); });
+          if (!String(bubble.replyIncorrect || '').trim()) {
+            bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
+          }
+          const bInvalid = mkTA(bubble.replyIncorrect || '', v => { bubble.replyIncorrect = v; });
+          if (!Array.isArray(bubble.branches)) bubble.branches = [];
+          if (!bubble.branches.length) bubble.branches.push(ensureBranchRule(null));
 
-        } else if (isMessages && !isToPlayer) {
-          const stop = getSelectedStop();
-          if (!stop) {
-            const hint = document.createElement('p');
-            hint.className = 'field-hint';
-            hint.style.marginTop = '4px';
-            hint.textContent = 'Select a stop to configure this incoming reply bubble.';
-            wrap.appendChild(hint);
-          } else {
-            if (!stop.playerReply || typeof stop.playerReply !== 'object') {
-              stop.playerReply = ensurePlayerReply(null);
-            }
-            setPlayerReplyType(stop, stop.playerReply.type);
+          const branchRulesLabel = mkLbl('BRANCH PATHS');
+          const branchRulesHint = document.createElement('p');
+          branchRulesHint.className = 'field-hint tight';
+          branchRulesHint.textContent = 'Each path sets accepted replies and the bubble to jump to. First match wins; if none match, invalid reply text is shown.';
 
-            const incomingMode = stop.playerReply.type === 'any' ? 'any' : 'text';
-            const modeRow = document.createElement('div');
-            modeRow.className = 'bubble-type-row';
-            const modeRadioName = 'incoming-mode-' + idx;
-            [
-              { value: 'text', label: 'WORD' },
-              { value: 'any', label: 'ANY' }
-            ].forEach((entry) => {
-              const rid = modeRadioName + '-' + entry.value;
-              const radio = document.createElement('input');
-              radio.type = 'radio';
-              radio.name = modeRadioName;
-              radio.value = entry.value;
-              radio.id = rid;
-              radio.checked = incomingMode === entry.value;
-              const rlabel = document.createElement('label');
-              rlabel.htmlFor = rid;
-              rlabel.textContent = entry.label;
-              const pair = document.createElement('span');
-              pair.className = 'type-pair';
-              pair.appendChild(radio);
-              pair.appendChild(rlabel);
-              modeRow.appendChild(pair);
-            });
-            wrap.appendChild(modeRow);
+          const branchList = document.createElement('div');
+          branchList.className = 'branch-rule-list';
+          const renderBranchRules = () => {
+            bubble.branches = (Array.isArray(bubble.branches) ? bubble.branches : []).map(ensureBranchRule);
+            branchList.innerHTML = '';
+            bubble.branches.forEach((rule, rIdx) => {
+              const card = document.createElement('div');
+              card.className = 'branch-rule-card';
 
-            const wordFields = document.createElement('div');
-            const answersLabel = document.createElement('label');
-            answersLabel.textContent = 'ANSWER(S)';
-            const answersInput = document.createElement('textarea');
-            answersInput.value = answersToText(stop.playerReply.answers || []);
-            const answersHint = document.createElement('p');
-            answersHint.className = 'field-hint tight';
-            answersHint.textContent = 'Comma separated or one answer per line.';
-            wordFields.appendChild(answersLabel);
-            wordFields.appendChild(answersInput);
-            wordFields.appendChild(answersHint);
-            wrap.appendChild(wordFields);
+              const head = document.createElement('div');
+              head.className = 'branch-rule-head';
+              const title = document.createElement('div');
+              title.className = 'branch-rule-title';
+              title.textContent = 'Branch ' + (rIdx + 1);
+              const removeBtn = document.createElement('button');
+              removeBtn.type = 'button';
+              removeBtn.textContent = 'Remove';
+              removeBtn.disabled = bubble.branches.length <= 1;
+              removeBtn.addEventListener('click', () => {
+                if (bubble.branches.length <= 1) return;
+                bubble.branches.splice(rIdx, 1);
+                renderBranchRules();
+              });
+              head.appendChild(title);
+              head.appendChild(removeBtn);
 
-            const anyFields = document.createElement('div');
-            const storesLabel = document.createElement('label');
-            storesLabel.textContent = 'STORE ANSWER AS';
-            const storesInput = document.createElement('input');
-            storesInput.type = 'text';
-            storesInput.placeholder = 'playerAnswer';
-            storesInput.value = stop.playerReply.storesAs || '';
-            const storesHint = document.createElement('p');
-            storesHint.className = 'field-hint tight';
-            anyFields.appendChild(storesLabel);
-            anyFields.appendChild(storesInput);
-            anyFields.appendChild(storesHint);
-            wrap.appendChild(anyFields);
+              const branchAnswers = mkTA(answersToText(rule.answers || []), v => {
+                bubble.branches[rIdx].answers = parseAnswers(v);
+              });
+              branchAnswers.placeholder = 'Example: red; blue';
 
-            const flowHint = document.createElement('p');
-            flowHint.className = 'field-hint';
-            wrap.appendChild(flowHint);
-
-            const applyIncomingModeUi = () => {
-              const isAny = stop.playerReply.type === 'any';
-              wordFields.style.display = isAny ? 'none' : '';
-              anyFields.style.display = isAny ? '' : 'none';
-              if (isAny) {
-                const key = String(stop.playerReply.storesAs || '').trim();
-                storesHint.textContent = 'Any answer is accepted and saved as {{' + (key || 'playerAnswer') + '}}.';
-                flowHint.textContent = 'Any answer triggers CORRECT REPLY. INCORRECT REPLY is hidden in ANY mode.';
-              } else {
-                storesHint.textContent = '';
-                flowHint.textContent = 'A matching answer triggers CORRECT REPLY. Non-matching answers trigger INCORRECT REPLY.';
+              const branchGoTo = document.createElement('select');
+              const targetOptions = getEligibleBranchTargets(bubbleId);
+              const emptyOption = document.createElement('option');
+              emptyOption.value = '';
+              emptyOption.textContent = 'Choose a bubble...';
+              branchGoTo.appendChild(emptyOption);
+              targetOptions.forEach((opt) => {
+                const option = document.createElement('option');
+                option.value = opt.id;
+                option.textContent = opt.label;
+                branchGoTo.appendChild(option);
+              });
+              const currentTarget = String(rule.goToBubbleId || '');
+              if (currentTarget && !targetOptions.some((opt) => opt.id === currentTarget)) {
+                const missing = document.createElement('option');
+                missing.value = currentTarget;
+                missing.textContent = '(Missing bubble) ' + currentTarget;
+                branchGoTo.appendChild(missing);
               }
-            };
-            applyIncomingModeUi();
-
-            modeRow.querySelectorAll('input[type="radio"]').forEach((radio) => {
-              radio.addEventListener('change', (e) => {
-                setPlayerReplyType(stop, e.target.value);
+              branchGoTo.value = currentTarget;
+              branchGoTo.addEventListener('change', (e) => {
+                bubble.branches[rIdx].goToBubbleId = String(e.target.value || '').trim();
+                bubble.branches[rIdx].goToStopId = '';
                 renderAll();
               });
-            });
 
-            answersInput.addEventListener('input', (e) => {
-              if (stop.playerReply.type !== 'text') return;
-              stop.playerReply.answers = parseAnswers(e.target.value);
-            });
+              const branchReply = mkTA(rule.reply || '', v => {
+                bubble.branches[rIdx].reply = v;
+              });
 
-            storesInput.addEventListener('input', (e) => {
-              if (stop.playerReply.type !== 'any') return;
-              stop.playerReply.storesAs = e.target.value;
-              applyIncomingModeUi();
-              updateHtmlVariableHints();
-            });
+              const branchAnswerHint = document.createElement('p');
+              branchAnswerHint.className = 'field-hint tight';
+              branchAnswerHint.textContent = 'Separate accepted replies with ; or put each on its own line.';
+              const branchGoToHint = document.createElement('p');
+              branchGoToHint.className = 'field-hint tight';
+              branchGoToHint.textContent = 'Pick a bubble to jump to when this branch matches.';
 
-            storesInput.addEventListener('blur', () => {
-              if (stop.playerReply.type !== 'any') return;
-              if (!String(stop.playerReply.storesAs || '').trim()) {
-                stop.playerReply.storesAs = toVarKey(stop.id + '_incoming', 'playerAnswer');
-                renderAll();
+              [head, mkLbl('ACCEPTED REPLY(S)'), branchAnswerHint, branchAnswers, mkLbl('JUMP TO BUBBLE'), branchGoToHint, branchGoTo, mkLbl('REPLY BACK FOR THIS BRANCH'), branchReply].forEach((el) => card.appendChild(el));
+              branchList.appendChild(card);
+            });
+          };
+
+          const addBranchRow = document.createElement('div');
+          addBranchRow.className = 'branch-add-row';
+          const addBranchBtn = document.createElement('button');
+          addBranchBtn.type = 'button';
+          addBranchBtn.textContent = 'Add Branch Path';
+          addBranchBtn.addEventListener('click', () => {
+            bubble.branches.push(ensureBranchRule(null));
+            renderBranchRules();
+          });
+          addBranchRow.appendChild(addBranchBtn);
+
+          [mkLbl('Typing Placeholder'), bPh, mkLbl('REPLY STORED AS'), bStores, branchRulesLabel, branchRulesHint, branchList, addBranchRow, mkLbl('REPLY BACK TO INVALID'), bInvalid].forEach(el => branchFields.appendChild(el));
+          renderBranchRules();
+          replySection.appendChild(branchFields);
+
+          replyRow.querySelectorAll('input[type="radio"]').forEach(r => {
+            r.addEventListener('change', e => {
+              bubble.replyExpected = e.target.value;
+              bubble.callToAction = e.target.value !== 'no';
+              if (e.target.value === 'word') {
+                if (!String(bubble.replyCorrect || '').trim()) {
+                  bubble.replyCorrect = pickRandomSuggestion(getCorrectReplySuggestions());
+                  wCorrect.value = bubble.replyCorrect;
+                }
+                if (!String(bubble.replyIncorrect || '').trim()) {
+                  bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
+                  wIncorrect.value = bubble.replyIncorrect;
+                }
               }
+              if (e.target.value === 'branch') {
+                if (!Array.isArray(bubble.branches) || !bubble.branches.length) {
+                  bubble.branches = [ensureBranchRule(null)];
+                }
+                if (!String(bubble.storesAs || '').trim()) {
+                  bubble.storesAs = toVarKey(((stopRef && stopRef.id) || 'branch') + '_reply', 'branchReply');
+                  bStores.value = bubble.storesAs;
+                  updateHtmlVariableHints();
+                }
+                if (!String(bubble.replyIncorrect || '').trim()) {
+                  bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
+                  bInvalid.value = bubble.replyIncorrect;
+                }
+                renderBranchRules();
+              }
+              wordFields.style.display = e.target.value === 'word' ? '' : 'none';
+              anyFields.style.display = e.target.value === 'any' ? '' : 'none';
+              branchFields.style.display = e.target.value === 'branch' ? '' : 'none';
+              applyBubbleVisualType();
             });
-          }
+          });
+          wrap.appendChild(replySection);
 
-        } else {
-          // Correct / incorrect bubbles — plain HTML textarea
-          const lbl = document.createElement('label');
-          lbl.textContent = listKey === 'correct' ? 'Correct Answer Response' : 'Incorrect Answer Response';
-          const ta = document.createElement('textarea');
-          ta.value = String(bubble.html || '');
-          ta.addEventListener('input', (e) => { bubbles[idx].html = e.target.value; });
-          wrap.appendChild(lbl);
-          wrap.appendChild(ta);
-          wrap.appendChild(createHtmlVariableHint());
+
+
+          const htmlInput = sections.text.querySelector('.bubble-html-input');
+          if (htmlInput) htmlInput.addEventListener('input', (e) => { bubble.html = e.target.value; });
+
+          [sections.image, sections.video].forEach(function(s) {
+            const srcInput = s.querySelector('.bubble-src-input');
+            if (srcInput) srcInput.addEventListener('input', (e) => { bubble.src = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          });
+
+          const altInput = sections.image.querySelector('.bubble-alt-input');
+          if (altInput) altInput.addEventListener('input', (e) => { bubble.alt = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+
+          [sections.button, sections.pay].forEach(function(s) {
+            const labelInput = s.querySelector('.bubble-label-input');
+            if (labelInput) labelInput.addEventListener('input', (e) => { bubble.label = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+            const hrefInput = s.querySelector('.bubble-href-input');
+            if (hrefInput) hrefInput.addEventListener('input', (e) => { bubble.href = e.target.value; bubble.html = generateBubbleHtml(bubble); });
+          });
         }
 
 
         // Remove
         removeBtn.addEventListener('click', () => {
-            const stop = getSelectedStop();
+            const stop = stopRef || getSelectedStop();
             if (listKey === 'messages' && stop && Array.isArray(stop.messages)) {
               const sourceIndex = stop.messages.indexOf(bubbles[idx]);
               if (sourceIndex >= 0) stop.messages.splice(sourceIndex, 1);
@@ -1900,82 +2592,146 @@ if (!state.stops.length) {
             renderAll();
         });
 
-        upBtn.addEventListener('click', () => {
-          if (idx === 0) return;
-          if (listKey === 'messages') {
-            const stop = getSelectedStop();
-            if (!stop || !Array.isArray(stop.messages)) return;
-            const a = stop.messages.indexOf(bubbles[idx]);
-            const b = stop.messages.indexOf(bubbles[idx - 1]);
-            if (a >= 0 && b >= 0) [stop.messages[a], stop.messages[b]] = [stop.messages[b], stop.messages[a]];
-          } else {
-            [bubbles[idx], bubbles[idx - 1]] = [bubbles[idx - 1], bubbles[idx]];
-          }
-          renderAll();
-        });
-
-        downBtn.addEventListener('click', () => {
-          if (idx === bubbles.length - 1) return;
-          if (listKey === 'messages') {
-            const stop = getSelectedStop();
-            if (!stop || !Array.isArray(stop.messages)) return;
-            const a = stop.messages.indexOf(bubbles[idx]);
-            const b = stop.messages.indexOf(bubbles[idx + 1]);
-            if (a >= 0 && b >= 0) [stop.messages[a], stop.messages[b]] = [stop.messages[b], stop.messages[a]];
-          } else {
-            [bubbles[idx], bubbles[idx + 1]] = [bubbles[idx + 1], bubbles[idx]];
-          }
-          renderAll();
-        });
-
         container.appendChild(wrap);
       });
     }
 
-    // Switches right-side details panel between stop-level edit modes.
-    function renderStopEditor() {
-      const stop = getSelectedStop();
-      if (selectedStopIndex === -1 || !stop) {
-        els.stopEditor.style.display = 'none';
-        return;
-      }
+    // Simplified editor for anytime stops: just the trigger word(s) + reply bubble.
+    function renderAnytimeEditorInto(body, stop) {
+      const pr = stop.playerReply || (stop.playerReply = ensurePlayerReply(null));
+      pr.anytime = true;
+      body.className = 'anytime-editor';
 
-      els.stopEditor.style.display = 'grid';
-      if (els.gameAssetsHint) els.gameAssetsHint.style.display = 'none';
+      // ── Trigger word(s) — gray bubble on the right ──
+      const triggerRow = document.createElement('div');
+      triggerRow.className = 'anytime-bubble-row';
+      const triggerLbl = document.createElement('div');
+      triggerLbl.className = 'anytime-bubble-lbl';
+      triggerLbl.style.textAlign = 'right';
+      triggerLbl.textContent = 'Player Types';
+      const triggerPreview = document.createElement('div');
+      triggerPreview.className = 'anytime-bubble-preview right';
+      const triggerBubble = document.createElement('div');
+      triggerBubble.className = 'anytime-chat-bubble player';
+      const triggerInput = document.createElement('input');
+      triggerInput.type = 'text';
+      triggerInput.placeholder = 'word1, word2, …';
+      triggerInput.value = (pr.answers || []).join(', ');
+      triggerInput.addEventListener('input', function() {
+        pr.answers = triggerInput.value.split(/[,\n]+/).map((s) => s.trim()).filter(Boolean);
+      });
+      triggerBubble.appendChild(triggerInput);
+      triggerPreview.appendChild(triggerBubble);
+      triggerRow.appendChild(triggerLbl);
+      triggerRow.appendChild(triggerPreview);
+      body.appendChild(triggerRow);
 
-      els.stopId.value = stop.id;
-      els.replyType.value = stop.playerReply.type;
-
-      els.textReplyFields.style.display = stop.playerReply.type === 'text' ? 'block' : 'none';
-      els.anyReplyFields.style.display = stop.playerReply.type === 'any' ? 'block' : 'none';
-
-      els.replyName.value = stop.playerReply.name || '';
-      els.replyPlaceholder.value = stop.playerReply.placeholder || '';
-      els.replyAnswers.value = answersToText(stop.playerReply.answers || []);
-      renderAnswersNormPreview(els.replyAnswers.value);
-      els.replyAnyPlaceholder.value = stop.playerReply.placeholder || '';
-      els.replyStoresAs.value = stop.playerReply.storesAs || '';
-
-      const hasIncomingBubble = hasFromPlayerBubble(stop);
-      const showReplyFlow = hasCallToActionBubble(stop) || hasIncomingBubble;
-      if (showReplyFlow) setPlayerReplyType(stop, stop.playerReply.type);
-      els.playerReplySection.style.display = showReplyFlow && !hasIncomingBubble ? 'block' : 'none';
-
-      els.stopEditor.appendChild(els.msgBubbles);
-      els.stopEditor.appendChild(els.playerReplySection);
-      els.stopEditor.appendChild(els.correctSection);
-      els.stopEditor.appendChild(els.incorrectSection);
-      els.stopEditor.appendChild(els.addBubbleRow);
-
-      const correctBubbles = stop.playerReply.correct || [];
-      const incorrectBubbles = stop.playerReply.incorrect || [];
-      const isAnyReplyMode = stop.playerReply.type === 'any';
-      renderBubbles(els.msgBubbles, stop.messages || [], 'messages');
-      renderBubbles(els.correctBubbles, correctBubbles, 'correct');
-      renderBubbles(els.incorrectBubbles, incorrectBubbles, 'incorrect');
-      els.correctSection.style.display = showReplyFlow && correctBubbles.length ? 'block' : 'none';
-      els.incorrectSection.style.display = showReplyFlow && !isAnyReplyMode && incorrectBubbles.length ? 'block' : 'none';
+      // ── Correct reply — blue bubble on the left ──
+      const replyRow = document.createElement('div');
+      replyRow.className = 'anytime-bubble-row';
+      const replyLbl = document.createElement('div');
+      replyLbl.className = 'anytime-bubble-lbl';
+      replyLbl.textContent = 'Reply shown to player';
+      const replyPreview = document.createElement('div');
+      replyPreview.className = 'anytime-bubble-preview left';
+      const replyBubble = document.createElement('div');
+      replyBubble.className = 'anytime-chat-bubble game';
+      const firstCorrect = (pr.correct && pr.correct[0]) || null;
+      const replyInput = document.createElement('textarea');
+      replyInput.rows = 2;
+      replyInput.placeholder = 'Reply text…';
+      replyInput.value = firstCorrect ? (firstCorrect.html || '').replace(/<br\s*\/?>/gi, '\n') : '';
+      replyInput.addEventListener('input', function() {
+        if (!Array.isArray(pr.correct) || !pr.correct.length) {
+          pr.correct = [{ bubbleId: createBubbleId(), html: '' }];
+        }
+        pr.correct[0].html = replyInput.value.replace(/\n/g, '<br>');
+      });
+      replyBubble.appendChild(replyInput);
+      replyPreview.appendChild(replyBubble);
+      replyRow.appendChild(replyLbl);
+      replyRow.appendChild(replyPreview);
+      body.appendChild(replyRow);
     }
+
+    // Renders the full stop editor form inline into a card body for a given stop object.
+    function renderStopEditorInto(body, stop) {
+      const pr = stop && stop.playerReply ? stop.playerReply : ensurePlayerReply(null);
+      stop.playerReply = pr;
+      const showReplyFlow = hasCallToActionBubble(stop) || hasFromPlayerBubble(stop);
+      if (showReplyFlow) setPlayerReplyType(stop, pr.type);
+
+      // Message Bubbles
+      const msgBubblesDiv = document.createElement('div');
+      renderBubbles(msgBubblesDiv, stop.messages || [], 'messages', stop);
+      body.appendChild(msgBubblesDiv);
+
+      // Add Bubble
+      const addRow = document.createElement('div');
+      addRow.className = 'row';
+      const addInner = document.createElement('div');
+      addInner.style.cssText = 'display:flex;align-items:center;gap:12px;';
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.textContent = 'Add Bubble';
+      const flashSpan = document.createElement('span');
+      flashSpan.className = 'bubble-flash';
+      addBtn.addEventListener('click', () => {
+        stop.messages.push({ bubbleId: createBubbleId(), msgType: 'text', html: '', callToAction: false, bottomAdded: false });
+        renderAll();
+        flashSpan.textContent = 'Bubble Added';
+        flashSpan.classList.add('visible');
+        setTimeout(() => flashSpan.classList.remove('visible'), 1800);
+      });
+      addInner.appendChild(addBtn);
+      addInner.appendChild(flashSpan);
+      addRow.appendChild(addInner);
+      body.appendChild(addRow);
+
+
+
+      // CONTINUE TO STOP dropdown
+      const nextStopRow = document.createElement('div');
+      nextStopRow.className = 'row full';
+      const nextStopSel = document.createElement('select');
+      const nextStopEmpty = document.createElement('option');
+      nextStopEmpty.value = '';
+      nextStopEmpty.textContent = '— continue normally —';
+      nextStopSel.appendChild(nextStopEmpty);
+      const stopIndex = (state.stops || []).indexOf(stop);
+      if (stopIndex > 0) {
+        const prevOpt = document.createElement('option');
+        prevOpt.value = '__prev__';
+        prevOpt.textContent = '← Previous Stop';
+        nextStopSel.appendChild(prevOpt);
+      }
+      (state.stops || []).forEach(function(s) {
+        if (!s || s === stop) return;
+        const sid = String(s.id || '').trim();
+        if (!sid) return;
+        const opt = document.createElement('option');
+        opt.value = sid;
+        opt.textContent = sid.toUpperCase() + ' STOP';
+        nextStopSel.appendChild(opt);
+      });
+      const currentNextStop = String((stop.playerReply && stop.playerReply.nextStopId) || '').trim();
+      nextStopSel.value = currentNextStop;
+      nextStopSel.addEventListener('change', function(e) {
+        if (!stop.playerReply || typeof stop.playerReply !== 'object') stop.playerReply = ensurePlayerReply(null);
+        stop.playerReply.nextStopId = String(e.target.value || '').trim();
+        renderAll();
+      });
+      const nextStopHint = document.createElement('p');
+      nextStopHint.className = 'field-hint tight';
+      nextStopHint.textContent = 'After this stop, jump to a specific stop instead of the next one in order.';
+      const nextStopLbl = document.createElement('label');
+      nextStopLbl.textContent = 'CONTINUE TO STOP';
+      nextStopRow.appendChild(nextStopLbl);
+      nextStopRow.appendChild(nextStopSel);
+      nextStopRow.appendChild(nextStopHint);
+      body.appendChild(nextStopRow);
+    }
+
 
     function renderHeader() {
       const h = state.header || DEFAULT_DOC.header;
@@ -1995,15 +2751,650 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
       if (els.builderIncorrectReplies) els.builderIncorrectReplies.value = answersToText(opts.incorrectReplies || []);
     }
 
+    const SVG_CHEVRON_UP   = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>';
+    const SVG_CHEVRON_DOWN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+    function renderCollapseState() {
+      const headerEditor = document.getElementById('headerEditor');
+      const gdHeader = document.getElementById('gameDetailsHeader');
+      const gdToggle = document.getElementById('gameDetailsToggle');
+      if (headerEditor) headerEditor.style.display = gameDetailsCollapsed ? 'none' : '';
+      if (gdHeader) gdHeader.classList.toggle('expanded', !gameDetailsCollapsed);
+      if (gdToggle) gdToggle.innerHTML = gameDetailsCollapsed ? SVG_CHEVRON_DOWN : SVG_CHEVRON_UP;
+    }
+
+    // ── Group board ────────────────────────────────────────────────────────
+
+    const ROUTE_TEAM_COLORS = {
+      beignet: '#6aaef7', lagniappe: '#f5a623',
+      rougarou: '#e85568', tchoupitoulas: '#4ecf98', tch: '#4ecf98'
+    };
+    function getVariantColor(name) {
+      return ROUTE_TEAM_COLORS[String(name || '').toLowerCase()] || '#94a3b8';
+    }
+
+    function generateBalancedRoutes(stopIds, variantNames) {
+      const n = stopIds.length;
+      const result = {};
+      variantNames.forEach(function(name, vi) {
+        result[name] = stopIds.map(function(_, si) { return stopIds[(si + vi) % n]; });
+      });
+      return result;
+    }
+
+    function getRouteStopIds(route) {
+      const allIds = (state.stops || []).map(function(s) { return s.id; });
+      const inVariants = new Set();
+      if (route && route.variants && typeof route.variants === 'object') {
+        Object.keys(route.variants).forEach(function(k) {
+          const arr = route.variants[k];
+          if (Array.isArray(arr)) arr.forEach(function(id) { inVariants.add(id); });
+        });
+      }
+      return allIds.filter(function(id) { return inVariants.has(id); });
+    }
+
+    function rebuildVariantsWithStops(route, newStopIds) {
+      const existing = route.variants || {};
+      const updated = {};
+      (route.variantNames || []).forEach(function(vn) {
+        const cur = Array.isArray(existing[vn]) ? existing[vn] : [];
+        const kept = cur.filter(function(id) { return newStopIds.indexOf(id) >= 0; });
+        newStopIds.forEach(function(id) { if (kept.indexOf(id) < 0) kept.push(id); });
+        updated[vn] = kept;
+      });
+      route.variants = updated;
+    }
+
+    function buildRouteStopCard(stopId, idx, varName, route) {
+      const card = document.createElement('div');
+      card.className = 'route-stop-card';
+      card.draggable = true;
+
+      const stepNum = document.createElement('span');
+      stepNum.className = 'route-step-num';
+      stepNum.textContent = String(idx + 1) + '.';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'route-stop-name';
+      nameSpan.textContent = stopId;
+
+      const suffix = document.createElement('span');
+      suffix.className = 'route-stop-suffix';
+      suffix.textContent = 'STOP';
+
+      card.appendChild(stepNum);
+      card.appendChild(nameSpan);
+      card.appendChild(suffix);
+
+      const exists = (state.stops || []).some(function(s) { return s.id === stopId; });
+      if (!exists) { card.style.opacity = '0.45'; card.title = 'Stop "' + stopId + '" no longer exists'; }
+
+      card.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/x-rv', varName);
+        e.dataTransfer.setData('text/x-ri', String(idx));
+        e.dataTransfer.effectAllowed = 'move';
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', function() {
+        card.classList.remove('dragging');
+        document.querySelectorAll('.route-stop-card').forEach(function(c) {
+          c.classList.remove('drop-before', 'drop-after');
+        });
+      });
+      return card;
+    }
+
+    function renderGroupBoard() {
+      const board = document.getElementById('group-board');
+      if (!board) return;
+      board.innerHTML = '';
+      const groupHdr = document.createElement('div');
+      groupHdr.className = 'content-section-header';
+      groupHdr.textContent = 'Group';
+      board.appendChild(groupHdr);
+
+      if (!Array.isArray(state.routes)) state.routes = [];
+      if (!state.routes.length) {
+        state.routes.push({ matchVar: 'teamName', variantNames: ['Beignet', 'Lagniappe', 'Rougarou', 'Tchoupitoulas'], variants: {} });
+      }
+      const route = state.routes[0];
+      if (!Array.isArray(route.variantNames) || !route.variantNames.length) {
+        route.variantNames = ['Beignet', 'Lagniappe', 'Rougarou', 'Tchoupitoulas'];
+      }
+      if (!route.variants || typeof route.variants !== 'object') route.variants = {};
+
+      const allStopIds = (state.stops || []).map(function(s) { return s.id; });
+      const routeStopIds = getRouteStopIds(route);
+      const routeStopSet = new Set(routeStopIds);
+
+      // ── Setup card ──
+      const setup = document.createElement('div');
+      setup.className = 'group-setup';
+
+      const setupTitle = document.createElement('p');
+      setupTitle.className = 'section-title';
+      setupTitle.textContent = 'Route Configuration';
+      setup.appendChild(setupTitle);
+
+      // Row 1: matchVar + variantNames
+      const row1 = document.createElement('div');
+      row1.className = 'group-setup-row';
+
+      const matchVarField = document.createElement('div');
+      matchVarField.className = 'group-setup-field';
+      const matchVarLbl = document.createElement('label');
+      matchVarLbl.textContent = 'Match Variable';
+      const matchVarIn = document.createElement('input');
+      matchVarIn.type = 'text';
+      matchVarIn.value = route.matchVar || 'teamName';
+      matchVarIn.placeholder = 'teamName';
+      matchVarIn.style.width = '160px';
+      matchVarIn.addEventListener('input', function(e) { route.matchVar = e.target.value || 'teamName'; });
+      matchVarField.appendChild(matchVarLbl);
+      matchVarField.appendChild(matchVarIn);
+      row1.appendChild(matchVarField);
+
+      const varNamesField = document.createElement('div');
+      varNamesField.className = 'group-setup-field';
+      varNamesField.style.flex = '1';
+      const varNamesLbl = document.createElement('label');
+      varNamesLbl.textContent = 'Variant Names (comma separated)';
+      const varNamesIn = document.createElement('input');
+      varNamesIn.type = 'text';
+      varNamesIn.style.width = '100%';
+      varNamesIn.value = route.variantNames.join(', ');
+      varNamesIn.placeholder = 'Beignet, Lagniappe, Rougarou, Tchoupitoulas';
+      varNamesIn.addEventListener('change', function(e) {
+        const names = e.target.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        if (!names.length) return;
+        route.variantNames = names;
+        rebuildVariantsWithStops(route, routeStopIds);
+        renderGroupBoard();
+      });
+      varNamesField.appendChild(varNamesLbl);
+      varNamesField.appendChild(varNamesIn);
+      row1.appendChild(varNamesField);
+      setup.appendChild(row1);
+
+      // Row 2: stop selector + generate button
+      const row2 = document.createElement('div');
+      row2.className = 'group-setup-row';
+      row2.style.alignItems = 'flex-end';
+
+      const stopsField = document.createElement('div');
+      stopsField.className = 'group-setup-field';
+      stopsField.style.flex = '1';
+      const stopsLbl = document.createElement('label');
+      stopsLbl.textContent = 'Stops In Route';
+      stopsField.appendChild(stopsLbl);
+
+      const checks = document.createElement('div');
+      checks.className = 'route-stop-checks';
+      if (!allStopIds.length) {
+        const none = document.createElement('span');
+        none.style.cssText = 'color:var(--muted);font-size:0.8rem;';
+        none.textContent = 'No stops yet.';
+        checks.appendChild(none);
+      }
+      allStopIds.forEach(function(stopId) {
+        const lbl = document.createElement('label');
+        lbl.className = 'route-stop-check';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = routeStopSet.has(stopId);
+        cb.addEventListener('change', function() {
+          const curIds = getRouteStopIds(route);
+          const set = new Set(curIds);
+          if (cb.checked) set.add(stopId); else set.delete(stopId);
+          const ordered = allStopIds.filter(function(id) { return set.has(id); });
+          rebuildVariantsWithStops(route, ordered);
+          renderGroupBoard();
+        });
+        const nm = document.createElement('span');
+        nm.textContent = stopId + ' STOP';
+        lbl.appendChild(cb);
+        lbl.appendChild(nm);
+        checks.appendChild(lbl);
+      });
+      stopsField.appendChild(checks);
+      row2.appendChild(stopsField);
+
+      const genBtn = document.createElement('button');
+      genBtn.type = 'button';
+      genBtn.className = 'primary';
+      genBtn.style.cssText = 'white-space:nowrap;flex-shrink:0;';
+      genBtn.textContent = '⟳ Generate Balanced';
+      genBtn.addEventListener('click', function() {
+        const ids = getRouteStopIds(route);
+        if (!ids.length) { alert('Check at least one stop to include in the route.'); return; }
+        route.variants = generateBalancedRoutes(ids, route.variantNames);
+        renderGroupBoard();
+      });
+      row2.appendChild(genBtn);
+      setup.appendChild(row2);
+      board.appendChild(setup);
+
+      // ── Swimlane ──
+      if (!routeStopIds.length) {
+        const empty = document.createElement('div');
+        empty.className = 'group-empty';
+        empty.textContent = 'Check stops above and click ⟳ Generate Balanced to build routes.';
+        board.appendChild(empty);
+        return;
+      }
+
+      const hasData = route.variantNames.some(function(vn) {
+        return Array.isArray(route.variants[vn]) && route.variants[vn].length;
+      });
+      if (!hasData) {
+        const empty = document.createElement('div');
+        empty.className = 'group-empty';
+        empty.textContent = 'Click ⟳ Generate Balanced to create routes for each team.';
+        board.appendChild(empty);
+        return;
+      }
+
+      const swimlane = document.createElement('div');
+      swimlane.className = 'group-swimlane';
+
+      route.variantNames.forEach(function(varName) {
+        const col = document.createElement('div');
+        col.className = 'route-column';
+
+        const colHdr = document.createElement('div');
+        colHdr.className = 'route-column-header';
+        const dot = document.createElement('span');
+        dot.className = 'route-team-dot';
+        dot.style.background = getVariantColor(varName);
+        const nameLbl = document.createElement('span');
+        nameLbl.className = 'route-team-name';
+        nameLbl.textContent = varName;
+        colHdr.appendChild(dot);
+        colHdr.appendChild(nameLbl);
+        col.appendChild(colHdr);
+
+        const stopListEl = document.createElement('div');
+        stopListEl.className = 'route-stop-list';
+        stopListEl.dataset.variant = varName;
+
+        const variantStops = Array.isArray(route.variants[varName]) ? route.variants[varName] : routeStopIds.slice();
+        variantStops.forEach(function(stopId, idx) {
+          stopListEl.appendChild(buildRouteStopCard(stopId, idx, varName, route));
+        });
+
+        stopListEl.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          const cards = Array.from(stopListEl.querySelectorAll('.route-stop-card'));
+          cards.forEach(function(c) { c.classList.remove('drop-before', 'drop-after'); });
+          let placed = false;
+          for (var ci = 0; ci < cards.length; ci++) {
+            const r = cards[ci].getBoundingClientRect();
+            if (e.clientY < r.top + r.height / 2) { cards[ci].classList.add('drop-before'); placed = true; break; }
+          }
+          if (!placed && cards.length) cards[cards.length - 1].classList.add('drop-after');
+        });
+        stopListEl.addEventListener('dragleave', function(e) {
+          if (!stopListEl.contains(e.relatedTarget)) {
+            stopListEl.querySelectorAll('.route-stop-card').forEach(function(c) { c.classList.remove('drop-before', 'drop-after'); });
+          }
+        });
+        stopListEl.addEventListener('drop', function(e) {
+          e.preventDefault();
+          const fromVar = e.dataTransfer.getData('text/x-rv');
+          if (fromVar !== varName) return;
+          const fromIdx = parseInt(e.dataTransfer.getData('text/x-ri'), 10);
+          if (isNaN(fromIdx)) return;
+          const arr = route.variants[varName];
+          if (!Array.isArray(arr)) return;
+          const cards = Array.from(stopListEl.querySelectorAll('.route-stop-card'));
+          const insertAt = getInsertionIndexFromY(cards, e.clientY);
+          const [moved] = arr.splice(fromIdx, 1);
+          const to = Math.max(0, Math.min(insertAt > fromIdx ? insertAt - 1 : insertAt, arr.length));
+          arr.splice(to, 0, moved);
+          renderGroupBoard();
+        });
+
+        col.appendChild(stopListEl);
+        swimlane.appendChild(col);
+      });
+
+      board.appendChild(swimlane);
+
+      // Non-route stops note
+      const nonRoute = allStopIds.filter(function(id) { return !routeStopSet.has(id); });
+      if (nonRoute.length) {
+        const note = document.createElement('p');
+        note.className = 'field-hint';
+        note.textContent = 'Not in route (all teams visit in order): ' + nonRoute.join(' → ');
+        board.appendChild(note);
+      }
+    }
+
+
+    // ── Map board ─────────────────────────────────────────────────────────
+
+    let selectedMapStopIndex = -1;
+
+    function getMapConnections(stopIndex) {
+      // Returns all outgoing connections for a stop as an array of
+      // { kind, label, targetId, color } objects.
+      const conns = [];
+      const stop = state.stops[stopIndex];
+      if (!stop) return conns;
+
+      // Default next stop
+      const nextStopId = String((stop.playerReply && stop.playerReply.nextStopId) || '').trim();
+      if (nextStopId) {
+        conns.push({ kind: 'jump', label: 'JUMP TO', targetId: nextStopId, color: null });
+      } else if (stopIndex < state.stops.length - 1) {
+        conns.push({ kind: 'default', label: 'DEFAULT', targetId: state.stops[stopIndex + 1].id, color: null });
+      }
+
+      // Route overrides for this stop
+      if (Array.isArray(state.routes)) {
+        state.routes.forEach(function(route) {
+          if (!route || !route.variants) return;
+          (route.variantNames || Object.keys(route.variants)).forEach(function(varName) {
+            const variant = route.variants[varName];
+            if (!Array.isArray(variant)) return;
+            const pos = variant.indexOf(stop.id);
+            if (pos < 0 || pos >= variant.length - 1) return;
+            conns.push({ kind: 'route', label: varName, targetId: variant[pos + 1], color: getVariantColor(varName) });
+          });
+        });
+      }
+
+      // Branch rules from bubble messages
+      (Array.isArray(stop.messages) ? stop.messages : []).forEach(function(bubble) {
+        if (!bubble || String(bubble.replyExpected || '').toLowerCase() !== 'branch') return;
+        (Array.isArray(bubble.branches) ? bubble.branches : []).forEach(function(rule) {
+          const targetId = String((rule && rule.goToStopId) || '').trim();
+          const answer   = String((rule && rule.answer)   || '').trim();
+          if (targetId) conns.push({ kind: 'branch', label: answer || 'if match', targetId, color: null });
+        });
+      });
+
+      // ANYTIME badge (not a connection, just a flag)
+      if (stop.playerReply && stop.playerReply.anytime && (stop.playerReply.answers || []).length) {
+        conns.push({ kind: 'anytime', label: 'ANYTIME', targetId: null, color: null,
+          answers: stop.playerReply.answers });
+      }
+
+      return conns;
+    }
+
+    function renderMapBoard() {
+      const board = document.getElementById('map-board');
+      if (!board) return;
+      board.innerHTML = '';
+      const mapHdr = document.createElement('div');
+      mapHdr.className = 'content-section-header';
+      mapHdr.style.width = '100%';
+      mapHdr.textContent = 'Map';
+      board.appendChild(mapHdr);
+
+      // Left: stop node list
+      const nodeList = document.createElement('div');
+      nodeList.className = 'map-stop-list';
+
+      state.stops.forEach(function(stop, i) {
+        const node = document.createElement('div');
+        node.className = 'map-stop-node' + (selectedMapStopIndex === i ? ' selected' : '');
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'map-stop-node-name';
+        nameEl.textContent = stop.id;
+
+        const suffixEl = document.createElement('span');
+        suffixEl.className = 'map-stop-node-suffix';
+        suffixEl.textContent = 'STOP';
+
+        // Colored dots for route overrides on this stop
+        const conns = getMapConnections(i);
+        const routeConns = conns.filter(function(c) { return c.kind === 'route'; });
+        const dotsEl = document.createElement('span');
+        dotsEl.className = 'map-conn-dots';
+        routeConns.forEach(function(c) {
+          const dot = document.createElement('span');
+          dot.className = 'map-conn-dot';
+          dot.style.background = c.color;
+          dot.title = c.label;
+          dotsEl.appendChild(dot);
+        });
+        if (stop.playerReply && stop.playerReply.anytime) {
+          const dot = document.createElement('span');
+          dot.className = 'map-conn-dot';
+          dot.style.background = '#111';
+          dot.title = 'ANYTIME';
+          dotsEl.appendChild(dot);
+        }
+        if (conns.some(function(c) { return c.kind === 'branch'; })) {
+          const dot = document.createElement('span');
+          dot.className = 'map-conn-dot';
+          dot.style.background = '#8b5cf6';
+          dot.title = 'BRANCH';
+          dotsEl.appendChild(dot);
+        }
+
+        node.appendChild(nameEl);
+        node.appendChild(suffixEl);
+        if (dotsEl.children.length) node.appendChild(dotsEl);
+
+        node.addEventListener('click', function() {
+          selectedMapStopIndex = i;
+          renderMapBoard();
+        });
+
+        nodeList.appendChild(node);
+      });
+
+      board.appendChild(nodeList);
+
+      // Right: connections panel
+      const panel = document.createElement('div');
+      panel.className = 'map-panel';
+
+      if (selectedMapStopIndex < 0 || selectedMapStopIndex >= state.stops.length) {
+        const empty = document.createElement('div');
+        empty.className = 'map-panel-empty';
+        empty.textContent = 'Select a stop to see its connections.';
+        panel.appendChild(empty);
+      } else {
+        const stop = state.stops[selectedMapStopIndex];
+        const hdr = document.createElement('div');
+        hdr.className = 'map-panel-header';
+        hdr.textContent = stop.id + ' STOP — outgoing connections';
+        panel.appendChild(hdr);
+
+        const conns = getMapConnections(selectedMapStopIndex);
+        if (!conns.length) {
+          const empty = document.createElement('div');
+          empty.className = 'map-panel-empty';
+          empty.textContent = 'No connections. This is the last stop or has no routing set.';
+          panel.appendChild(empty);
+        } else {
+          const list = document.createElement('div');
+          list.className = 'map-conn-list';
+
+          conns.forEach(function(conn) {
+            const row = document.createElement('div');
+            row.className = 'map-conn-row';
+
+            if (conn.kind === 'anytime') {
+              const badge = document.createElement('span');
+              badge.className = 'map-anytime-badge';
+              badge.textContent = 'ANYTIME';
+              const lbl = document.createElement('span');
+              lbl.className = 'map-conn-label';
+              lbl.textContent = (conn.answers || []).join(', ');
+              row.appendChild(badge);
+              row.appendChild(lbl);
+              list.appendChild(row);
+              return;
+            }
+
+            const typeEl = document.createElement('span');
+            typeEl.className = 'map-conn-type';
+
+            if (conn.kind === 'route') {
+              const dot = document.createElement('span');
+              dot.className = 'map-conn-team-dot';
+              dot.style.background = conn.color;
+              typeEl.appendChild(dot);
+              typeEl.appendChild(document.createTextNode(' ' + conn.label));
+            } else if (conn.kind === 'branch') {
+              typeEl.style.color = '#8b5cf6';
+              typeEl.textContent = 'BRANCH';
+            } else if (conn.kind === 'jump') {
+              typeEl.textContent = 'JUMP TO';
+            } else {
+              typeEl.textContent = conn.label;
+            }
+
+            const arrow = document.createElement('span');
+            arrow.className = 'map-conn-arrow';
+            arrow.textContent = '→';
+
+            const targetExists = state.stops.some(function(s) { return s.id === conn.targetId; });
+            const targetEl = document.createElement('span');
+            targetEl.className = 'map-conn-target' + (targetExists ? '' : ' missing');
+            targetEl.textContent = conn.targetId + ' STOP' + (targetExists ? '' : ' ✕');
+            if (targetExists) {
+              targetEl.addEventListener('click', function() {
+                const idx = state.stops.findIndex(function(s) { return s.id === conn.targetId; });
+                if (idx >= 0) { selectedMapStopIndex = idx; renderMapBoard(); }
+              });
+            }
+
+            row.appendChild(typeEl);
+            row.appendChild(arrow);
+            row.appendChild(targetEl);
+
+            if (conn.kind === 'branch' && conn.label) {
+              const lbl = document.createElement('span');
+              lbl.className = 'map-conn-label';
+              lbl.textContent = '"' + conn.label + '"';
+              row.appendChild(lbl);
+            }
+
+            list.appendChild(row);
+          });
+
+          panel.appendChild(list);
+        }
+      }
+
+      board.appendChild(panel);
+    }
+
+    function renderAnytimeSection() {
+      const list = document.getElementById('anytimeList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      state.stops.forEach((stop, i) => {
+        if (!stop || !stop.playerReply || !stop.playerReply.anytime) return;
+        const isExpanded = expandedAnytime.has(i);
+        const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
+          + (Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
+          + (Array.isArray(stop.playerReply.incorrect) ? stop.playerReply.incorrect.length : 0);
+
+        const card = document.createElement('div');
+        card.className = 'stop-card' + (isExpanded ? ' expanded' : '');
+        card.dataset.stopIndex = String(i);
+
+        const hdr = document.createElement('div');
+        hdr.className = 'section-header stop-header' + (isExpanded ? ' expanded' : '');
+
+        const badge = document.createElement('span');
+        badge.className = 'anytime-badge';
+        badge.textContent = 'ANYTIME';
+        badge.style.marginRight = '6px';
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'section-title-text stop-title-edit';
+        nameEl.contentEditable = 'true';
+        nameEl.spellcheck = false;
+        nameEl.setAttribute('role', 'textbox');
+        nameEl.setAttribute('aria-label', 'Stop name');
+        nameEl.textContent = stop.id;
+
+        const nameGroup = document.createElement('span');
+        nameGroup.className = 'stop-name-group';
+        nameGroup.appendChild(nameEl);
+
+        const metaEl = document.createElement('span');
+        metaEl.className = 'section-meta';
+        metaEl.textContent = totalBubbles + (totalBubbles === 1 ? ' bubble' : ' bubbles');
+
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'stop-action stop-delete';
+        deleteBtn.title = 'REMOVE';
+        deleteBtn.setAttribute('aria-label', 'REMOVE');
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
+        const actions = document.createElement('span');
+        actions.className = 'stop-card-actions';
+        actions.appendChild(deleteBtn);
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'section-toggle';
+        toggleBtn.innerHTML = isExpanded ? SVG_CHEVRON_UP : SVG_CHEVRON_DOWN;
+
+        hdr.appendChild(badge);
+        hdr.appendChild(nameGroup);
+        hdr.appendChild(metaEl);
+        hdr.appendChild(actions);
+        hdr.appendChild(toggleBtn);
+        card.appendChild(hdr);
+
+        if (isExpanded) {
+          const body = document.createElement('div');
+          renderAnytimeEditorInto(body, stop);
+          card.appendChild(body);
+        }
+
+        toggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isExpanded) expandedAnytime.delete(i);
+          else expandedAnytime.add(i);
+          renderAll();
+        });
+
+        nameEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); nameEl.blur(); } });
+        nameEl.addEventListener('input', () => { stop.id = String(nameEl.textContent || ''); });
+        nameEl.addEventListener('blur', () => {
+          const next = String(nameEl.textContent || '').replace(/\s+/g, ' ').trim();
+          stop.id = next || stop.id || ('ANYTIME-' + (i + 1));
+          nameEl.textContent = stop.id;
+          renderWarnings();
+        });
+
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const removed = state.stops.splice(i, 1)[0];
+          expandedAnytime.delete(i);
+          showUndoToast(removed, i);
+          renderAll();
+        });
+
+        list.appendChild(card);
+      });
+    }
+
     function renderAll() {
       renderHeader();
       renderBuilderOptions();
       renderStopList();
-      renderStopEditor();
+      renderAnytimeSection();
+      renderGroupBoard();
+      renderMapBoard();
       renderWarnings();
-      renderInlineStopNameWarning();
       renderDirtyBadge();
+      renderCollapseState();
     }
+
 
     function attachHeaderEvents() {
       els.headerTitle.addEventListener('input', (e) => {
@@ -2045,83 +3436,24 @@ if (els.builderCorrectReplies) {
           opts.incorrectReplies = parseAnswers(e.target.value);
         });
       }
-    }
 
-    // One-time event bindings for stop + reply inputs.
-    function attachStopEvents() {
-      els.stopId.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        stop.id = e.target.value;
-        stopNameBlurValidated = false;
-        renderStopList();
-        renderInlineStopNameWarning();
-      });
-
-      els.stopId.addEventListener('blur', () => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        stopNameBlurValidated = true;
-        renderInlineStopNameWarning();
-      });
-
-      els.replyName.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        stop.playerReply.name = e.target.value;
-      });
-
-      els.replyType.addEventListener('change', (e) => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        setPlayerReplyType(stop, e.target.value);
+      // Game details collapse toggle — header click or button
+      const doToggleGameDetails = () => {
+        if (!gameDetailsCollapsed) {
+          expandedStops.clear();
+          selectedStopIndex = -1;
+        } else {
+          state.stops.forEach((_, idx) => expandedStops.add(idx));
+          if (selectedStopIndex < 0 && state.stops.length) selectedStopIndex = 0;
+        }
+        gameDetailsCollapsed = !gameDetailsCollapsed;
         renderAll();
-      });
+      };
+      const gdHeader = document.getElementById('gameDetailsHeader');
+      if (gdHeader) gdHeader.addEventListener('click', doToggleGameDetails);
+      const gdToggle = document.getElementById('gameDetailsToggle');
+      if (gdToggle) gdToggle.addEventListener('click', (e) => { e.stopPropagation(); doToggleGameDetails(); });
 
-      els.replyPlaceholder.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'text') return;
-        stop.playerReply.placeholder = e.target.value;
-      });
-
-      els.replyAnswers.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'text') return;
-        stop.playerReply.answers = parseAnswers(e.target.value);
-        renderAnswersNormPreview(e.target.value);
-      });
-
-      els.replyAnyPlaceholder.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'any') return;
-        stop.playerReply.placeholder = e.target.value;
-      });
-
-      els.replyStoresAs.addEventListener('input', (e) => {
-        const stop = getSelectedStop();
-        if (!stop || stop.playerReply.type !== 'any') return;
-        stop.playerReply.storesAs = e.target.value;
-        updateHtmlVariableHints();
-      });
-
-      els.removeReplyBtn.addEventListener('click', () => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        removePlayerReplyFlow(stop);
-        renderAll();
-      });
-
-
-      els.addBubbleBtn.addEventListener('click', () => {
-        const stop = getSelectedStop();
-        if (!stop) return;
-        stop.messages.push({ msgType: 'text', html: '', callToAction: false, direction: 'toPlayer', bottomAdded: false });
-        renderAll();
-        const flash = document.getElementById('addBubbleFlash');
-        flash.textContent = 'Bubble Added';
-        flash.classList.add('visible');
-        setTimeout(() => flash.classList.remove('visible'), 1800);
-      });
     }
 
     function toDoc() {
@@ -2137,6 +3469,9 @@ if (els.builderCorrectReplies) {
           };
         })
       };
+      if (Array.isArray(state.routes) && state.routes.length) {
+        doc.routes = deepClone(state.routes);
+      }
       doc.header.pageTitle = doc.header.title || '';
       return doc;
     }
@@ -2188,8 +3523,9 @@ if (els.builderCorrectReplies) {
         }
         state = doc;
         loadedStopsSnapshot = deepClone(doc);
+        expandedStops = new Set();
         selectedStopIndex = state.stops.length ? 0 : -1;
-        stopNameBlurValidated = false;
+        if (selectedStopIndex === 0) expandedStops.add(0);
         renderAll();
         setStatus('Loaded ./stops.json from this folder.', 'ok');
       } catch (err) {
@@ -2258,17 +3594,31 @@ if (els.builderCorrectReplies) {
       const stop = createEmptyStop();
       const insertAt = state.stops.length;
       state.stops.splice(insertAt, 0, stop);
+      expandedStops.add(insertAt);
       selectedStopIndex = insertAt;
-      stopNameBlurValidated = false;
       renderAll();
     });
 
     let copiedStop = null;
 
+    document.getElementById('addAnytimeBtn').addEventListener('click', () => {
+      const stop = createEmptyStop();
+      stop.id = 'ANYTIME-' + nextStopNumber();
+      stop.playerReply = { type: 'text', answers: [], correct: [{ bubbleId: createBubbleId(), html: '' }], incorrect: [], anytime: true };
+      const insertAt = state.stops.length;
+      state.stops.push(stop);
+      expandedAnytime.add(insertAt);
+      renderAll();
+    });
+
     document.getElementById('undoDeleteBtn').addEventListener('click', () => {
       if (!deletedStopUndo) return;
       const { stop, index } = deletedStopUndo;
       state.stops.splice(index, 0, stop);
+      const shifted = new Set();
+      expandedStops.forEach(idx => shifted.add(idx >= index ? idx + 1 : idx));
+      shifted.add(index);
+      expandedStops = shifted;
       selectedStopIndex = index;
       dismissUndoToast();
       renderAll();
@@ -2282,9 +3632,9 @@ if (els.builderCorrectReplies) {
     });
 
 
+
     renderFolderNote();
     attachHeaderEvents();
-    attachStopEvents();
     renderAll();
     loadedStopsSnapshot = deepClone(toDoc());
     loadStopsFile({ skipConfirm: true });
