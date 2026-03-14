@@ -41,6 +41,15 @@ try {
   if (savedVars) state.vars = JSON.parse(savedVars);
 } catch (e) {}
 
+// Seed vars from URL params — URL values override saved state.
+// System params (reset, reveal, start, preview) are ignored.
+(function() {
+  const SYSTEM_PARAMS = new Set(['reset', 'reveal', 'start', 'preview']);
+  new URLSearchParams(location.search).forEach(function(value, key) {
+    if (!SYSTEM_PARAMS.has(key)) state.vars[key] = value;
+  });
+})();
+
 function saveState() {
   try {
     localStorage.setItem('nola360_step', String(state.step));
@@ -719,6 +728,19 @@ function doAdvance(matchedAnswer, options) {
   } else if (nextEntry === null && goToStopId) {
     const resolved = resolveStopIndexById(goToStopId);
     if (resolved >= 0) nextIndex = resolved;
+  }
+
+  // Per-stop variable routing: playerReply.varRoutes = { varName, map: { value: stopId } }
+  if (nextEntry === null && !goToStopId && currentReply && currentReply.varRoutes && currentReply.varRoutes.varName) {
+    var vrVal = (state.vars && state.vars[currentReply.varRoutes.varName]) || '';
+    if (vrVal && currentReply.varRoutes.map) {
+      Object.keys(currentReply.varRoutes.map).forEach(function(k) {
+        if (k.toLowerCase() === vrVal.toLowerCase()) {
+          var vrIdx = resolveStopIndexById(currentReply.varRoutes.map[k]);
+          if (vrIdx >= 0) nextIndex = vrIdx;
+        }
+      });
+    }
   }
 
   // Route-based next stop: if the current stop is in a route, jump to the

@@ -61,15 +61,7 @@
           "replyCorrect": "Yes!",
           "replyIncorrect": "Incorrect. One more try.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         },
         {
           "bubbleId": "bubble_mmnxqpl1_2",
@@ -88,15 +80,7 @@
           "replyCorrect": "That is correct.",
           "replyIncorrect": "Not quite. Try again.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -107,8 +91,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -126,30 +109,12 @@
           "alt": "",
           "label": "",
           "href": "",
-          "replyExpected": "branch",
+          "replyExpected": "no",
           "answers": [],
           "replyCorrect": "Right on target.",
           "replyIncorrect": "Almost. Re-read the clue.",
           "storesAs": "which_way_reply",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [
-                "red"
-              ],
-              "goToBubbleId": "bubble_mmnvercx_9",
-              "goToStopId": "",
-              "reply": ""
-            },
-            {
-              "answers": [
-                "BLUE"
-              ],
-              "goToBubbleId": "bubble_mmnvercx_10",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -172,8 +137,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -194,16 +158,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -226,15 +188,7 @@
           "replyCorrect": "Right on target.",
           "replyIncorrect": "Not yet. Check your spelling.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -245,8 +199,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": "looking for the correct answer bubble example"
+        "goTo": ""
       }
     },
     {
@@ -269,15 +222,7 @@
           "replyCorrect": "Correct. Nice work.",
           "replyIncorrect": "Almost. Re-read the clue.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -288,8 +233,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": "looking for the correct answer bubble example"
+        "goTo": ""
       }
     },
     {
@@ -315,15 +259,7 @@
           "replyCorrect": "Yes! God bless America",
           "replyIncorrect": "Seriously?",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -346,8 +282,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -368,16 +303,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -400,15 +333,7 @@
           "replyCorrect": "Excellent. Proceed.",
           "replyIncorrect": "Close",
           "storesAs": "{namen}",
-          "replyResponse": "Hello {namen}!",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": "Hello {namen}!"
         }
       ],
       "playerReply": {
@@ -431,8 +356,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -453,16 +377,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -485,15 +407,7 @@
           "replyCorrect": "That is correct.",
           "replyIncorrect": "That is not the one.",
           "storesAs": "namen",
-          "replyResponse": "Hello {namen}!",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": "Hello {namen}!"
         }
       ],
       "playerReply": {
@@ -516,8 +430,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -538,16 +451,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -572,15 +483,7 @@
           "replyCorrect": "Let's Continue!",
           "replyIncorrect": "No. Try again.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         },
         {
           "bubbleId": "bubble_mmnvercx_21",
@@ -599,15 +502,7 @@
           "replyCorrect": "Correct. Nice work.",
           "replyIncorrect": "Close",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -630,8 +525,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -652,16 +546,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -684,15 +576,7 @@
           "replyCorrect": "Perfect. Next clue unlocked.",
           "replyIncorrect": "Try again before moving on.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         },
         {
           "bubbleId": "bubble_mmnvercx_28",
@@ -711,15 +595,7 @@
           "replyCorrect": "Correct. Nice work.",
           "replyIncorrect": "Try again before moving on.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -742,8 +618,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -764,13 +639,11 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
-        "storesAs": "name",
-        "nextStopId": ""
+        "storesAs": "name"
       }
     },
     {
@@ -795,15 +668,7 @@
           "replyCorrect": "Correct!",
           "replyIncorrect": "Not quite. Try again.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -826,8 +691,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [
@@ -848,16 +712,14 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "placeholder": "",
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -880,15 +742,7 @@
           "replyCorrect": "Excellent. Proceed.",
           "replyIncorrect": "Not yet. Check your spelling.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -899,8 +753,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -923,15 +776,7 @@
           "replyCorrect": "Great answer. Moving on.",
           "replyIncorrect": "No. Try again.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -942,8 +787,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -966,15 +810,7 @@
           "replyCorrect": "Yes. Keep going.",
           "replyIncorrect": "Nope. Try a different answer.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -985,8 +821,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -1009,15 +844,7 @@
           "replyCorrect": "Right on target.",
           "replyIncorrect": "No. Try again.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -1028,8 +855,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -1052,15 +878,7 @@
           "replyCorrect": "Perfect. Next clue unlocked.",
           "replyIncorrect": "Nope. Try a different answer.",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": [
-            {
-              "answers": [],
-              "goToBubbleId": "",
-              "goToStopId": "",
-              "reply": ""
-            }
-          ]
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -1071,8 +889,7 @@
         "answers": [],
         "setsTeam": false,
         "anytime": false,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -1095,8 +912,7 @@
           "replyCorrect": "",
           "replyIncorrect": "",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": []
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -1119,8 +935,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [],
@@ -1130,8 +945,7 @@
         ],
         "setsTeam": false,
         "anytime": true,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -1154,8 +968,7 @@
           "replyCorrect": "",
           "replyIncorrect": "",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": []
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -1163,7 +976,7 @@
         "correct": [
           {
             "bubbleId": "bubble_mmogv7td_3",
-            "html": "Ok, dude",
+            "html": "Ok, quitter",
             "callToAction": false,
             "forAnswer": "",
             "placeholder": "",
@@ -1178,8 +991,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [],
@@ -1189,8 +1001,7 @@
         ],
         "setsTeam": false,
         "anytime": true,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
     },
     {
@@ -1213,8 +1024,7 @@
           "replyCorrect": "",
           "replyIncorrect": "",
           "storesAs": "",
-          "replyResponse": "",
-          "branches": []
+          "replyResponse": ""
         }
       ],
       "playerReply": {
@@ -1237,8 +1047,7 @@
             "replyCorrect": "",
             "replyIncorrect": "",
             "storesAs": "",
-            "replyResponse": "",
-            "branches": []
+            "replyResponse": ""
           }
         ],
         "incorrect": [],
@@ -1248,9 +1057,65 @@
         ],
         "setsTeam": false,
         "anytime": true,
-        "goTo": "",
-        "nextStopId": ""
+        "goTo": ""
       }
+    }
+  ],
+  "variables": [
+    {
+      "key": "playerName",
+      "values": [
+        "Kevin",
+        "Kelley",
+        "Karl",
+        "Keith"
+      ]
+    },
+    {
+      "key": "fanOf",
+      "values": [
+        "Arizona",
+        "Atlanta",
+        "Baltimore",
+        "Buffalo",
+        "Charlotte",
+        "Chicago",
+        "Cincinnati",
+        "Cleveland",
+        "Dallas",
+        "Denver",
+        "Detroit",
+        "Green Bay",
+        "Houston",
+        "Indianapolis",
+        "Jacksonville",
+        "Kansas City",
+        "Las Vegas",
+        "Los Angeles C",
+        "Los Angeles R",
+        "Miami",
+        "Minneapolis",
+        "Nashville",
+        "New Orleans",
+        "New England",
+        "New York G",
+        "New York J",
+        "Philadelphia",
+        "Pittsburgh",
+        "San Francisco",
+        "Seattle",
+        "Tampa",
+        "Washington"
+      ]
+    },
+    {
+      "key": "teamName",
+      "values": [
+        "Tchoupitoulas",
+        "Lagniappe",
+        "Beignet",
+        "Muffuletta"
+      ]
     }
   ],
   "routes": [
@@ -1287,7 +1152,8 @@
           "TWO",
           "THREE"
         ]
-      }
+      },
+      "uid": "route-1773465649857-0"
     }
   ]
 }

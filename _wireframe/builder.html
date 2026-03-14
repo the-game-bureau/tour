@@ -326,34 +326,6 @@
     .reply-fields .field-hint {
       margin-top: 0;
     }
-    .branch-rule-list {
-      display: grid;
-      gap: var(--space-3);
-    }
-    .branch-rule-card {
-      border: 1px solid var(--line);
-      background: #f8fafc;
-      padding: var(--space-3);
-      display: grid;
-      gap: var(--space-2);
-    }
-    .branch-rule-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-2);
-    }
-    .branch-rule-title {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .branch-add-row {
-      display: flex;
-      justify-content: flex-start;
-    }
 
     .bubble-chat-stage {
       border: 1px solid #d7dde6;
@@ -637,8 +609,6 @@
       font-size: 0.88rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      flex: 1;
-      min-width: 0;
     }
     .stop-title-edit[contenteditable="true"] {
       user-select: text;
@@ -679,7 +649,7 @@
       flex-shrink: 0;
       user-select: none;
     }
-    .stop-card .section-meta { margin-right: auto; }
+    .stop-card-actions + .section-toggle { margin-left: var(--space-2); }
     .stop-group-dots {
       display: inline-flex;
       gap: 3px;
@@ -692,35 +662,113 @@
       border-radius: 50%;
       flex-shrink: 0;
     }
-    /* ── Anytime section ──────────────────────────────────────────────── */
-    #anytime-section {
+    /* ── Variables section ────────────────────────────────────────────── */
+    .var-launch {
+      display: grid;
+      gap: var(--space-3);
+      border-top: 2px solid var(--line);
+      padding-top: var(--space-4);
+    }
+    .var-launch-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .var-launch-params {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3) var(--space-4);
+      align-items: flex-end;
+    }
+    .var-launch-param {
       display: flex;
       flex-direction: column;
-      gap: var(--space-3);
+      gap: var(--space-1);
     }
-    #anytimeList {
+    .var-launch-param label { margin: 0; }
+    .var-launch-url {
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      word-break: break-all;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: var(--space-2) var(--space-3);
+      color: var(--ink);
+      line-height: 1.5;
+      cursor: text;
+      user-select: all;
+    }
+    .var-launch-btns {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .var-launch-body {
+      display: flex;
+      gap: var(--space-6);
+      align-items: flex-start;
+    }
+    .var-launch-left {
+      display: grid;
+      gap: var(--space-3);
+      flex: 1;
+      min-width: 0;
+    }
+    .var-qr-wrap {
+      flex-shrink: 0;
+      border: 2px solid var(--line);
+      padding: var(--space-3);
+      background: #fff;
+      line-height: 0;
+    }
+    .var-qr-wrap img {
+      display: block;
+      width: 140px;
+      height: 140px;
+      image-rendering: pixelated;
+    }
+    #variableList {
+      display: grid;
+      gap: var(--space-4);
+    }
+    .var-row {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .var-field {
       display: flex;
       flex-direction: column;
-      gap: var(--space-3);
+      gap: var(--space-2);
+      flex: 1;
+      min-width: 120px;
     }
-    .anytime-badge {
+    .var-field label { margin: 0; }
+    .var-field-name { flex: 0 0 160px; min-width: 120px; }
+    .var-delete-wrap {
+      flex-shrink: 0;
+      padding-bottom: 2px;
+    }
+
+    /* ── Stop / Anytime reply-type badges ─────────────────────────────── */
+    .reply-tag, .anytime-badge {
       font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.1em;
-      background: #4ecf98;
       color: #fff;
       padding: 2px 5px;
       border-radius: 3px;
       flex-shrink: 0;
     }
-    /* ── Anytime bubble preview editor ───────────────────────────────── */
-    .anytime-editor {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding: var(--space-4);
-      background: #fff;
-    }
+    .anytime-badge           { background: #4ecf98; }
+    .reply-tag-noreply       { background: #9ca3af; }
+    .reply-tag-wordreply     { background: #1a73e8; }
+    .reply-tag-anyreply      { background: #f5a623; }
+    .reply-tag-choicereply   { background: #9333ea; }
     .anytime-bubble-row {
       display: flex;
       flex-direction: column;
@@ -791,6 +839,7 @@
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
+      margin-left: auto;
       padding: 0;
       font-family: var(--sans);
       color: var(--ink);
@@ -808,7 +857,7 @@
       flex-direction: column;
       gap: var(--space-3);
     }
-    #stopList {
+    #anytime-section, #stopList {
       display: flex;
       flex-direction: column;
       gap: var(--space-3);
@@ -846,6 +895,7 @@
       display: flex;
       gap: var(--space-2);
       flex-shrink: 0;
+      margin-left: auto;
     }
 
     .stop-card-body {
@@ -856,10 +906,15 @@
     }
 
     .stops-add-row {
-      margin-top: var(--space-2);
+      margin-top: var(--space-3);
     }
 
-    /* ── Content section headers ──────────────────────────────────────── */
+    /* ── Content area + section headers ──────────────────────────────── */
+    #content-area {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
     .content-section { display: flex; flex-direction: column; gap: var(--space-3); }
     .content-section-header {
       font-size: 0.68rem;
@@ -871,276 +926,7 @@
       border-bottom: 2px solid var(--line);
     }
 
-    /* ── Group board ──────────────────────────────────────────────────── */
-    #group-board { display: flex; flex-direction: column; gap: var(--space-4); }
 
-    .group-setup {
-      padding: var(--space-4);
-      background: var(--panel);
-      border: 2px solid var(--line);
-      display: grid;
-      gap: var(--space-4);
-    }
-    .group-setup-row {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-4);
-      flex-wrap: wrap;
-    }
-    .group-setup-field {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-    .group-setup-field label { margin: 0; }
-    .route-stop-checks {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2) var(--space-4);
-    }
-    .route-stop-check {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-weight: 700;
-    }
-    .route-stop-check input { width: auto; accent-color: var(--accent); cursor: pointer; }
-
-    .group-swimlane {
-      display: flex;
-      gap: var(--space-3);
-      overflow-x: auto;
-      padding-bottom: var(--space-2);
-      align-items: flex-start;
-    }
-    .route-column {
-      flex: 1;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-    }
-    .route-column-header {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-      background: var(--panel);
-      border: 2px solid var(--line);
-      border-bottom: none;
-    }
-    .route-team-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .route-team-name {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--ink);
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .route-stop-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      min-height: 48px;
-      border: 2px solid var(--line);
-      padding: var(--space-1);
-      background: #fff;
-    }
-    .route-stop-card {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-      background: var(--panel);
-      border: 1px solid var(--line);
-      cursor: grab;
-      user-select: none;
-    }
-    .route-stop-card:active { cursor: grabbing; }
-    .route-stop-card.dragging { opacity: 0.35; }
-    .route-stop-card.drop-before { box-shadow: 0 -3px 0 var(--accent); }
-    .route-stop-card.drop-after  { box-shadow: 0  3px 0 var(--accent); }
-    .route-step-num {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--muted);
-      font-family: var(--mono);
-      flex-shrink: 0;
-      min-width: 1.4em;
-    }
-    .route-stop-name {
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .route-stop-suffix {
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 400;
-      flex-shrink: 0;
-    }
-    .group-empty {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.82rem;
-      padding: var(--space-7);
-      letter-spacing: 0.04em;
-      background: var(--panel);
-      border: 2px solid var(--line);
-    }
-
-    /* ── Map board ────────────────────────────────────────────────────── */
-    #map-board { display: flex; gap: var(--space-4); align-items: flex-start; }
-
-    .map-stop-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-      flex: 0 0 240px;
-      min-width: 0;
-    }
-    .map-stop-node {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-2) var(--space-3);
-      border: 2px solid var(--line);
-      background: var(--panel);
-      cursor: pointer;
-      user-select: none;
-      position: relative;
-    }
-    .map-stop-node:hover { background: #e8edf2; }
-    .map-stop-node.selected { background: #fff; border-color: var(--accent); }
-    .map-stop-node-name {
-      flex: 1;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .map-stop-node-suffix {
-      font-size: 0.68rem;
-      font-weight: 400;
-      color: var(--muted);
-      flex-shrink: 0;
-    }
-    .map-conn-dots {
-      display: flex;
-      gap: 3px;
-      flex-shrink: 0;
-    }
-    .map-conn-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-    }
-
-    .map-panel {
-      flex: 1;
-      min-width: 0;
-      border: 2px solid var(--line);
-      background: var(--panel);
-    }
-    .map-panel-empty {
-      padding: var(--space-7);
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-    }
-    .map-panel-header {
-      padding: var(--space-3) var(--space-4);
-      border-bottom: 2px solid var(--line);
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      background: var(--panel);
-    }
-    .map-conn-list {
-      display: flex;
-      flex-direction: column;
-    }
-    .map-conn-row {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      padding: var(--space-3) var(--space-4);
-      border-bottom: 1px solid #d7dde6;
-      background: #fff;
-    }
-    .map-conn-row:last-child { border-bottom: none; }
-    .map-conn-type {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      flex-shrink: 0;
-      min-width: 72px;
-    }
-    .map-conn-arrow {
-      color: var(--muted);
-      flex-shrink: 0;
-      font-size: 1rem;
-      line-height: 1;
-    }
-    .map-conn-target {
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      cursor: pointer;
-      flex: 1;
-      min-width: 0;
-    }
-    .map-conn-target:hover { text-decoration: underline; }
-    .map-conn-target.missing { color: var(--danger); cursor: default; text-decoration: none; }
-    .map-conn-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-style: italic;
-      flex-shrink: 0;
-    }
-    .map-conn-team-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .map-anytime-badge {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: #111;
-      color: #fff;
-      padding: 2px 5px;
-      flex-shrink: 0;
-    }
 
   </style>
 </head>
@@ -1166,7 +952,7 @@
     <div id="tile-game-details-full" class="stop-card" data-tile-name="game-details-full">
       <div class="section-header expanded" id="gameDetailsHeader">
         <span class="section-title-text">Game Details</span>
-        <span class="section-meta">STOPS: <span id="stopCount">0</span></span>
+        <span class="section-meta"><span id="stopCount">0</span> STOPS</span>
         <button type="button" class="section-toggle" id="gameDetailsToggle" title="Collapse">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
         </button>
@@ -1232,24 +1018,20 @@
       </div>
     </div>
 
+    <div id="variables-section" class="stop-card"></div>
+
     <div id="content-area">
-      <div id="anytime-section" class="content-section">
-        <div id="anytimeList"></div>
-        <div class="stops-add-row">
-          <button id="addAnytimeBtn" class="primary" type="button">New Anytime Stop</button>
-        </div>
-      </div>
+      <div id="anytime-section"></div>
       <div id="stops-section" class="content-section">
-        <div class="content-section-header">Stops</div>
         <div id="stopList"></div>
-        <div class="stops-add-row">
-          <button id="addStopBtn" class="primary" type="button">New Stop</button>
+        <div class="stops-add-row" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button id="addStopBtn" class="primary" type="button">Add Stop</button>
+          <button id="addAnytimeBtn" class="primary" type="button">Add Anytime Stop</button>
         </div>
       </div>
-      <div id="group-board" class="content-section"></div>
-      <div id="map-board" class="content-section"></div>
     </div>
 
+    <div id="launch-section" class="stop-card"></div>
 
   </div>
 
@@ -1268,6 +1050,7 @@
         faviconUrl: 'index.ico',
         pageTitle: 'WALKING TOUR'
       },
+      variables: [],
       routes: [],
       stops: []
     };
@@ -1326,7 +1109,9 @@
     let state = defaultState();
     let selectedStopIndex = -1;
     let loadedStopsSnapshot = null;
-    let gameDetailsCollapsed = false;
+    let gameDetailsCollapsed = true;
+    let variablesSectionCollapsed = true;
+    let launchSectionCollapsed = true;
     let expandedStops = new Set();
     let expandedAnytime = new Set();
 
@@ -1512,24 +1297,6 @@ if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGES
       if (previewRaw) return previewRaw.length > 56 ? previewRaw.slice(0, 56) + '...' : previewRaw;
       return String(fallbackName || 'Untitled bubble');
     }
-    function getEligibleBranchTargets(currentBubbleId) {
-      const out = [];
-      (state.stops || []).forEach((stop) => {
-        const stopName = String(stop.id || '').toUpperCase();
-        const msgs = Array.isArray(stop && stop.messages) ? stop.messages : [];
-        const validMsgs = msgs.filter(b => b && typeof b === 'object');
-        msgs.forEach((b, bIdx) => {
-          if (!b || typeof b !== 'object') return;
-          const id = ensureBubbleId(b);
-          if (!id || id === currentBubbleId) return;
-          const label = validMsgs.length > 1
-            ? stopName + ' STOP · bubble ' + (bIdx + 1)
-            : stopName + ' STOP';
-          out.push({ id, label });
-        });
-      });
-      return out;
-    }
 
     function reseedStopBubbleIds(stop) {
       if (!stop || !Array.isArray(stop.messages)) return;
@@ -1540,16 +1307,6 @@ if (!Array.isArray(bo.correctReplies)) bo.correctReplies = CORRECT_BUBBLE_SUGGES
         const newId = createBubbleId();
         b.bubbleId = newId;
         if (oldId) idMap.set(oldId, newId);
-      });
-      stop.messages.forEach((b) => {
-        if (!b || typeof b !== 'object' || !Array.isArray(b.branches)) return;
-        b.branches.forEach((rule) => {
-          if (!rule || typeof rule !== 'object') return;
-          const target = String(rule.goToBubbleId || '').trim();
-          if (target && idMap.has(target)) {
-            rule.goToBubbleId = idMap.get(target);
-          }
-        });
       });
     }
 
@@ -1737,30 +1494,13 @@ state.stops.forEach((stop) => {
       return Array.isArray(arr) ? arr.join('\n') : '';
     }
 
-    function ensureBranchRule(rule) {
-      const src = rule && typeof rule === 'object' ? rule : {};
-      const answers = Array.isArray(src.answers)
-        ? src.answers.map((x) => String(x).trim()).filter(Boolean)
-        : parseAnswers(src.answer !== undefined ? src.answer : src.forAnswer);
-      return {
-        answers,
-        goToBubbleId: String(src.goToBubbleId || src.goToBubble || '').trim(),
-        goToStopId: String(src.goToStopId || src.goTo || src.nextStop || '').trim(),
-        reply: String(src.reply || src.replyBack || src.html || '')
-      };
-    }
 
     function ensureBubble(b) {
-      if (!b || typeof b !== 'object') return { bubbleId: createBubbleId(), html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, msgType: 'text', src: '', alt: '', label: '', href: '', replyExpected: 'no', answers: [], replyCorrect: '', replyIncorrect: '', storesAs: '', replyResponse: '', branches: [] };
+      if (!b || typeof b !== 'object') return { bubbleId: createBubbleId(), html: '', callToAction: false, forAnswer: '', placeholder: '', bottomAdded: false, msgType: 'text', src: '', alt: '', label: '', href: '', replyExpected: 'no', answers: [], replyCorrect: '', replyIncorrect: '', storesAs: '', replyResponse: '' };
       const replyExpectedRaw = String(b.replyExpected || 'no').toLowerCase();
-      const re = ['no', 'word', 'any', 'branch'].includes(replyExpectedRaw) ? replyExpectedRaw : 'no';
+      const re = ['no', 'word', 'any', 'multi'].includes(replyExpectedRaw) ? replyExpectedRaw : 'no';
       const msgTypeRaw = String(b.msgType || 'text').toLowerCase();
       const msgType = ['text', 'image', 'video', 'button', 'pay'].includes(msgTypeRaw) ? msgTypeRaw : 'text';
-      const branchSource = Array.isArray(b.branches)
-        ? b.branches
-        : Array.isArray(b.branchMap)
-          ? b.branchMap
-          : [];
       return {
         bubbleId: String(b.bubbleId || createBubbleId()),
         html: String(b.html || ''),
@@ -1778,8 +1518,7 @@ state.stops.forEach((stop) => {
         replyCorrect: String(b.replyCorrect || ''),
         replyIncorrect: String(b.replyIncorrect || ''),
         storesAs: String(b.storesAs || ''),
-        replyResponse: String(b.replyResponse || ''),
-        branches: branchSource.map(ensureBranchRule)
+        replyResponse: String(b.replyResponse || '')
       };
     }
 
@@ -1797,7 +1536,6 @@ state.stops.forEach((stop) => {
       if (type === 'any') {
         base.placeholder = String(r.placeholder || '');
         base.storesAs = String(r.storesAs || '');
-        base.nextStopId = String(r.nextStopId || '').trim();
         return base;
       }
       base.placeholder = String(r.placeholder || '');
@@ -1805,7 +1543,6 @@ state.stops.forEach((stop) => {
       base.setsTeam = !!r.setsTeam;
       base.anytime = !!r.anytime;
       base.goTo = String(r.goTo || '');
-      base.nextStopId = String(r.nextStopId || '').trim();
       return base;
     }
 
@@ -1833,6 +1570,7 @@ state.stops.forEach((stop) => {
         throw new Error('Missing "stops" array.');
       }
       out.stops = doc.stops.map(ensureStop);
+      if (Array.isArray(doc.variables)) out.variables = deepClone(doc.variables);
       if (Array.isArray(doc.routes)) out.routes = deepClone(doc.routes);
       if (typeof doc._comment === 'string') out._comment = doc._comment;
       return out;
@@ -1870,271 +1608,222 @@ state.stops.forEach((stop) => {
     }
 
 
-    // Renders all stops as inline collapsible cards. The selected stop is expanded and contains els.stopEditor.
+    function getReplyTag(stop) {
+      const pr = stop && stop.playerReply;
+      if (!pr) return { label: 'NOREPLY', cls: 'reply-tag-noreply' };
+      if (pr.type === 'any')   return { label: 'ANYREPLY',    cls: 'reply-tag-anyreply' };
+      if (pr.type === 'multi') return { label: 'CHOICEREPLY', cls: 'reply-tag-choicereply' };
+      if (pr.type === 'text' && Array.isArray(pr.answers) && pr.answers.length)
+                               return { label: 'WORDREPLY',   cls: 'reply-tag-wordreply' };
+      return { label: 'NOREPLY', cls: 'reply-tag-noreply' };
+    }
+
+    // Builds a single stop card element for the flat stop list.
+    function buildStopCard(stop, i) {
+      const isExpanded = expandedStops.has(i);
+      const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
+        + (Array.isArray(stop.playerReply && stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
+        + (Array.isArray(stop.playerReply && stop.playerReply.incorrect) ? stop.playerReply.incorrect.length : 0);
+
+      const card = document.createElement('div');
+      card.className = 'stop-card' + (isExpanded ? ' expanded' : '');
+      card.dataset.stopIndex = String(i);
+      card.draggable = false;
+
+      const hdr = document.createElement('div');
+      hdr.className = 'section-header stop-header' + (isExpanded ? ' expanded' : '');
+
+      const grip = document.createElement('span');
+      grip.className = 'stop-grip';
+      grip.title = 'Click to collapse, drag to reorder';
+      grip.setAttribute('role', 'button');
+      grip.setAttribute('tabindex', '0');
+      grip.setAttribute('aria-label', 'Collapse stop or drag to reorder');
+      grip.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>';
+
+      const nameEl = document.createElement('span');
+      nameEl.className = 'section-title-text stop-title-edit';
+      nameEl.contentEditable = 'true';
+      nameEl.spellcheck = false;
+      nameEl.setAttribute('role', 'textbox');
+      nameEl.setAttribute('aria-label', 'Stop name');
+      nameEl.textContent = stop.id;
+
+      const suffixEl = document.createElement('span');
+      suffixEl.className = 'stop-name-suffix';
+      suffixEl.textContent = 'STOP';
+      suffixEl.setAttribute('aria-hidden', 'true');
+
+      const nameGroup = document.createElement('span');
+      nameGroup.className = 'stop-name-group';
+      nameGroup.appendChild(nameEl);
+      nameGroup.appendChild(suffixEl);
+
+      const metaEl = document.createElement('span');
+      metaEl.className = 'section-meta';
+      metaEl.textContent = totalBubbles + (totalBubbles === 1 ? ' bubble' : ' bubbles');
+
+      const actions = document.createElement('span');
+      actions.className = 'stop-card-actions';
+
+      const copyBtn = document.createElement('span');
+      copyBtn.className = 'stop-action stop-copy';
+      copyBtn.title = 'COPY';
+      copyBtn.setAttribute('aria-label', 'COPY');
+      copyBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg>';
+
+      const pasteBtn = document.createElement('span');
+      pasteBtn.className = 'stop-action stop-paste' + (copiedStop ? '' : ' disabled');
+      pasteBtn.title = 'PASTE';
+      pasteBtn.setAttribute('aria-label', 'PASTE');
+      pasteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg>';
+
+      const deleteBtn = document.createElement('span');
+      deleteBtn.className = 'stop-action stop-delete';
+      deleteBtn.title = 'REMOVE';
+      deleteBtn.setAttribute('aria-label', 'REMOVE');
+      deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
+
+      const replyTag = getReplyTag(stop);
+      const replyBadge = document.createElement('span');
+      replyBadge.className = 'reply-tag ' + replyTag.cls;
+      replyBadge.textContent = replyTag.label;
+
+      actions.appendChild(copyBtn);
+      actions.appendChild(pasteBtn);
+      actions.appendChild(deleteBtn);
+
+      const toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'section-toggle';
+      toggleBtn.innerHTML = isExpanded ? SVG_CHEVRON_UP : SVG_CHEVRON_DOWN;
+
+      hdr.appendChild(grip);
+      hdr.appendChild(nameGroup);
+      hdr.appendChild(replyBadge);
+      hdr.appendChild(metaEl);
+      hdr.appendChild(actions);
+      hdr.appendChild(toggleBtn);
+      card.appendChild(hdr);
+
+      if (isExpanded) {
+        const body = document.createElement('div');
+        body.className = 'stop-card-body';
+        renderStopEditorInto(body, stop);
+        card.appendChild(body);
+      }
+
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isExpanded) { expandedStops.delete(i); } else { expandedStops.add(i); selectedStopIndex = i; }
+        renderAll();
+      });
+
+      nameEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); nameEl.blur(); } });
+      nameEl.addEventListener('input', () => { stop.id = String(nameEl.textContent || ''); });
+      nameEl.addEventListener('blur', () => {
+        const next = String(nameEl.textContent || '').replace(/\s+/g, ' ').trim();
+        stop.id = next || stop.id || ('NEW-' + (i + 1));
+        nameEl.textContent = stop.id;
+        renderWarnings();
+      });
+
+      copyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        copiedStop = JSON.parse(JSON.stringify(stop));
+        setStatus('Stop copied.', 'ok');
+        renderAll();
+      });
+
+      pasteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!copiedStop) return;
+        const clone = JSON.parse(JSON.stringify(copiedStop));
+        clone.id = 'NEW-' + nextStopNumber();
+        reseedStopBubbleIds(clone);
+        state.stops.splice(i + 1, 0, clone);
+        const shifted = new Set();
+        expandedStops.forEach(idx => shifted.add(idx > i ? idx + 1 : idx));
+        shifted.add(i + 1);
+        expandedStops = shifted;
+        selectedStopIndex = i + 1;
+        renderAll();
+      });
+
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const removed = state.stops.splice(i, 1)[0];
+        const shifted = new Set();
+        expandedStops.forEach(idx => { if (idx !== i) shifted.add(idx > i ? idx - 1 : idx); });
+        expandedStops = shifted;
+        if (selectedStopIndex === i) selectedStopIndex = -1;
+        else if (selectedStopIndex > i) selectedStopIndex--;
+        if (!state.stops.length) selectedStopIndex = -1;
+        else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
+        showUndoToast(removed, i);
+        renderAll();
+      });
+
+      let dragFromHandle = false;
+      let didHandleDrag = false;
+      const armHandleDrag = () => { dragFromHandle = true; didHandleDrag = false; card.draggable = true; };
+      const disarmHandleDrag = () => { setTimeout(() => { dragFromHandle = false; card.draggable = false; }, 0); };
+      const collapseOnHandleAction = (e) => {
+        if (e) e.stopPropagation();
+        if (didHandleDrag) { didHandleDrag = false; return; }
+        if (expandedStops.has(i)) { expandedStops.delete(i); if (selectedStopIndex === i) selectedStopIndex = -1; renderAll(); }
+      };
+      grip.addEventListener('mousedown', armHandleDrag);
+      grip.addEventListener('touchstart', armHandleDrag, { passive: true });
+      grip.addEventListener('click', (e) => { collapseOnHandleAction(e); disarmHandleDrag(); });
+      grip.addEventListener('mouseleave', disarmHandleDrag);
+      grip.addEventListener('touchend', disarmHandleDrag);
+      grip.addEventListener('touchcancel', disarmHandleDrag);
+      grip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); collapseOnHandleAction(e); } });
+      card.addEventListener('dragstart', (e) => {
+        const startedOnHandle = dragFromHandle || !!(e.target && e.target.closest('.stop-grip'));
+        if (!startedOnHandle) { e.preventDefault(); return; }
+        didHandleDrag = true;
+        e.dataTransfer.setData(DND_MIME.STOP_INDEX, String(i));
+        e.dataTransfer.effectAllowed = 'move';
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', () => { dragFromHandle = false; card.draggable = false; clearStopDropIndicators(); card.classList.remove('dragging'); });
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const rect = card.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        clearStopDropIndicators();
+        card.classList.add(before ? 'drop-before' : 'drop-after');
+      });
+      card.addEventListener('dragleave', () => { card.classList.remove('drop-before', 'drop-after'); });
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const rect = card.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        clearStopDropIndicators();
+        const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
+        if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
+        const fromStop = state.stops[fromIndex];
+        const insertionIndex = i + (before ? 0 : 1);
+        const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
+        reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
+        if (fromStop) moveInStopOrder({ kind: 'stop', id: fromStop.id }, { kind: 'stop', id: stop.id }, before);
+        renderAll();
+      });
+
+      return card;
+    }
+
+    // Renders all stops as inline collapsible cards with optional split dividers.
     function renderStopList() {
       els.stopList.innerHTML = '';
       const stopCountEl = document.getElementById('stopCount');
-      if (stopCountEl) stopCountEl.textContent = state.stops.filter((s) => !(s && s.playerReply && s.playerReply.anytime)).length;
+      if (stopCountEl) stopCountEl.textContent = state.stops.filter((s) => s && !(s.playerReply && s.playerReply.anytime)).length;
 
-      state.stops.forEach((stop, i) => {
-        // Anytime stops live in the anytime section only
-        if (stop && stop.playerReply && stop.playerReply.anytime) return;
-        const isExpanded = expandedStops.has(i);
-        const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
-          + (Array.isArray(stop.playerReply && stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
-          + (Array.isArray(stop.playerReply && stop.playerReply.incorrect) ? stop.playerReply.incorrect.length : 0);
-
-        const card = document.createElement('div');
-        card.className = 'stop-card' + (isExpanded ? ' expanded' : '');
-        card.dataset.stopIndex = String(i);
-        card.draggable = false;
-
-        // --- Header ---
-        const hdr = document.createElement('div');
-        hdr.className = 'section-header stop-header' + (isExpanded ? ' expanded' : '');
-
-        const grip = document.createElement('span');
-        grip.className = 'stop-grip';
-        grip.title = 'Click to collapse, drag to reorder';
-        grip.setAttribute('role', 'button');
-        grip.setAttribute('tabindex', '0');
-        grip.setAttribute('aria-label', 'Collapse stop or drag to reorder');
-        grip.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.2" fill="currentColor" stroke="none"/></svg>';
-
-        const nameEl = document.createElement('span');
-        nameEl.className = 'section-title-text stop-title-edit';
-        nameEl.contentEditable = 'true';
-        nameEl.spellcheck = false;
-        nameEl.setAttribute('role', 'textbox');
-        nameEl.setAttribute('aria-label', 'Stop name');
-        nameEl.textContent = stop.id;
-
-        const suffixEl = document.createElement('span');
-        suffixEl.className = 'stop-name-suffix';
-        suffixEl.textContent = 'STOP';
-        suffixEl.setAttribute('aria-hidden', 'true');
-
-        const nameGroup = document.createElement('span');
-        nameGroup.className = 'stop-name-group';
-        nameGroup.appendChild(nameEl);
-        nameGroup.appendChild(suffixEl);
-
-        const metaEl = document.createElement('span');
-        metaEl.className = 'section-meta';
-        metaEl.textContent = totalBubbles + (totalBubbles === 1 ? ' bubble' : ' bubbles');
-
-        // Group membership dots
-        const groupDotsEl = document.createElement('span');
-        groupDotsEl.className = 'stop-group-dots';
-        if (Array.isArray(state.routes) && state.routes.length) {
-          const route = state.routes[0];
-          if (route && route.variants) {
-            Object.keys(route.variants).forEach(function(varName) {
-              const arr = route.variants[varName];
-              if (Array.isArray(arr) && arr.indexOf(stop.id) >= 0) {
-                const dot = document.createElement('span');
-                dot.className = 'stop-group-dot';
-                dot.style.background = getVariantColor(varName);
-                dot.title = varName;
-                groupDotsEl.appendChild(dot);
-              }
-            });
-          }
-        }
-
-        const actions = document.createElement('span');
-        actions.className = 'stop-card-actions';
-
-        const copyBtn = document.createElement('span');
-        copyBtn.className = 'stop-action stop-copy';
-        copyBtn.title = 'COPY';
-        copyBtn.setAttribute('aria-label', 'COPY');
-        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg>';
-
-        const pasteBtn = document.createElement('span');
-        pasteBtn.className = 'stop-action stop-paste' + (copiedStop ? '' : ' disabled');
-        pasteBtn.title = 'PASTE';
-        pasteBtn.setAttribute('aria-label', 'PASTE');
-        pasteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg>';
-
-        const deleteBtn = document.createElement('span');
-        deleteBtn.className = 'stop-action stop-delete';
-        deleteBtn.title = 'REMOVE';
-        deleteBtn.setAttribute('aria-label', 'REMOVE');
-        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
-
-        actions.appendChild(copyBtn);
-        actions.appendChild(pasteBtn);
-        actions.appendChild(deleteBtn);
-
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.className = 'section-toggle';
-        toggleBtn.innerHTML = isExpanded ? SVG_CHEVRON_UP : SVG_CHEVRON_DOWN;
-
-        hdr.appendChild(grip);
-        hdr.appendChild(nameGroup);
-        hdr.appendChild(metaEl);
-        if (groupDotsEl.children.length) hdr.appendChild(groupDotsEl);
-        hdr.appendChild(actions);
-        hdr.appendChild(toggleBtn);
-        card.appendChild(hdr);
-
-        // --- Expanded body ---
-        if (isExpanded) {
-          const body = document.createElement('div');
-          body.className = 'stop-card-body';
-          renderStopEditorInto(body, stop);
-          card.appendChild(body);
-        }
-
-        // --- Events ---
-        toggleBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (isExpanded) {
-            expandedStops.delete(i);
-          } else {
-            expandedStops.add(i);
-            selectedStopIndex = i;
-          }
-          renderAll();
-        });
-
-        nameEl.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            nameEl.blur();
-          }
-        });
-        nameEl.addEventListener('input', () => {
-          stop.id = String(nameEl.textContent || '');
-        });
-        nameEl.addEventListener('blur', () => {
-          const next = String(nameEl.textContent || '').replace(/\s+/g, ' ').trim();
-          stop.id = next || stop.id || ('NEW-' + (i + 1));
-          nameEl.textContent = stop.id;
-          renderWarnings();
-        });
-
-        copyBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          copiedStop = JSON.parse(JSON.stringify(stop));
-          setStatus('Stop copied.', 'ok');
-          renderAll();
-        });
-
-        pasteBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (!copiedStop) return;
-          const clone = JSON.parse(JSON.stringify(copiedStop));
-          clone.id = 'NEW-' + nextStopNumber();
-          reseedStopBubbleIds(clone);
-          state.stops.splice(i + 1, 0, clone);
-          const shifted = new Set();
-          expandedStops.forEach(idx => shifted.add(idx > i ? idx + 1 : idx));
-          shifted.add(i + 1);
-          expandedStops = shifted;
-          selectedStopIndex = i + 1;
-
-          renderAll();
-        });
-
-        deleteBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const removed = state.stops.splice(i, 1)[0];
-          const shifted = new Set();
-          expandedStops.forEach(idx => { if (idx !== i) shifted.add(idx > i ? idx - 1 : idx); });
-          expandedStops = shifted;
-          if (selectedStopIndex === i) selectedStopIndex = -1;
-          else if (selectedStopIndex > i) selectedStopIndex--;
-          if (!state.stops.length) selectedStopIndex = -1;
-          else if (selectedStopIndex >= state.stops.length) selectedStopIndex = state.stops.length - 1;
-          showUndoToast(removed, i);
-          renderAll();
-        });
-
-        // Drag and drop (handle only)
-        let dragFromHandle = false;
-        let didHandleDrag = false;
-        const armHandleDrag = () => {
-          dragFromHandle = true;
-          didHandleDrag = false;
-          card.draggable = true;
-        };
-        const disarmHandleDrag = () => {
-          setTimeout(() => {
-            dragFromHandle = false;
-            card.draggable = false;
-          }, 0);
-        };
-        const collapseOnHandleAction = (e) => {
-          if (e) e.stopPropagation();
-          if (didHandleDrag) {
-            didHandleDrag = false;
-            return;
-          }
-          if (expandedStops.has(i)) {
-            expandedStops.delete(i);
-            if (selectedStopIndex === i) selectedStopIndex = -1;
-            renderAll();
-          }
-        };
-        grip.addEventListener('mousedown', armHandleDrag);
-        grip.addEventListener('touchstart', armHandleDrag, { passive: true });
-        grip.addEventListener('click', (e) => {
-          collapseOnHandleAction(e);
-          disarmHandleDrag();
-        });
-        grip.addEventListener('mouseleave', disarmHandleDrag);
-        grip.addEventListener('touchend', disarmHandleDrag);
-        grip.addEventListener('touchcancel', disarmHandleDrag);
-        grip.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            collapseOnHandleAction(e);
-          }
-        });
-        card.addEventListener('dragstart', (e) => {
-          const startedOnHandle = dragFromHandle || !!(e.target && e.target.closest('.stop-grip'));
-          if (!startedOnHandle) {
-            e.preventDefault();
-            return;
-          }
-          didHandleDrag = true;
-          e.dataTransfer.setData(DND_MIME.STOP_INDEX, String(i));
-          e.dataTransfer.effectAllowed = 'move';
-          card.classList.add('dragging');
-        });
-        card.addEventListener('dragend', () => {
-          dragFromHandle = false;
-          card.draggable = false;
-          clearStopDropIndicators();
-          card.classList.remove('dragging');
-        });
-        card.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          const rect = card.getBoundingClientRect();
-          const before = e.clientY < rect.top + rect.height / 2;
-          clearStopDropIndicators();
-          card.classList.add(before ? 'drop-before' : 'drop-after');
-        });
-        card.addEventListener('dragleave', () => {
-          card.classList.remove('drop-before', 'drop-after');
-        });
-        card.addEventListener('drop', (e) => {
-          e.preventDefault();
-          const rect = card.getBoundingClientRect();
-          const before = e.clientY < rect.top + rect.height / 2;
-          clearStopDropIndicators();
-          const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
-          if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
-          const insertionIndex = i + (before ? 0 : 1);
-          const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
-          reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
-          renderAll();
-        });
-
-        els.stopList.appendChild(card);
+      (state.stops || []).forEach((stop, i) => {
+        if (!stop || (stop.playerReply && stop.playerReply.anytime)) return;
+        els.stopList.appendChild(buildStopCard(stop, i));
       });
 
       // Fallback drop target for whitespace between cards
@@ -2156,9 +1845,8 @@ state.stops.forEach((stop) => {
         e.preventDefault();
         const fromIndex = parseInt(e.dataTransfer.getData(DND_MIME.STOP_INDEX) || '-1', 10);
         if (isNaN(fromIndex) || fromIndex < 0 || fromIndex >= state.stops.length) return;
-        const insertionIndex = getInsertionIndexFromY(items, e.clientY);
         clearStopDropIndicators();
-        const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
+        const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, getInsertionIndexFromY(items, e.clientY));
         reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
         renderAll();
       };
@@ -2226,7 +1914,7 @@ state.stops.forEach((stop) => {
         const isMessages = listKey === 'messages';
         const msgType = isMessages ? (bubble.msgType || 'text') : null;
         const replyMode = String((bubble && bubble.replyExpected) || 'no').toLowerCase();
-        const bubbleNeedsReply = replyMode === 'word' || replyMode === 'any' || replyMode === 'branch';
+        const bubbleNeedsReply = replyMode === 'word' || replyMode === 'any';
 
         wrap.className = 'bubble'
           + (isMessages && bubbleNeedsReply ? ' cta-bubble' : '');
@@ -2361,7 +2049,7 @@ state.stops.forEach((stop) => {
           const replyRow = document.createElement('div');
           replyRow.className = 'bubble-type-row';
           const rName = 'reply-' + bubbleUid;
-          ['no', 'word', 'any', 'branch'].forEach(val => {
+          ['no', 'word', 'any', 'multi'].forEach(val => {
             const rid = rName + '-' + val;
             const r = document.createElement('input');
             r.type = 'radio'; r.name = rName; r.value = val; r.id = rid; r.checked = replyExpected === val;
@@ -2416,110 +2104,6 @@ state.stops.forEach((stop) => {
           [mkLbl('Typing Placeholder'), aPh, mkLbl('REPLY STORED AS'), aStores, mkLbl('RESPONSE'), aResp].forEach(el => anyFields.appendChild(el));
           replySection.appendChild(anyFields);
 
-          const branchFields = document.createElement('div');
-          branchFields.className = 'reply-fields';
-          branchFields.style.display = replyExpected === 'branch' ? '' : 'none';
-          const bPh = mkInput(bubble.placeholder || '', ensureBuilderOptionsHeader(state.header).defaultPlaceholder || 'Type here...', v => { bubble.placeholder = v; });
-          const bStores = mkInput(bubble.storesAs || '', 'variableName', v => { bubble.storesAs = v; updateHtmlVariableHints(); });
-          if (!String(bubble.replyIncorrect || '').trim()) {
-            bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
-          }
-          const bInvalid = mkTA(bubble.replyIncorrect || '', v => { bubble.replyIncorrect = v; });
-          if (!Array.isArray(bubble.branches)) bubble.branches = [];
-          if (!bubble.branches.length) bubble.branches.push(ensureBranchRule(null));
-
-          const branchRulesLabel = mkLbl('BRANCH PATHS');
-          const branchRulesHint = document.createElement('p');
-          branchRulesHint.className = 'field-hint tight';
-          branchRulesHint.textContent = 'Each path sets accepted replies and the bubble to jump to. First match wins; if none match, invalid reply text is shown.';
-
-          const branchList = document.createElement('div');
-          branchList.className = 'branch-rule-list';
-          const renderBranchRules = () => {
-            bubble.branches = (Array.isArray(bubble.branches) ? bubble.branches : []).map(ensureBranchRule);
-            branchList.innerHTML = '';
-            bubble.branches.forEach((rule, rIdx) => {
-              const card = document.createElement('div');
-              card.className = 'branch-rule-card';
-
-              const head = document.createElement('div');
-              head.className = 'branch-rule-head';
-              const title = document.createElement('div');
-              title.className = 'branch-rule-title';
-              title.textContent = 'Branch ' + (rIdx + 1);
-              const removeBtn = document.createElement('button');
-              removeBtn.type = 'button';
-              removeBtn.textContent = 'Remove';
-              removeBtn.disabled = bubble.branches.length <= 1;
-              removeBtn.addEventListener('click', () => {
-                if (bubble.branches.length <= 1) return;
-                bubble.branches.splice(rIdx, 1);
-                renderBranchRules();
-              });
-              head.appendChild(title);
-              head.appendChild(removeBtn);
-
-              const branchAnswers = mkTA(answersToText(rule.answers || []), v => {
-                bubble.branches[rIdx].answers = parseAnswers(v);
-              });
-              branchAnswers.placeholder = 'Example: red; blue';
-
-              const branchGoTo = document.createElement('select');
-              const targetOptions = getEligibleBranchTargets(bubbleId);
-              const emptyOption = document.createElement('option');
-              emptyOption.value = '';
-              emptyOption.textContent = 'Choose a bubble...';
-              branchGoTo.appendChild(emptyOption);
-              targetOptions.forEach((opt) => {
-                const option = document.createElement('option');
-                option.value = opt.id;
-                option.textContent = opt.label;
-                branchGoTo.appendChild(option);
-              });
-              const currentTarget = String(rule.goToBubbleId || '');
-              if (currentTarget && !targetOptions.some((opt) => opt.id === currentTarget)) {
-                const missing = document.createElement('option');
-                missing.value = currentTarget;
-                missing.textContent = '(Missing bubble) ' + currentTarget;
-                branchGoTo.appendChild(missing);
-              }
-              branchGoTo.value = currentTarget;
-              branchGoTo.addEventListener('change', (e) => {
-                bubble.branches[rIdx].goToBubbleId = String(e.target.value || '').trim();
-                bubble.branches[rIdx].goToStopId = '';
-                renderAll();
-              });
-
-              const branchReply = mkTA(rule.reply || '', v => {
-                bubble.branches[rIdx].reply = v;
-              });
-
-              const branchAnswerHint = document.createElement('p');
-              branchAnswerHint.className = 'field-hint tight';
-              branchAnswerHint.textContent = 'Separate accepted replies with ; or put each on its own line.';
-              const branchGoToHint = document.createElement('p');
-              branchGoToHint.className = 'field-hint tight';
-              branchGoToHint.textContent = 'Pick a bubble to jump to when this branch matches.';
-
-              [head, mkLbl('ACCEPTED REPLY(S)'), branchAnswerHint, branchAnswers, mkLbl('JUMP TO BUBBLE'), branchGoToHint, branchGoTo, mkLbl('REPLY BACK FOR THIS BRANCH'), branchReply].forEach((el) => card.appendChild(el));
-              branchList.appendChild(card);
-            });
-          };
-
-          const addBranchRow = document.createElement('div');
-          addBranchRow.className = 'branch-add-row';
-          const addBranchBtn = document.createElement('button');
-          addBranchBtn.type = 'button';
-          addBranchBtn.textContent = 'Add Branch Path';
-          addBranchBtn.addEventListener('click', () => {
-            bubble.branches.push(ensureBranchRule(null));
-            renderBranchRules();
-          });
-          addBranchRow.appendChild(addBranchBtn);
-
-          [mkLbl('Typing Placeholder'), bPh, mkLbl('REPLY STORED AS'), bStores, branchRulesLabel, branchRulesHint, branchList, addBranchRow, mkLbl('REPLY BACK TO INVALID'), bInvalid].forEach(el => branchFields.appendChild(el));
-          renderBranchRules();
-          replySection.appendChild(branchFields);
 
           replyRow.querySelectorAll('input[type="radio"]').forEach(r => {
             r.addEventListener('change', e => {
@@ -2535,24 +2119,8 @@ state.stops.forEach((stop) => {
                   wIncorrect.value = bubble.replyIncorrect;
                 }
               }
-              if (e.target.value === 'branch') {
-                if (!Array.isArray(bubble.branches) || !bubble.branches.length) {
-                  bubble.branches = [ensureBranchRule(null)];
-                }
-                if (!String(bubble.storesAs || '').trim()) {
-                  bubble.storesAs = toVarKey(((stopRef && stopRef.id) || 'branch') + '_reply', 'branchReply');
-                  bStores.value = bubble.storesAs;
-                  updateHtmlVariableHints();
-                }
-                if (!String(bubble.replyIncorrect || '').trim()) {
-                  bubble.replyIncorrect = pickRandomSuggestion(getIncorrectReplySuggestions());
-                  bInvalid.value = bubble.replyIncorrect;
-                }
-                renderBranchRules();
-              }
               wordFields.style.display = e.target.value === 'word' ? '' : 'none';
               anyFields.style.display = e.target.value === 'any' ? '' : 'none';
-              branchFields.style.display = e.target.value === 'branch' ? '' : 'none';
               applyBubbleVisualType();
             });
           });
@@ -2600,7 +2168,6 @@ state.stops.forEach((stop) => {
     function renderAnytimeEditorInto(body, stop) {
       const pr = stop.playerReply || (stop.playerReply = ensurePlayerReply(null));
       pr.anytime = true;
-      body.className = 'anytime-editor';
 
       // ── Trigger word(s) — gray bubble on the right ──
       const triggerRow = document.createElement('div');
@@ -2690,46 +2257,50 @@ state.stops.forEach((stop) => {
 
 
 
-      // CONTINUE TO STOP dropdown
-      const nextStopRow = document.createElement('div');
-      nextStopRow.className = 'row full';
-      const nextStopSel = document.createElement('select');
-      const nextStopEmpty = document.createElement('option');
-      nextStopEmpty.value = '';
-      nextStopEmpty.textContent = '— continue normally —';
-      nextStopSel.appendChild(nextStopEmpty);
-      const stopIndex = (state.stops || []).indexOf(stop);
-      if (stopIndex > 0) {
-        const prevOpt = document.createElement('option');
-        prevOpt.value = '__prev__';
-        prevOpt.textContent = '← Previous Stop';
-        nextStopSel.appendChild(prevOpt);
+      // STORE ANSWER AS — only for any reply type
+      if (pr.type === 'any') {
+        const storesRow = document.createElement('div');
+        storesRow.className = 'row full';
+
+        const storesLbl = document.createElement('label');
+        storesLbl.textContent = 'STORE ANSWER AS';
+
+        const storesSel = document.createElement('select');
+        const blankOpt = document.createElement('option');
+        blankOpt.value = '';
+        blankOpt.textContent = '— don\'t store —';
+        storesSel.appendChild(blankOpt);
+
+        const allVarKeys = (Array.isArray(state.variables) ? state.variables : []).map((v) => v.key).filter(Boolean);
+
+        const allVarKeysMut = allVarKeys.slice();
+        const currentStoresAs = String(pr.storesAs || '').trim();
+        if (currentStoresAs && !allVarKeysMut.includes(currentStoresAs)) {
+          allVarKeysMut.push(currentStoresAs);
+        }
+
+        allVarKeysMut.forEach((key) => {
+          const opt = document.createElement('option');
+          opt.value = key;
+          opt.textContent = '{{' + key + '}}';
+          storesSel.appendChild(opt);
+        });
+        storesSel.value = currentStoresAs;
+
+        storesSel.addEventListener('change', (e) => {
+          pr.storesAs = e.target.value;
+          updateHtmlVariableHints();
+        });
+
+        const storesHint = document.createElement('p');
+        storesHint.className = 'field-hint tight';
+        storesHint.textContent = 'Save the player\'s answer into a variable for use in later message text.';
+
+        storesRow.appendChild(storesLbl);
+        storesRow.appendChild(storesSel);
+        storesRow.appendChild(storesHint);
+        body.appendChild(storesRow);
       }
-      (state.stops || []).forEach(function(s) {
-        if (!s || s === stop) return;
-        const sid = String(s.id || '').trim();
-        if (!sid) return;
-        const opt = document.createElement('option');
-        opt.value = sid;
-        opt.textContent = sid.toUpperCase() + ' STOP';
-        nextStopSel.appendChild(opt);
-      });
-      const currentNextStop = String((stop.playerReply && stop.playerReply.nextStopId) || '').trim();
-      nextStopSel.value = currentNextStop;
-      nextStopSel.addEventListener('change', function(e) {
-        if (!stop.playerReply || typeof stop.playerReply !== 'object') stop.playerReply = ensurePlayerReply(null);
-        stop.playerReply.nextStopId = String(e.target.value || '').trim();
-        renderAll();
-      });
-      const nextStopHint = document.createElement('p');
-      nextStopHint.className = 'field-hint tight';
-      nextStopHint.textContent = 'After this stop, jump to a specific stop instead of the next one in order.';
-      const nextStopLbl = document.createElement('label');
-      nextStopLbl.textContent = 'CONTINUE TO STOP';
-      nextStopRow.appendChild(nextStopLbl);
-      nextStopRow.appendChild(nextStopSel);
-      nextStopRow.appendChild(nextStopHint);
-      body.appendChild(nextStopRow);
     }
 
 
@@ -2773,528 +2344,154 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
       return ROUTE_TEAM_COLORS[String(name || '').toLowerCase()] || '#94a3b8';
     }
 
-    function generateBalancedRoutes(stopIds, variantNames) {
-      const n = stopIds.length;
-      const result = {};
-      variantNames.forEach(function(name, vi) {
-        result[name] = stopIds.map(function(_, si) { return stopIds[(si + vi) % n]; });
+
+
+    function renderVariablesSection() {
+      const section = document.getElementById('variables-section');
+      if (!section) return;
+      section.innerHTML = '';
+      if (!Array.isArray(state.variables)) state.variables = [];
+
+      // ── Header ──
+      const hdr = document.createElement('div');
+      hdr.className = 'section-header' + (variablesSectionCollapsed ? '' : ' expanded');
+      hdr.style.cursor = 'pointer';
+
+      const titleEl = document.createElement('span');
+      titleEl.className = 'section-title-text';
+      titleEl.textContent = 'Variables';
+
+      const varCount = state.variables.filter(v => v.key).length;
+      const metaEl = document.createElement('span');
+      metaEl.className = 'section-meta';
+      metaEl.textContent = varCount + ' variable' + (varCount === 1 ? '' : 's');
+
+      const toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'section-toggle';
+      toggleBtn.title = variablesSectionCollapsed ? 'Expand' : 'Collapse';
+      toggleBtn.innerHTML = variablesSectionCollapsed ? SVG_CHEVRON_DOWN : SVG_CHEVRON_UP;
+
+      hdr.appendChild(titleEl);
+      hdr.appendChild(metaEl);
+      hdr.appendChild(toggleBtn);
+      section.appendChild(hdr);
+
+      const doToggle = () => {
+        variablesSectionCollapsed = !variablesSectionCollapsed;
+        renderVariablesSection();
+      };
+      hdr.addEventListener('click', doToggle);
+      toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); doToggle(); });
+
+      if (variablesSectionCollapsed) return;
+
+      // ── Body ──
+      const body = document.createElement('div');
+      body.className = 'section-body';
+      section.appendChild(body);
+
+      const desc = document.createElement('p');
+      desc.className = 'field-hint';
+      desc.style.margin = '0';
+      desc.innerHTML = '<ul style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px;">'
+        + '<li>Give a variable a name and a list of possible values — e.g. <code>teamName</code> = Beignet, Lagniappe, Rougarou, Tchoupitoulas. The right value gets assigned to each player at runtime and is available throughout the game.</li>'
+        + '<li>Use <code>{{variableName}}</code> anywhere in a bubble to insert that player\'s value at runtime — e.g. <code>{{playerName}}</code> in "Nice work, {{playerName}}!" becomes "Nice work, Kevin!" for a player who typed Kevin earlier.</li>'
+        + '<li>On a stop that accepts any answer, use <em>Store Answer As</em> to save what the player typed — then drop that variable into a later bubble to use it.</li>'
+        + '</ul>';
+      body.appendChild(desc);
+
+      const list = document.createElement('div');
+      list.id = 'variableList';
+      body.appendChild(list);
+
+      state.variables.forEach((variable, vi) => {
+        const card = buildVariableRow(
+          variable.key || '',
+          variable.values || [],
+          (newKey) => { variable.key = newKey; },
+          (newVals) => { variable.values = newVals; },
+          () => { state.variables.splice(vi, 1); renderAll(); }
+        );
+        list.appendChild(card);
       });
-      return result;
+
+      // ── Add Variable button ──
+      const addRow = document.createElement('div');
+      addRow.className = 'stops-add-row';
+      addRow.style.marginTop = 'var(--space-2)';
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'primary';
+      addBtn.textContent = 'New Variable';
+      addBtn.addEventListener('click', () => {
+        state.variables.push({ key: 'var' + (state.variables.length + 1), values: [] });
+        renderAll();
+      });
+      addRow.appendChild(addBtn);
+      body.appendChild(addRow);
     }
 
-    function getRouteStopIds(route) {
-      const allIds = (state.stops || []).map(function(s) { return s.id; });
-      const inVariants = new Set();
-      if (route && route.variants && typeof route.variants === 'object') {
-        Object.keys(route.variants).forEach(function(k) {
-          const arr = route.variants[k];
-          if (Array.isArray(arr)) arr.forEach(function(id) { inVariants.add(id); });
-        });
-      }
-      return allIds.filter(function(id) { return inVariants.has(id); });
-    }
+    function buildVariableRow(key, values, onKeyChange, onValuesChange, onDelete) {
+      const row = document.createElement('div');
+      row.className = 'var-row';
 
-    function rebuildVariantsWithStops(route, newStopIds) {
-      const existing = route.variants || {};
-      const updated = {};
-      (route.variantNames || []).forEach(function(vn) {
-        const cur = Array.isArray(existing[vn]) ? existing[vn] : [];
-        const kept = cur.filter(function(id) { return newStopIds.indexOf(id) >= 0; });
-        newStopIds.forEach(function(id) { if (kept.indexOf(id) < 0) kept.push(id); });
-        updated[vn] = kept;
+      // Name field
+      const nameField = document.createElement('div');
+      nameField.className = 'var-field var-field-name';
+      const nameLbl = document.createElement('label');
+      nameLbl.textContent = 'Variable Name';
+      const keyIn = document.createElement('input');
+      keyIn.type = 'text';
+      keyIn.value = key;
+      keyIn.placeholder = 'variableName';
+      keyIn.addEventListener('input', () => { onKeyChange(keyIn.value.trim()); });
+      keyIn.addEventListener('blur', () => { keyIn.value = keyIn.value.trim() || key; });
+      nameField.appendChild(nameLbl);
+      nameField.appendChild(keyIn);
+      row.appendChild(nameField);
+
+      // Values field
+      const valField = document.createElement('div');
+      valField.className = 'var-field';
+      const valLbl = document.createElement('label');
+      valLbl.textContent = 'Values (comma separated)';
+      const valIn = document.createElement('input');
+      valIn.type = 'text';
+      valIn.value = values.join(', ');
+      valIn.placeholder = 'value1, value2, value3…';
+      valIn.addEventListener('input', () => {
+        onValuesChange(valIn.value.split(',').map((s) => s.trim()).filter(Boolean));
       });
-      route.variants = updated;
-    }
-
-    function buildRouteStopCard(stopId, idx, varName, route) {
-      const card = document.createElement('div');
-      card.className = 'route-stop-card';
-      card.draggable = true;
-
-      const stepNum = document.createElement('span');
-      stepNum.className = 'route-step-num';
-      stepNum.textContent = String(idx + 1) + '.';
-
-      const nameSpan = document.createElement('span');
-      nameSpan.className = 'route-stop-name';
-      nameSpan.textContent = stopId;
-
-      const suffix = document.createElement('span');
-      suffix.className = 'route-stop-suffix';
-      suffix.textContent = 'STOP';
-
-      card.appendChild(stepNum);
-      card.appendChild(nameSpan);
-      card.appendChild(suffix);
-
-      const exists = (state.stops || []).some(function(s) { return s.id === stopId; });
-      if (!exists) { card.style.opacity = '0.45'; card.title = 'Stop "' + stopId + '" no longer exists'; }
-
-      card.addEventListener('dragstart', function(e) {
-        e.dataTransfer.setData('text/x-rv', varName);
-        e.dataTransfer.setData('text/x-ri', String(idx));
-        e.dataTransfer.effectAllowed = 'move';
-        card.classList.add('dragging');
+      valIn.addEventListener('blur', () => {
+        valIn.value = valIn.value.split(',').map((s) => s.trim()).filter(Boolean).join(', ');
       });
-      card.addEventListener('dragend', function() {
-        card.classList.remove('dragging');
-        document.querySelectorAll('.route-stop-card').forEach(function(c) {
-          c.classList.remove('drop-before', 'drop-after');
-        });
-      });
-      return card;
-    }
+      valField.appendChild(valLbl);
+      valField.appendChild(valIn);
+      row.appendChild(valField);
 
-    function renderGroupBoard() {
-      const board = document.getElementById('group-board');
-      if (!board) return;
-      board.innerHTML = '';
-      const groupHdr = document.createElement('div');
-      groupHdr.className = 'content-section-header';
-      groupHdr.textContent = 'Group';
-      board.appendChild(groupHdr);
+      const wrap = document.createElement('div');
+      wrap.className = 'var-delete-wrap';
+      const deleteBtn = document.createElement('span');
+      deleteBtn.className = 'stop-action stop-delete';
+      deleteBtn.title = 'REMOVE';
+      deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
+      deleteBtn.addEventListener('click', onDelete);
+      wrap.appendChild(deleteBtn);
+      row.appendChild(wrap);
 
-      if (!Array.isArray(state.routes)) state.routes = [];
-      if (!state.routes.length) {
-        state.routes.push({ matchVar: 'teamName', variantNames: ['Beignet', 'Lagniappe', 'Rougarou', 'Tchoupitoulas'], variants: {} });
-      }
-      const route = state.routes[0];
-      if (!Array.isArray(route.variantNames) || !route.variantNames.length) {
-        route.variantNames = ['Beignet', 'Lagniappe', 'Rougarou', 'Tchoupitoulas'];
-      }
-      if (!route.variants || typeof route.variants !== 'object') route.variants = {};
-
-      const allStopIds = (state.stops || []).map(function(s) { return s.id; });
-      const routeStopIds = getRouteStopIds(route);
-      const routeStopSet = new Set(routeStopIds);
-
-      // ── Setup card ──
-      const setup = document.createElement('div');
-      setup.className = 'group-setup';
-
-      const setupTitle = document.createElement('p');
-      setupTitle.className = 'section-title';
-      setupTitle.textContent = 'Route Configuration';
-      setup.appendChild(setupTitle);
-
-      // Row 1: matchVar + variantNames
-      const row1 = document.createElement('div');
-      row1.className = 'group-setup-row';
-
-      const matchVarField = document.createElement('div');
-      matchVarField.className = 'group-setup-field';
-      const matchVarLbl = document.createElement('label');
-      matchVarLbl.textContent = 'Match Variable';
-      const matchVarIn = document.createElement('input');
-      matchVarIn.type = 'text';
-      matchVarIn.value = route.matchVar || 'teamName';
-      matchVarIn.placeholder = 'teamName';
-      matchVarIn.style.width = '160px';
-      matchVarIn.addEventListener('input', function(e) { route.matchVar = e.target.value || 'teamName'; });
-      matchVarField.appendChild(matchVarLbl);
-      matchVarField.appendChild(matchVarIn);
-      row1.appendChild(matchVarField);
-
-      const varNamesField = document.createElement('div');
-      varNamesField.className = 'group-setup-field';
-      varNamesField.style.flex = '1';
-      const varNamesLbl = document.createElement('label');
-      varNamesLbl.textContent = 'Variant Names (comma separated)';
-      const varNamesIn = document.createElement('input');
-      varNamesIn.type = 'text';
-      varNamesIn.style.width = '100%';
-      varNamesIn.value = route.variantNames.join(', ');
-      varNamesIn.placeholder = 'Beignet, Lagniappe, Rougarou, Tchoupitoulas';
-      varNamesIn.addEventListener('change', function(e) {
-        const names = e.target.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-        if (!names.length) return;
-        route.variantNames = names;
-        rebuildVariantsWithStops(route, routeStopIds);
-        renderGroupBoard();
-      });
-      varNamesField.appendChild(varNamesLbl);
-      varNamesField.appendChild(varNamesIn);
-      row1.appendChild(varNamesField);
-      setup.appendChild(row1);
-
-      // Row 2: stop selector + generate button
-      const row2 = document.createElement('div');
-      row2.className = 'group-setup-row';
-      row2.style.alignItems = 'flex-end';
-
-      const stopsField = document.createElement('div');
-      stopsField.className = 'group-setup-field';
-      stopsField.style.flex = '1';
-      const stopsLbl = document.createElement('label');
-      stopsLbl.textContent = 'Stops In Route';
-      stopsField.appendChild(stopsLbl);
-
-      const checks = document.createElement('div');
-      checks.className = 'route-stop-checks';
-      if (!allStopIds.length) {
-        const none = document.createElement('span');
-        none.style.cssText = 'color:var(--muted);font-size:0.8rem;';
-        none.textContent = 'No stops yet.';
-        checks.appendChild(none);
-      }
-      allStopIds.forEach(function(stopId) {
-        const lbl = document.createElement('label');
-        lbl.className = 'route-stop-check';
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = routeStopSet.has(stopId);
-        cb.addEventListener('change', function() {
-          const curIds = getRouteStopIds(route);
-          const set = new Set(curIds);
-          if (cb.checked) set.add(stopId); else set.delete(stopId);
-          const ordered = allStopIds.filter(function(id) { return set.has(id); });
-          rebuildVariantsWithStops(route, ordered);
-          renderGroupBoard();
-        });
-        const nm = document.createElement('span');
-        nm.textContent = stopId + ' STOP';
-        lbl.appendChild(cb);
-        lbl.appendChild(nm);
-        checks.appendChild(lbl);
-      });
-      stopsField.appendChild(checks);
-      row2.appendChild(stopsField);
-
-      const genBtn = document.createElement('button');
-      genBtn.type = 'button';
-      genBtn.className = 'primary';
-      genBtn.style.cssText = 'white-space:nowrap;flex-shrink:0;';
-      genBtn.textContent = '⟳ Generate Balanced';
-      genBtn.addEventListener('click', function() {
-        const ids = getRouteStopIds(route);
-        if (!ids.length) { alert('Check at least one stop to include in the route.'); return; }
-        route.variants = generateBalancedRoutes(ids, route.variantNames);
-        renderGroupBoard();
-      });
-      row2.appendChild(genBtn);
-      setup.appendChild(row2);
-      board.appendChild(setup);
-
-      // ── Swimlane ──
-      if (!routeStopIds.length) {
-        const empty = document.createElement('div');
-        empty.className = 'group-empty';
-        empty.textContent = 'Check stops above and click ⟳ Generate Balanced to build routes.';
-        board.appendChild(empty);
-        return;
-      }
-
-      const hasData = route.variantNames.some(function(vn) {
-        return Array.isArray(route.variants[vn]) && route.variants[vn].length;
-      });
-      if (!hasData) {
-        const empty = document.createElement('div');
-        empty.className = 'group-empty';
-        empty.textContent = 'Click ⟳ Generate Balanced to create routes for each team.';
-        board.appendChild(empty);
-        return;
-      }
-
-      const swimlane = document.createElement('div');
-      swimlane.className = 'group-swimlane';
-
-      route.variantNames.forEach(function(varName) {
-        const col = document.createElement('div');
-        col.className = 'route-column';
-
-        const colHdr = document.createElement('div');
-        colHdr.className = 'route-column-header';
-        const dot = document.createElement('span');
-        dot.className = 'route-team-dot';
-        dot.style.background = getVariantColor(varName);
-        const nameLbl = document.createElement('span');
-        nameLbl.className = 'route-team-name';
-        nameLbl.textContent = varName;
-        colHdr.appendChild(dot);
-        colHdr.appendChild(nameLbl);
-        col.appendChild(colHdr);
-
-        const stopListEl = document.createElement('div');
-        stopListEl.className = 'route-stop-list';
-        stopListEl.dataset.variant = varName;
-
-        const variantStops = Array.isArray(route.variants[varName]) ? route.variants[varName] : routeStopIds.slice();
-        variantStops.forEach(function(stopId, idx) {
-          stopListEl.appendChild(buildRouteStopCard(stopId, idx, varName, route));
-        });
-
-        stopListEl.addEventListener('dragover', function(e) {
-          e.preventDefault();
-          const cards = Array.from(stopListEl.querySelectorAll('.route-stop-card'));
-          cards.forEach(function(c) { c.classList.remove('drop-before', 'drop-after'); });
-          let placed = false;
-          for (var ci = 0; ci < cards.length; ci++) {
-            const r = cards[ci].getBoundingClientRect();
-            if (e.clientY < r.top + r.height / 2) { cards[ci].classList.add('drop-before'); placed = true; break; }
-          }
-          if (!placed && cards.length) cards[cards.length - 1].classList.add('drop-after');
-        });
-        stopListEl.addEventListener('dragleave', function(e) {
-          if (!stopListEl.contains(e.relatedTarget)) {
-            stopListEl.querySelectorAll('.route-stop-card').forEach(function(c) { c.classList.remove('drop-before', 'drop-after'); });
-          }
-        });
-        stopListEl.addEventListener('drop', function(e) {
-          e.preventDefault();
-          const fromVar = e.dataTransfer.getData('text/x-rv');
-          if (fromVar !== varName) return;
-          const fromIdx = parseInt(e.dataTransfer.getData('text/x-ri'), 10);
-          if (isNaN(fromIdx)) return;
-          const arr = route.variants[varName];
-          if (!Array.isArray(arr)) return;
-          const cards = Array.from(stopListEl.querySelectorAll('.route-stop-card'));
-          const insertAt = getInsertionIndexFromY(cards, e.clientY);
-          const [moved] = arr.splice(fromIdx, 1);
-          const to = Math.max(0, Math.min(insertAt > fromIdx ? insertAt - 1 : insertAt, arr.length));
-          arr.splice(to, 0, moved);
-          renderGroupBoard();
-        });
-
-        col.appendChild(stopListEl);
-        swimlane.appendChild(col);
-      });
-
-      board.appendChild(swimlane);
-
-      // Non-route stops note
-      const nonRoute = allStopIds.filter(function(id) { return !routeStopSet.has(id); });
-      if (nonRoute.length) {
-        const note = document.createElement('p');
-        note.className = 'field-hint';
-        note.textContent = 'Not in route (all teams visit in order): ' + nonRoute.join(' → ');
-        board.appendChild(note);
-      }
-    }
-
-
-    // ── Map board ─────────────────────────────────────────────────────────
-
-    let selectedMapStopIndex = -1;
-
-    function getMapConnections(stopIndex) {
-      // Returns all outgoing connections for a stop as an array of
-      // { kind, label, targetId, color } objects.
-      const conns = [];
-      const stop = state.stops[stopIndex];
-      if (!stop) return conns;
-
-      // Default next stop
-      const nextStopId = String((stop.playerReply && stop.playerReply.nextStopId) || '').trim();
-      if (nextStopId) {
-        conns.push({ kind: 'jump', label: 'JUMP TO', targetId: nextStopId, color: null });
-      } else if (stopIndex < state.stops.length - 1) {
-        conns.push({ kind: 'default', label: 'DEFAULT', targetId: state.stops[stopIndex + 1].id, color: null });
-      }
-
-      // Route overrides for this stop
-      if (Array.isArray(state.routes)) {
-        state.routes.forEach(function(route) {
-          if (!route || !route.variants) return;
-          (route.variantNames || Object.keys(route.variants)).forEach(function(varName) {
-            const variant = route.variants[varName];
-            if (!Array.isArray(variant)) return;
-            const pos = variant.indexOf(stop.id);
-            if (pos < 0 || pos >= variant.length - 1) return;
-            conns.push({ kind: 'route', label: varName, targetId: variant[pos + 1], color: getVariantColor(varName) });
-          });
-        });
-      }
-
-      // Branch rules from bubble messages
-      (Array.isArray(stop.messages) ? stop.messages : []).forEach(function(bubble) {
-        if (!bubble || String(bubble.replyExpected || '').toLowerCase() !== 'branch') return;
-        (Array.isArray(bubble.branches) ? bubble.branches : []).forEach(function(rule) {
-          const targetId = String((rule && rule.goToStopId) || '').trim();
-          const answer   = String((rule && rule.answer)   || '').trim();
-          if (targetId) conns.push({ kind: 'branch', label: answer || 'if match', targetId, color: null });
-        });
-      });
-
-      // ANYTIME badge (not a connection, just a flag)
-      if (stop.playerReply && stop.playerReply.anytime && (stop.playerReply.answers || []).length) {
-        conns.push({ kind: 'anytime', label: 'ANYTIME', targetId: null, color: null,
-          answers: stop.playerReply.answers });
-      }
-
-      return conns;
-    }
-
-    function renderMapBoard() {
-      const board = document.getElementById('map-board');
-      if (!board) return;
-      board.innerHTML = '';
-      const mapHdr = document.createElement('div');
-      mapHdr.className = 'content-section-header';
-      mapHdr.style.width = '100%';
-      mapHdr.textContent = 'Map';
-      board.appendChild(mapHdr);
-
-      // Left: stop node list
-      const nodeList = document.createElement('div');
-      nodeList.className = 'map-stop-list';
-
-      state.stops.forEach(function(stop, i) {
-        const node = document.createElement('div');
-        node.className = 'map-stop-node' + (selectedMapStopIndex === i ? ' selected' : '');
-
-        const nameEl = document.createElement('span');
-        nameEl.className = 'map-stop-node-name';
-        nameEl.textContent = stop.id;
-
-        const suffixEl = document.createElement('span');
-        suffixEl.className = 'map-stop-node-suffix';
-        suffixEl.textContent = 'STOP';
-
-        // Colored dots for route overrides on this stop
-        const conns = getMapConnections(i);
-        const routeConns = conns.filter(function(c) { return c.kind === 'route'; });
-        const dotsEl = document.createElement('span');
-        dotsEl.className = 'map-conn-dots';
-        routeConns.forEach(function(c) {
-          const dot = document.createElement('span');
-          dot.className = 'map-conn-dot';
-          dot.style.background = c.color;
-          dot.title = c.label;
-          dotsEl.appendChild(dot);
-        });
-        if (stop.playerReply && stop.playerReply.anytime) {
-          const dot = document.createElement('span');
-          dot.className = 'map-conn-dot';
-          dot.style.background = '#111';
-          dot.title = 'ANYTIME';
-          dotsEl.appendChild(dot);
-        }
-        if (conns.some(function(c) { return c.kind === 'branch'; })) {
-          const dot = document.createElement('span');
-          dot.className = 'map-conn-dot';
-          dot.style.background = '#8b5cf6';
-          dot.title = 'BRANCH';
-          dotsEl.appendChild(dot);
-        }
-
-        node.appendChild(nameEl);
-        node.appendChild(suffixEl);
-        if (dotsEl.children.length) node.appendChild(dotsEl);
-
-        node.addEventListener('click', function() {
-          selectedMapStopIndex = i;
-          renderMapBoard();
-        });
-
-        nodeList.appendChild(node);
-      });
-
-      board.appendChild(nodeList);
-
-      // Right: connections panel
-      const panel = document.createElement('div');
-      panel.className = 'map-panel';
-
-      if (selectedMapStopIndex < 0 || selectedMapStopIndex >= state.stops.length) {
-        const empty = document.createElement('div');
-        empty.className = 'map-panel-empty';
-        empty.textContent = 'Select a stop to see its connections.';
-        panel.appendChild(empty);
-      } else {
-        const stop = state.stops[selectedMapStopIndex];
-        const hdr = document.createElement('div');
-        hdr.className = 'map-panel-header';
-        hdr.textContent = stop.id + ' STOP — outgoing connections';
-        panel.appendChild(hdr);
-
-        const conns = getMapConnections(selectedMapStopIndex);
-        if (!conns.length) {
-          const empty = document.createElement('div');
-          empty.className = 'map-panel-empty';
-          empty.textContent = 'No connections. This is the last stop or has no routing set.';
-          panel.appendChild(empty);
-        } else {
-          const list = document.createElement('div');
-          list.className = 'map-conn-list';
-
-          conns.forEach(function(conn) {
-            const row = document.createElement('div');
-            row.className = 'map-conn-row';
-
-            if (conn.kind === 'anytime') {
-              const badge = document.createElement('span');
-              badge.className = 'map-anytime-badge';
-              badge.textContent = 'ANYTIME';
-              const lbl = document.createElement('span');
-              lbl.className = 'map-conn-label';
-              lbl.textContent = (conn.answers || []).join(', ');
-              row.appendChild(badge);
-              row.appendChild(lbl);
-              list.appendChild(row);
-              return;
-            }
-
-            const typeEl = document.createElement('span');
-            typeEl.className = 'map-conn-type';
-
-            if (conn.kind === 'route') {
-              const dot = document.createElement('span');
-              dot.className = 'map-conn-team-dot';
-              dot.style.background = conn.color;
-              typeEl.appendChild(dot);
-              typeEl.appendChild(document.createTextNode(' ' + conn.label));
-            } else if (conn.kind === 'branch') {
-              typeEl.style.color = '#8b5cf6';
-              typeEl.textContent = 'BRANCH';
-            } else if (conn.kind === 'jump') {
-              typeEl.textContent = 'JUMP TO';
-            } else {
-              typeEl.textContent = conn.label;
-            }
-
-            const arrow = document.createElement('span');
-            arrow.className = 'map-conn-arrow';
-            arrow.textContent = '→';
-
-            const targetExists = state.stops.some(function(s) { return s.id === conn.targetId; });
-            const targetEl = document.createElement('span');
-            targetEl.className = 'map-conn-target' + (targetExists ? '' : ' missing');
-            targetEl.textContent = conn.targetId + ' STOP' + (targetExists ? '' : ' ✕');
-            if (targetExists) {
-              targetEl.addEventListener('click', function() {
-                const idx = state.stops.findIndex(function(s) { return s.id === conn.targetId; });
-                if (idx >= 0) { selectedMapStopIndex = idx; renderMapBoard(); }
-              });
-            }
-
-            row.appendChild(typeEl);
-            row.appendChild(arrow);
-            row.appendChild(targetEl);
-
-            if (conn.kind === 'branch' && conn.label) {
-              const lbl = document.createElement('span');
-              lbl.className = 'map-conn-label';
-              lbl.textContent = '"' + conn.label + '"';
-              row.appendChild(lbl);
-            }
-
-            list.appendChild(row);
-          });
-
-          panel.appendChild(list);
-        }
-      }
-
-      board.appendChild(panel);
+      return row;
     }
 
     function renderAnytimeSection() {
-      const list = document.getElementById('anytimeList');
-      if (!list) return;
-      list.innerHTML = '';
+      const section = document.getElementById('anytime-section');
+      if (!section) return;
+      section.innerHTML = '';
 
-      state.stops.forEach((stop, i) => {
-        if (!stop || !stop.playerReply || !stop.playerReply.anytime) return;
+      const anytimeStops = (state.stops || []).map((s, i) => ({ stop: s, i })).filter(({ stop }) => stop && stop.playerReply && stop.playerReply.anytime);
+      if (!anytimeStops.length) return;
+
+      anytimeStops.forEach(({ stop, i }) => {
         const isExpanded = expandedAnytime.has(i);
         const totalBubbles = (Array.isArray(stop.messages) ? stop.messages.length : 0)
           + (Array.isArray(stop.playerReply.correct) ? stop.playerReply.correct.length : 0)
@@ -3307,11 +2504,6 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
         const hdr = document.createElement('div');
         hdr.className = 'section-header stop-header' + (isExpanded ? ' expanded' : '');
 
-        const badge = document.createElement('span');
-        badge.className = 'anytime-badge';
-        badge.textContent = 'ANYTIME';
-        badge.style.marginRight = '6px';
-
         const nameEl = document.createElement('span');
         nameEl.className = 'section-title-text stop-title-edit';
         nameEl.contentEditable = 'true';
@@ -3320,13 +2512,31 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
         nameEl.setAttribute('aria-label', 'Stop name');
         nameEl.textContent = stop.id;
 
+        const suffixEl = document.createElement('span');
+        suffixEl.className = 'stop-name-suffix';
+        suffixEl.textContent = 'STOP';
+        suffixEl.setAttribute('aria-hidden', 'true');
+
         const nameGroup = document.createElement('span');
         nameGroup.className = 'stop-name-group';
         nameGroup.appendChild(nameEl);
+        nameGroup.appendChild(suffixEl);
 
         const metaEl = document.createElement('span');
         metaEl.className = 'section-meta';
         metaEl.textContent = totalBubbles + (totalBubbles === 1 ? ' bubble' : ' bubbles');
+
+        const copyBtn = document.createElement('span');
+        copyBtn.className = 'stop-action stop-copy';
+        copyBtn.title = 'COPY';
+        copyBtn.setAttribute('aria-label', 'COPY');
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" ry="2"></rect><rect x="5" y="5" width="10" height="10" rx="2" ry="2"></rect></svg>';
+
+        const pasteBtn = document.createElement('span');
+        pasteBtn.className = 'stop-action stop-paste' + (copiedStop ? '' : ' disabled');
+        pasteBtn.title = 'PASTE';
+        pasteBtn.setAttribute('aria-label', 'PASTE');
+        pasteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="12" height="14" rx="2" ry="2"></rect><path d="M9 5V3h6v2"></path><path d="M9 11h6"></path><path d="M9 15h6"></path></svg>';
 
         const deleteBtn = document.createElement('span');
         deleteBtn.className = 'stop-action stop-delete';
@@ -3335,6 +2545,8 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
         deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><rect x="6" y="6" width="12" height="14" rx="2" ry="2"/><path d="M10 10v7"/><path d="M14 10v7"/></svg>';
         const actions = document.createElement('span');
         actions.className = 'stop-card-actions';
+        actions.appendChild(copyBtn);
+        actions.appendChild(pasteBtn);
         actions.appendChild(deleteBtn);
 
         const toggleBtn = document.createElement('button');
@@ -3342,17 +2554,22 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
         toggleBtn.className = 'section-toggle';
         toggleBtn.innerHTML = isExpanded ? SVG_CHEVRON_UP : SVG_CHEVRON_DOWN;
 
-        hdr.appendChild(badge);
+        const badge = document.createElement('span');
+        badge.className = 'anytime-badge';
+        badge.textContent = 'ANYTIME';
+
         hdr.appendChild(nameGroup);
+        hdr.appendChild(badge);
         hdr.appendChild(metaEl);
         hdr.appendChild(actions);
         hdr.appendChild(toggleBtn);
         card.appendChild(hdr);
 
         if (isExpanded) {
-          const body = document.createElement('div');
-          renderAnytimeEditorInto(body, stop);
-          card.appendChild(body);
+          const cardBody = document.createElement('div');
+          cardBody.className = 'stop-card-body';
+          renderAnytimeEditorInto(cardBody, stop);
+          card.appendChild(cardBody);
         }
 
         toggleBtn.addEventListener('click', (e) => {
@@ -3371,6 +2588,26 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
           renderWarnings();
         });
 
+        copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          copiedStop = JSON.parse(JSON.stringify(stop));
+          setStatus('Stop copied.', 'ok');
+          renderAll();
+        });
+
+        pasteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (!copiedStop) return;
+          const clone = JSON.parse(JSON.stringify(copiedStop));
+          clone.id = 'ANYTIME-' + nextStopNumber();
+          clone.playerReply = clone.playerReply || {};
+          clone.playerReply.anytime = true;
+          reseedStopBubbleIds(clone);
+          state.stops.splice(i + 1, 0, clone);
+          expandedAnytime.add(i + 1);
+          markDirty(); renderAll();
+        });
+
         deleteBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           const removed = state.stops.splice(i, 1)[0];
@@ -3379,20 +2616,134 @@ if (els.builderCorrectReplies) els.builderCorrectReplies.value = answersToText(o
           renderAll();
         });
 
-        list.appendChild(card);
+        section.appendChild(card);
       });
     }
 
     function renderAll() {
       renderHeader();
       renderBuilderOptions();
+      renderVariablesSection();
       renderStopList();
       renderAnytimeSection();
-      renderGroupBoard();
-      renderMapBoard();
+      renderLaunchSection();
       renderWarnings();
       renderDirtyBadge();
       renderCollapseState();
+    }
+
+    function renderLaunchSection() {
+      const section = document.getElementById('launch-section');
+      if (!section) return;
+      section.innerHTML = '';
+
+      // ── Header ──
+      const hdr = document.createElement('div');
+      hdr.className = 'section-header' + (launchSectionCollapsed ? '' : ' expanded');
+      hdr.style.cursor = 'pointer';
+
+      const titleEl = document.createElement('span');
+      titleEl.className = 'section-title-text';
+      titleEl.textContent = 'Launch Game';
+
+      const toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'section-toggle';
+      toggleBtn.title = launchSectionCollapsed ? 'Expand' : 'Collapse';
+      toggleBtn.innerHTML = launchSectionCollapsed ? SVG_CHEVRON_DOWN : SVG_CHEVRON_UP;
+
+      hdr.appendChild(titleEl);
+      hdr.appendChild(toggleBtn);
+      section.appendChild(hdr);
+
+      const doToggle = () => {
+        launchSectionCollapsed = !launchSectionCollapsed;
+        renderLaunchSection();
+      };
+      hdr.addEventListener('click', doToggle);
+      toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); doToggle(); });
+
+      if (launchSectionCollapsed) return;
+
+      // ── Body ──
+      const body = document.createElement('div');
+      body.className = 'section-body';
+      section.appendChild(body);
+
+      // Collect all variables + all their values
+      const allVars = (state.variables || []).filter((v) => v.key);
+
+      // Base URL field
+      const baseField = document.createElement('div');
+      baseField.className = 'var-field';
+      const baseLbl = document.createElement('label');
+      baseLbl.textContent = 'Base Game URL';
+      const baseIn = document.createElement('input');
+      baseIn.type = 'text';
+      baseIn.value = (state.header && state.header.gameUrl) || 'http://localhost:52330/_wireframe/index.html';
+      baseIn.placeholder = 'http://localhost:52330/_wireframe/index.html';
+      baseIn.addEventListener('input', () => {
+        if (!state.header) state.header = {};
+        state.header.gameUrl = baseIn.value;
+        refresh();
+      });
+      baseField.appendChild(baseLbl);
+      baseField.appendChild(baseIn);
+      body.appendChild(baseField);
+
+      function buildGameUrl() {
+        const base = baseIn.value.trim() || 'http://localhost:52330/_wireframe/index.html';
+        const parts = allVars
+          .filter((v) => v.key && v.values && v.values.length)
+          .map((v) => encodeURIComponent(v.key) + '=' + v.values.join(','));
+        return base + (parts.length ? '?' + parts.join('&') : '');
+      }
+
+      function buildGoUrl() {
+        const gameUrl = buildGameUrl();
+        const base = baseIn.value.trim() || 'http://localhost:52330/_wireframe/index.html';
+        const goBase = base.replace(/\/[^\/]*$/, '/go.html');
+        const title = (state.header && state.header.title) || 'Game On';
+        return goBase + '?url=' + encodeURIComponent(gameUrl) + '&title=' + encodeURIComponent(title);
+      }
+
+      function refresh() {
+        goUrlOut.textContent = buildGoUrl();
+      }
+
+      // Share URL display
+      const goUrlField = document.createElement('div');
+      goUrlField.className = 'var-field';
+      const goUrlLbl = document.createElement('label');
+      goUrlLbl.textContent = 'Share URL';
+      goUrlLbl.style.color = 'var(--ink)';
+      const goUrlOut = document.createElement('div');
+      goUrlOut.className = 'var-launch-url';
+      goUrlOut.style.borderColor = 'var(--ink)';
+      goUrlOut.style.borderWidth = '2px';
+      goUrlOut.setAttribute('tabindex', '0');
+      goUrlField.appendChild(goUrlLbl);
+      goUrlField.appendChild(goUrlOut);
+      body.appendChild(goUrlField);
+
+      // Buttons
+      const btns = document.createElement('div');
+      btns.className = 'var-launch-btns';
+
+      const copyGoBtn = document.createElement('button');
+      copyGoBtn.type = 'button';
+      copyGoBtn.textContent = 'Copy Share URL';
+      copyGoBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(buildGoUrl()).then(() => {
+          copyGoBtn.textContent = 'Copied!';
+          setTimeout(() => { copyGoBtn.textContent = 'Copy Share URL'; }, 1500);
+        });
+      });
+
+      btns.appendChild(copyGoBtn);
+      body.appendChild(btns);
+
+      refresh();
     }
 
 
@@ -3469,6 +2820,9 @@ if (els.builderCorrectReplies) {
           };
         })
       };
+      if (Array.isArray(state.variables) && state.variables.length) {
+        doc.variables = deepClone(state.variables);
+      }
       if (Array.isArray(state.routes) && state.routes.length) {
         doc.routes = deepClone(state.routes);
       }
@@ -3482,6 +2836,10 @@ if (els.builderCorrectReplies) {
 
     function isDirty() {
       return loadedStopsSnapshot !== null && !docsEqual(toDoc(), loadedStopsSnapshot);
+    }
+
+    function markDirty() {
+      renderDirtyBadge();
     }
 
     function renderDirtyBadge() {
@@ -3524,8 +2882,7 @@ if (els.builderCorrectReplies) {
         state = doc;
         loadedStopsSnapshot = deepClone(doc);
         expandedStops = new Set();
-        selectedStopIndex = state.stops.length ? 0 : -1;
-        if (selectedStopIndex === 0) expandedStops.add(0);
+        selectedStopIndex = -1;
         renderAll();
         setStatus('Loaded ./stops.json from this folder.', 'ok');
       } catch (err) {
@@ -3599,17 +2956,19 @@ if (els.builderCorrectReplies) {
       renderAll();
     });
 
-    let copiedStop = null;
-
     document.getElementById('addAnytimeBtn').addEventListener('click', () => {
       const stop = createEmptyStop();
       stop.id = 'ANYTIME-' + nextStopNumber();
       stop.playerReply = { type: 'text', answers: [], correct: [{ bubbleId: createBubbleId(), html: '' }], incorrect: [], anytime: true };
-      const insertAt = state.stops.length;
+      stop.messages = [];
       state.stops.push(stop);
-      expandedAnytime.add(insertAt);
+      expandedAnytime.add(state.stops.length - 1);
       renderAll();
     });
+
+
+    let copiedStop = null;
+
 
     document.getElementById('undoDeleteBtn').addEventListener('click', () => {
       if (!deletedStopUndo) return;

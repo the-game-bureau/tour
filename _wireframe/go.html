@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#111111">
+  <title>Game On</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100dvh;
+      background: #111;
+      color: #fff;
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding:
+        max(env(safe-area-inset-top), 48px)
+        max(env(safe-area-inset-right), 32px)
+        max(env(safe-area-inset-bottom), 48px)
+        max(env(safe-area-inset-left), 32px);
+    }
+
+    #title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 14vw, 5rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: 36px;
+    }
+
+    #play-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #111;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      height: 68px;
+      width: min(320px, 86vw);
+      border-radius: 6px;
+      touch-action: manipulation;
+      transition: background 0.1s, transform 0.1s;
+      margin-bottom: 40px;
+    }
+
+    #play-btn:active {
+      background: #d1d5db;
+      transform: scale(0.97);
+    }
+
+    #share-hint {
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    #qr-wrap {
+      background: #fff;
+      padding: clamp(14px, 4vw, 22px);
+      border-radius: 6px;
+    }
+
+    #qr-img {
+      display: block;
+      width: min(280px, 78vw);
+      height: min(280px, 78vw);
+      image-rendering: pixelated;
+    }
+
+    #error {
+      color: #f87171;
+      font-size: 1rem;
+      max-width: 300px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div id="title"></div>
+  <a id="play-btn" href="#">Tap to Play</a>
+  <div id="share-hint">or hold up this screen & let other players scan<br>↓</div>
+  <div id="qr-wrap"><img id="qr-img" alt="QR Code"></div>
+  <div id="error" style="display:none"></div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const gameUrl = params.get('url');
+    const title = params.get('title') || 'Game On';
+
+    document.getElementById('title').textContent = title;
+    document.title = title;
+
+    if (!gameUrl) {
+      document.getElementById('error').style.display = '';
+      document.getElementById('error').textContent = 'No game URL provided. Add ?url=YOUR_GAME_URL to this page\'s address.';
+      document.getElementById('play-btn').style.display = 'none';
+      document.getElementById('qr-wrap').style.display = 'none';
+      document.getElementById('share-hint').style.display = 'none';
+    } else {
+      const cssSize = Math.min(280, Math.round(window.innerWidth * 0.78));
+      const px = cssSize * Math.min(window.devicePixelRatio || 2, 3);
+      document.getElementById('qr-img').src =
+        'https://api.qrserver.com/v1/create-qr-code/?size=' + px + 'x' + px + '&data=' + encodeURIComponent(gameUrl);
+      document.getElementById('play-btn').href = gameUrl;
+    }
+  </script>
+</body>
+</html>
