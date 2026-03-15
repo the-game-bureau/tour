@@ -1021,13 +1021,15 @@
     <div id="variables-section" class="stop-card"></div>
 
     <div id="content-area">
-      <div id="anytime-section"></div>
       <div id="stops-section" class="content-section">
         <div id="stopList"></div>
         <div class="stops-add-row" style="display:flex;gap:8px;flex-wrap:wrap;">
           <button id="addStopBtn" class="primary" type="button">Add Stop</button>
-          <button id="addAnytimeBtn" class="primary" type="button">Add Anytime Stop</button>
         </div>
+      </div>
+      <div id="anytime-section"></div>
+      <div class="stops-add-row" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="addAnytimeBtn" class="primary" type="button">Add Anytime Stop</button>
       </div>
     </div>
 
@@ -1808,7 +1810,6 @@ state.stops.forEach((stop) => {
         const insertionIndex = i + (before ? 0 : 1);
         const newIndex = moveStopToInsertionIndex(state.stops, fromIndex, insertionIndex);
         reconcileSelectedStopIndexAfterMove(fromIndex, newIndex);
-        if (fromStop) moveInStopOrder({ kind: 'stop', id: fromStop.id }, { kind: 'stop', id: stop.id }, before);
         renderAll();
       });
 
@@ -2963,7 +2964,9 @@ if (els.builderCorrectReplies) {
       stop.messages = [];
       state.stops.push(stop);
       expandedAnytime.add(state.stops.length - 1);
-      renderAll();
+      markDirty(); renderAll();
+      const section = document.getElementById('anytime-section');
+      if (section && section.lastElementChild) section.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
 
